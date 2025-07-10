@@ -1,0 +1,132 @@
+2025-07-10 14:35:59,935 - __main__ - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 14:35:59,936 - __main__ - INFO -    Read-only mode: False
+2025-07-10 14:37:38,175 - save_to_db - INFO -    Keywords: 5
+2025-07-10 14:37:38,176 - save_to_db - INFO -    Reddit posts: 0
+2025-07-10 14:37:38,176 - save_to_db - INFO -    Google data points: 0
+2025-07-10 14:56:05,396 - __main__ - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 14:56:05,396 - __main__ - INFO -    Read-only mode: False
+2025-07-10 15:10:40,506 - fetch_reddit_data - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 15:10:40,507 - fetch_reddit_data - INFO -    Read-only mode: True
+2025-07-10 15:10:56,363 - save_to_db - INFO -    Keywords: 5
+2025-07-10 15:10:56,364 - save_to_db - INFO -    Reddit posts: 0
+2025-07-10 15:10:56,364 - save_to_db - INFO -    Google data points: 92
+2025-07-10 15:36:42,321 - __main__ - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 15:36:42,321 - __main__ - INFO -    Read-only mode: True
+2025-07-10 15:52:17,681 - __main__ - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 15:52:17,681 - __main__ - INFO -    Read-only mode: True
+2025-07-10 15:54:13,362 - fetch_reddit_data - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 15:54:13,363 - fetch_reddit_data - INFO -    Read-only mode: True
+2025-07-10 15:54:27,804 - save_to_db - INFO -    Keywords: 5
+2025-07-10 15:54:27,804 - save_to_db - INFO -    Reddit posts: 0
+2025-07-10 15:54:27,804 - save_to_db - INFO -    Google data points: 92
+2025-07-10 15:57:45,860 - fetch_reddit_data - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 15:57:45,860 - fetch_reddit_data - INFO -    Read-only mode: True
+2025-07-10 15:58:21,690 - save_to_db - INFO -    Keywords: 5
+2025-07-10 15:58:21,690 - save_to_db - INFO -    Reddit posts: 0
+2025-07-10 15:58:21,690 - save_to_db - INFO -    Google data points: 92
+2025-07-10 16:00:02,325 - __main__ - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 16:00:02,325 - __main__ - INFO -    Read-only mode: True
+2025-07-10 16:00:58,921 - prawcore - WARNING - Retrying due to ReadTimeout(ReadTimeoutError("HTTPSConnectionPool(host='oauth.reddit.com', port=443): Read timed out. (read timeout=16.0)")) status: GET https://oauth.reddit.com/subreddits/popular/
+2025-07-10 16:00:59,577 - prawcore - WARNING - Retrying due to ConnectionError(MaxRetryError("HTTPSConnectionPool(host='oauth.reddit.com', port=443): Max retries exceeded with url: /subreddits/popular/?limit=10&raw_json=1 (Caused by NewConnectionError('<urllib3.connection.HTTPSConnection object at 0x0000029D7799C550>: Failed to establish a new connection: [Errno 11001] getaddrinfo failed'))")) status: GET https://oauth.reddit.com/subreddits/popular/
+2025-07-10 18:30:12,829 - __main__ - INFO - Starting Reddit data collection for 5 keywords
+2025-07-10 18:30:14,100 - __main__ - INFO - Reddit API connection established
+2025-07-10 18:30:14,101 - __main__ - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 18:30:14,101 - __main__ - INFO -    Read-only mode: True
+2025-07-10 18:30:14,101 - __main__ - INFO - Processing keyword: AI
+2025-07-10 18:30:14,101 - __main__ - INFO - Searching Reddit for keyword: 'AI' (limit: 50)
+2025-07-10 18:30:22,538 - __main__ - INFO - Found 50 posts for keyword 'AI'
+2025-07-10 18:30:24,539 - __main__ - INFO - Processing keyword: ChatGPT
+2025-07-10 18:30:24,539 - __main__ - INFO - Searching Reddit for keyword: 'ChatGPT' (limit: 50)
+2025-07-10 18:30:25,568 - prawcore - WARNING - Retrying due to 500 status: GET https://oauth.reddit.com/r/all/search/
+2025-07-10 18:30:33,863 - __main__ - INFO - Found 50 posts for keyword 'ChatGPT'
+2025-07-10 18:30:35,864 - __main__ - INFO - Processing keyword: Pakistan Elections
+2025-07-10 18:30:35,865 - __main__ - INFO - Searching Reddit for keyword: 'Pakistan Elections' (limit: 50)
+2025-07-10 18:30:39,097 - __main__ - INFO - Found 17 posts for keyword 'Pakistan Elections'
+2025-07-10 18:30:41,099 - __main__ - INFO - Processing keyword: Machine Learning
+2025-07-10 18:30:41,099 - __main__ - INFO - Searching Reddit for keyword: 'Machine Learning' (limit: 50)
+2025-07-10 18:30:47,970 - __main__ - INFO - Found 50 posts for keyword 'Machine Learning'
+2025-07-10 18:30:49,972 - __main__ - INFO - Processing keyword: Python Programming
+2025-07-10 18:30:49,972 - __main__ - INFO - Searching Reddit for keyword: 'Python Programming' (limit: 50)
+2025-07-10 18:30:56,597 - __main__ - INFO - Found 50 posts for keyword 'Python Programming'
+2025-07-10 18:30:58,598 - __main__ - INFO - Fetching trending subreddits...
+2025-07-10 18:30:58,599 - __main__ - INFO - Fetching trending subreddits
+2025-07-10 18:31:03,965 - __main__ - INFO - Collected data from 10 trending subreddits
+2025-07-10 18:31:03,965 - __main__ - INFO - Reddit data collection completed! Total posts: 217
+2025-07-10 18:31:03,976 - __main__ - INFO - Reddit data saved to: data/raw_reddit_data.json
+2025-07-10 18:36:32,312 - fetch_reddit_data - INFO - Starting Reddit data collection for 5 keywords
+2025-07-10 18:36:32,314 - fetch_reddit_data - INFO - Reddit API connection established
+2025-07-10 18:36:32,315 - fetch_reddit_data - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 18:36:32,315 - fetch_reddit_data - INFO -    Read-only mode: True
+2025-07-10 18:36:32,315 - fetch_reddit_data - INFO - Processing keyword: AI
+2025-07-10 18:36:32,316 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'AI' (limit: 50)
+2025-07-10 18:36:39,720 - fetch_reddit_data - INFO - Found 50 posts for keyword 'AI'
+2025-07-10 18:36:41,721 - fetch_reddit_data - INFO - Processing keyword: ChatGPT
+2025-07-10 18:36:41,722 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'ChatGPT' (limit: 50)
+2025-07-10 18:36:48,270 - fetch_reddit_data - INFO - Found 50 posts for keyword 'ChatGPT'
+2025-07-10 18:36:50,272 - fetch_reddit_data - INFO - Processing keyword: Pakistan Elections
+2025-07-10 18:36:50,272 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'Pakistan Elections' (limit: 50)
+2025-07-10 18:36:53,122 - fetch_reddit_data - INFO - Found 17 posts for keyword 'Pakistan Elections'
+2025-07-10 18:36:55,123 - fetch_reddit_data - INFO - Processing keyword: Machine Learning
+2025-07-10 18:36:55,123 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'Machine Learning' (limit: 50)
+2025-07-10 18:37:01,389 - fetch_reddit_data - INFO - Found 50 posts for keyword 'Machine Learning'
+2025-07-10 18:37:03,391 - fetch_reddit_data - INFO - Processing keyword: Python Programming
+2025-07-10 18:37:03,391 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'Python Programming' (limit: 50)
+2025-07-10 18:37:09,761 - fetch_reddit_data - INFO - Found 50 posts for keyword 'Python Programming'
+2025-07-10 18:37:11,762 - fetch_reddit_data - INFO - Fetching trending subreddits...
+2025-07-10 18:37:11,763 - fetch_reddit_data - INFO - Fetching trending subreddits
+2025-07-10 18:37:13,594 - fetch_reddit_data - INFO - Collected data from 10 trending subreddits
+2025-07-10 18:37:13,596 - fetch_reddit_data - INFO - Reddit data collection completed! Total posts: 217
+2025-07-10 18:37:13,611 - fetch_reddit_data - INFO - Reddit data saved to: data/raw_reddit_data.json
+2025-07-10 18:37:14,416 - save_to_db - INFO -    Keywords: 5
+2025-07-10 18:37:14,416 - save_to_db - INFO -    Reddit posts: 217
+2025-07-10 18:37:14,416 - save_to_db - INFO -    Google data points: 92
+2025-07-10 18:42:27,194 - fetch_reddit_data - INFO - Starting Reddit data collection for 5 keywords
+2025-07-10 18:42:27,195 - fetch_reddit_data - INFO - Reddit API connection established
+2025-07-10 18:42:27,195 - fetch_reddit_data - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 18:42:27,195 - fetch_reddit_data - INFO -    Read-only mode: True
+2025-07-10 18:42:27,196 - fetch_reddit_data - INFO - Processing keyword: AI
+2025-07-10 18:42:27,196 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'AI' (limit: 50)
+2025-07-10 18:42:34,691 - fetch_reddit_data - INFO - Found 50 posts for keyword 'AI'
+2025-07-10 18:42:36,693 - fetch_reddit_data - INFO - Processing keyword: ChatGPT
+2025-07-10 18:42:36,693 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'ChatGPT' (limit: 50)
+2025-07-10 18:42:45,054 - fetch_reddit_data - INFO - Found 50 posts for keyword 'ChatGPT'
+2025-07-10 18:42:47,055 - fetch_reddit_data - INFO - Processing keyword: Pakistan Elections
+2025-07-10 18:42:47,055 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'Pakistan Elections' (limit: 50)
+2025-07-10 18:42:50,223 - fetch_reddit_data - INFO - Found 17 posts for keyword 'Pakistan Elections'
+2025-07-10 18:42:52,224 - fetch_reddit_data - INFO - Processing keyword: Machine Learning
+2025-07-10 18:42:52,225 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'Machine Learning' (limit: 50)
+2025-07-10 18:42:59,010 - fetch_reddit_data - INFO - Found 50 posts for keyword 'Machine Learning'
+2025-07-10 18:43:01,011 - fetch_reddit_data - INFO - Processing keyword: Robotics
+2025-07-10 18:43:01,011 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'Robotics' (limit: 50)
+2025-07-10 18:43:07,801 - fetch_reddit_data - INFO - Found 50 posts for keyword 'Robotics'
+2025-07-10 18:43:09,804 - fetch_reddit_data - INFO - Fetching trending subreddits...
+2025-07-10 18:43:09,804 - fetch_reddit_data - INFO - Fetching trending subreddits
+2025-07-10 18:43:11,611 - fetch_reddit_data - INFO - Collected data from 10 trending subreddits
+2025-07-10 18:43:11,613 - fetch_reddit_data - INFO - Reddit data collection completed! Total posts: 217
+2025-07-10 18:43:11,625 - fetch_reddit_data - INFO - Reddit data saved to: data/raw_reddit_data.json
+2025-07-10 18:43:11,726 - save_to_db - INFO -    Keywords: 5
+2025-07-10 18:43:11,726 - save_to_db - INFO -    Reddit posts: 217
+2025-07-10 18:43:11,726 - save_to_db - INFO -    Google data points: 92
+2025-07-10 18:55:13,423 - save_to_db - INFO - Loaded cleaned data from: data/cleaned_data.json
+2025-07-10 19:01:03,806 - save_to_db - INFO - Loaded cleaned data from: data/cleaned_data.json
+2025-07-10 19:03:41,643 - save_to_db - INFO - Loaded cleaned data from: data/cleaned_data.json
+2025-07-10 19:10:10,925 - save_to_db - INFO - Loaded cleaned data from: data/cleaned_data.json
+2025-07-10 19:16:28,144 - fetch_reddit_data - INFO - Starting Reddit data collection for 3 keywords
+2025-07-10 19:16:28,146 - fetch_reddit_data - INFO - Reddit API connection established
+2025-07-10 19:16:28,147 - fetch_reddit_data - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-10 19:16:28,147 - fetch_reddit_data - INFO -    Read-only mode: True
+2025-07-10 19:16:28,147 - fetch_reddit_data - INFO - Processing keyword: AI
+2025-07-10 19:16:28,147 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'AI' (limit: 50)
+2025-07-10 19:16:36,475 - fetch_reddit_data - INFO - Found 50 posts for keyword 'AI'
+2025-07-10 19:16:38,476 - fetch_reddit_data - INFO - Processing keyword: ChatGPT
+2025-07-10 19:16:38,476 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'ChatGPT' (limit: 50)
+2025-07-10 19:16:45,307 - fetch_reddit_data - INFO - Found 50 posts for keyword 'ChatGPT'
+2025-07-10 19:16:47,308 - fetch_reddit_data - INFO - Processing keyword: Machine Learning
+2025-07-10 19:16:47,308 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'Machine Learning' (limit: 50)
+2025-07-10 19:16:53,821 - save_to_db - INFO - Loaded cleaned data from: data/cleaned_data.json
+2025-07-10 19:16:55,629 - fetch_reddit_data - INFO - Found 50 posts for keyword 'Machine Learning'
+2025-07-10 19:16:57,630 - fetch_reddit_data - INFO - Fetching trending subreddits...
+2025-07-10 19:16:57,631 - fetch_reddit_data - INFO - Fetching trending subreddits
+2025-07-10 19:17:00,155 - fetch_reddit_data - INFO - Collected data from 10 trending subreddits
+2025-07-10 19:17:00,156 - fetch_reddit_data - INFO - Reddit data collection completed! Total posts: 150
+2025-07-10 19:17:00,165 - fetch_reddit_data - INFO - Reddit data saved to: data/raw_reddit_data.json

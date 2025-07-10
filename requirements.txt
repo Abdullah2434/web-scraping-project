@@ -1,0 +1,21 @@
+# Core dependencies for web scraping project
+pytrends==4.9.2
+urllib3==1.26.18
+praw==7.7.1
+requests==2.31.0
+beautifulsoup4==4.12.2
+pandas==2.0.3
+numpy==1.24.3
+
+# Database dependencies
+pymongo==4.5.0
+
+# Dashboard and visualization
+streamlit==1.28.1
+plotly==5.17.0
+matplotlib==3.7.2
+seaborn==0.12.2
+
+# Additional utilities
+python-dotenv==1.0.0
+configparser==6.0.1 

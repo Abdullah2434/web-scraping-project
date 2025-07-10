@@ -1,0 +1,22 @@
+{
+  "collection_info": {
+    "keywords": [
+      "AI"
+    ],
+    "total_keywords": 1,
+    "region": "US",
+    "timeframe": "today 3-m",
+    "collection_timestamp": "2025-07-10T19:15:10.777189"
+  },
+  "interest_over_time": {
+    "AI": {
+      "keywords": [
+        "AI"
+      ],
+      "error": "The request failed: Google returned a response with code 429",
+      "timestamp": "2025-07-10T19:15:12.202764"
+    }
+  },
+  "related_queries": {},
+  "regional_interest": {}
+}
