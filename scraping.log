@@ -8728,3 +8728,24 @@ The `max_results` query parameter value [5] is not between 10 and 100
 2025-07-14 17:29:17,404 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T19:29:17.402226'}
 2025-07-14 17:29:17,420 - werkzeug - WARNING -  * Debugger is active!
 2025-07-14 17:29:17,424 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 17:32:41,068 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:41] "GET /api/stats?_t=1752496360737 HTTP/1.1" 200 -
+2025-07-14 17:32:41,074 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:41] "GET /api/trending?_t=1752496360738 HTTP/1.1" 200 -
+2025-07-14 17:32:41,760 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:41] "GET /api/charts/keyword-frequency?_t=1752496361742 HTTP/1.1" 200 -
+2025-07-14 17:32:43,068 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:43] "GET /api/charts/google-trends?_t=1752496362740 HTTP/1.1" 200 -
+2025-07-14 17:32:43,767 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:43] "GET /api/charts/reddit-engagement?_t=1752496363744 HTTP/1.1" 200 -
+2025-07-14 17:32:45,068 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:45] "GET /api/charts/youtube-engagement?_t=1752496364736 HTTP/1.1" 200 -
+2025-07-14 17:32:46,750 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:46] "GET /api/recent-activity?_t=1752496366735 HTTP/1.1" 200 -
+2025-07-14 17:32:57,063 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:57] "GET /api/stats?_t=1752496376740 HTTP/1.1" 200 -
+2025-07-14 17:32:57,067 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:57] "GET /api/trending?_t=1752496376741 HTTP/1.1" 200 -
+2025-07-14 17:32:57,762 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:57] "GET /api/charts/keyword-frequency?_t=1752496377749 HTTP/1.1" 200 -
+2025-07-14 17:32:59,060 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:59] "GET /api/charts/google-trends?_t=1752496378735 HTTP/1.1" 200 -
+2025-07-14 17:32:59,758 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:32:59] "GET /api/charts/reddit-engagement?_t=1752496379738 HTTP/1.1" 200 -
+2025-07-14 17:33:01,064 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:33:01] "GET /api/charts/youtube-engagement?_t=1752496380742 HTTP/1.1" 200 -
+2025-07-14 17:33:02,761 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:33:02] "GET /api/recent-activity?_t=1752496382743 HTTP/1.1" 200 -
+2025-07-14 17:37:41,074 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:37:41] "GET /api/stats?_t=1752496660741 HTTP/1.1" 200 -
+2025-07-14 17:37:41,083 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:37:41] "GET /api/trending?_t=1752496660742 HTTP/1.1" 200 -
+2025-07-14 17:37:41,780 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:37:41] "GET /api/charts/keyword-frequency?_t=1752496661747 HTTP/1.1" 200 -
+2025-07-14 17:37:43,085 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:37:43] "GET /api/charts/google-trends?_t=1752496662747 HTTP/1.1" 200 -
+2025-07-14 17:37:43,786 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:37:43] "GET /api/charts/reddit-engagement?_t=1752496663749 HTTP/1.1" 200 -
+2025-07-14 17:37:45,168 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:37:45] "GET /api/charts/youtube-engagement?_t=1752496664740 HTTP/1.1" 200 -
+2025-07-14 17:37:47,763 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:37:47] "GET /api/recent-activity?_t=1752496667750 HTTP/1.1" 200 -
