@@ -1255,6 +1255,41 @@ def not_found(error):
 def internal_error(error):
     return render_template('error.html', error="Internal server error"), 500
 
+# Health check endpoints for Render
+@app.route('/health')
+def health_check():
+    """Health check endpoint for Render"""
+    return jsonify({
+        'status': 'healthy',
+        'timestamp': datetime.now().isoformat(),
+        'version': '1.0.0'
+    })
+
+@app.route('/trigger-collection')
+def manual_trigger():
+    """Manual trigger endpoint for testing"""
+    try:
+        from keyword_manager import get_current_keywords
+        keywords = get_current_keywords() or DEFAULT_KEYWORDS
+        
+        # Start collection in background thread
+        def trigger_collection():
+            try:
+                run_data_collection_with_logging(keywords, ['google', 'reddit', 'youtube', 'twitter'])
+            except Exception as e:
+                logger.error(f"Manual collection error: {e}")
+        
+        thread = threading.Thread(target=trigger_collection, daemon=True)
+        thread.start()
+        
+        return jsonify({
+            'status': 'triggered',
+            'message': 'Data collection started',
+            'keywords': keywords
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     # This block only runs for local development
     # Production uses app.py as entry point

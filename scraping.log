@@ -6893,3 +6893,26 @@ The `max_results` query parameter value [5] is not between 10 and 100
 2025-07-14 16:49:05,674 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:49:05.672885'}
 2025-07-14 16:49:05,700 - werkzeug - WARNING -  * Debugger is active!
 2025-07-14 16:49:05,705 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:51:52,835 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
+2025-07-14 16:51:52,855 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
+2025-07-14 16:51:54,178 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:51:57,691 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 16:51:57,700 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T18:51:57.698073'}
+2025-07-14 16:51:57,731 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:51:57,737 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:52:07,646 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\flask_app.py', reloading
+2025-07-14 16:52:07,698 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\flask_app.py', reloading
+2025-07-14 16:52:08,375 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:52:11,998 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 16:52:12,008 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T18:52:12.006751'}
+2025-07-14 16:52:12,042 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:52:12,050 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:52:26,451 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\test_deployment.py', reloading
+2025-07-14 16:52:26,458 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\test_deployment.py', reloading
+2025-07-14 16:52:26,459 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\test_deployment.py', reloading
+2025-07-14 16:52:26,469 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\test_deployment.py', reloading
+2025-07-14 16:52:27,536 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:52:31,614 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 16:52:31,621 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T18:52:31.620283'}
+2025-07-14 16:52:31,643 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:52:31,650 - werkzeug - INFO -  * Debugger PIN: 368-055-718
