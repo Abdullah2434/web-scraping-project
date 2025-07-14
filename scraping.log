@@ -6766,3 +6766,32 @@ The `max_results` query parameter value [5] is not between 10 and 100
 2025-07-14 16:42:00,408 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
 2025-07-14 16:42:00,411 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
 2025-07-14 16:42:01,791 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:42:07,828 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=60min
+2025-07-14 16:42:07,836 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:42:07.834600'}
+2025-07-14 16:42:07,858 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:42:07,863 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:42:16,315 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\fetch_youtube_data.py', reloading
+2025-07-14 16:42:16,324 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\keyword_manager.py', reloading
+2025-07-14 16:42:17,331 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:42:18,965 - flask_app - INFO - STARTING data collection process...
+2025-07-14 16:42:18,965 - flask_app - INFO - KEYWORDS: climate change, cryptocurrency, space exploration, renewable energy, AI
+2025-07-14 16:42:18,966 - flask_app - INFO - SOURCES: google, reddit, youtube, twitter
+2025-07-14 16:42:18,966 - flask_app - INFO - STEP 1/5: Collecting Google Trends data...
+2025-07-14 16:42:21,363 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=60min
+2025-07-14 16:42:21,373 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:42:21.371974'}
+2025-07-14 16:42:21,402 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:42:21,409 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:42:36,557 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\site-packages\\pytrends\\request.py', reloading
+2025-07-14 16:42:36,790 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:42:39,447 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=60min
+2025-07-14 16:42:39,454 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:42:39.452683'}
+2025-07-14 16:42:39,476 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:42:39,481 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:42:41,079 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:42:41] "GET /api/stats?_t=1752493360752 HTTP/1.1" 200 -
+2025-07-14 16:42:41,081 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\site-packages\\flask\\app.py', reloading
+2025-07-14 16:42:41,087 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:42:41] "GET /api/trending?_t=1752493360753 HTTP/1.1" 200 -
+2025-07-14 16:42:41,088 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\site-packages\\werkzeug\\debug\\__init__.py', reloading
+2025-07-14 16:42:41,089 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\site-packages\\werkzeug\\serving.py', reloading
+2025-07-14 16:42:41,090 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\http\\server.py', reloading
+2025-07-14 16:42:41,090 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\socketserver.py', reloading
+2025-07-14 16:42:41,738 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
