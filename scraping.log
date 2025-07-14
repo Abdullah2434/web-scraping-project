@@ -6916,3 +6916,10 @@ The `max_results` query parameter value [5] is not between 10 and 100
 2025-07-14 16:52:31,621 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T18:52:31.620283'}
 2025-07-14 16:52:31,643 - werkzeug - WARNING -  * Debugger is active!
 2025-07-14 16:52:31,650 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:52:41,096 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:52:41] "GET /api/stats?_t=1752493960743 HTTP/1.1" 200 -
+2025-07-14 16:52:41,109 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:52:41] "GET /api/trending?_t=1752493960744 HTTP/1.1" 200 -
+2025-07-14 16:52:41,762 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:52:41] "GET /api/charts/keyword-frequency?_t=1752493961737 HTTP/1.1" 200 -
+2025-07-14 16:52:43,081 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:52:43] "GET /api/charts/google-trends?_t=1752493962735 HTTP/1.1" 200 -
+2025-07-14 16:52:43,771 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:52:43] "GET /api/charts/reddit-engagement?_t=1752493963744 HTTP/1.1" 200 -
+2025-07-14 16:52:45,076 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:52:45] "GET /api/charts/youtube-engagement?_t=1752493964738 HTTP/1.1" 200 -
+2025-07-14 16:52:46,758 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:52:46] "GET /api/recent-activity?_t=1752493966741 HTTP/1.1" 200 -
