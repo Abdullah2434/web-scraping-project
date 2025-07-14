@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Keyword Trends Analytics{% endblock %}
+
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Welcome back! Here's what's happening with your keyword trends today.{% endblock %}
+
+{% block content %}
+<!-- Welcome Section -->
+<div class="welcome-section">
+    <div class="welcome-card">
+        <div class="welcome-content">
+            <div class="welcome-text">
+                <h2>Welcome Back, Abdullah! 👋</h2>
+                <p>Your keyword analysis dashboard is ready with the latest insights</p>
+            </div>
+            <div class="welcome-stats">
+                <div class="stat-item">
+                    <span class="stat-number">{{ stats.total_keywords }}</span>
+                    <span class="stat-label">Keywords</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ stats.data_sources|length }}</span>
+                    <span class="stat-label">Sources</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Metrics Grid -->
+<div class="metrics-grid">
+    <div class="metric-card">
+        <div class="metric-content">
+            <div class="metric-icon">
+                <i class="fab fa-reddit"></i>
+            </div>
+            <div class="metric-details">
+                <h3 class="metric-value">{{ "{:,}".format(stats.reddit_posts) }}</h3>
+                <p class="metric-label">Reddit Posts</p>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+12.5%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-content">
+            <div class="metric-icon">
+                <i class="fab fa-google"></i>
+            </div>
+            <div class="metric-details">
+                <h3 class="metric-value">{{ stats.google_trends_count }}</h3>
+                <p class="metric-label">Google Trends</p>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+8.2%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-content">
+            <div class="metric-icon">
+                <i class="fab fa-youtube"></i>
+            </div>
+            <div class="metric-details">
+                <h3 class="metric-value">{{ "{:,}".format(stats.youtube_videos) }}</h3>
+                <p class="metric-label">YouTube Videos</p>
+                <div class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+15.3%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="metric-card">
+        <div class="metric-content">
+            <div class="metric-icon">
+                <i class="fab fa-twitter"></i>
+            </div>
+            <div class="metric-details">
+                <h3 class="metric-value">{{ stats.twitter_tweets }}</h3>
+                <p class="metric-label">Twitter Posts</p>
+                <div class="metric-change neutral">
+                    <i class="fas fa-check"></i>
+                    <span>Working</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+   
+</div>
+
+<!-- Data Sources -->
+<div class="info-section">
+    <div class="info-card">
+        <h4>📊 Active Data Sources</h4>
+        <div class="tags-container">
+            {% for source in stats.data_sources %}
+            <span class="data-source-tag">{{ source.replace('_', ' ').title() }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Charts Section -->
+<div class="charts-section">
+    <div class="section-header">
+        <h3>📈 Data Visualization & Insights</h3>
+        <div class="section-actions">
+            <select id="keywordFilter" onchange="filterData()">
+                <option value="">All Keywords</option>
+                {% for keyword in stats.keywords_analyzed %}
+                <option value="{{ keyword }}">{{ keyword }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    
+    <div class="charts-grid">
+        <!-- Keyword Frequency Chart -->
+        <div class="chart-card full-width">
+            <div class="chart-header">
+                <h4>Keyword Frequency Across All Sources</h4>
+                <button class="chart-expand" onclick="expandChart('keywordFrequency')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="keywordFrequencyChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Google Trends Chart -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h4>Google Trends Over Time</h4>
+                <button class="chart-expand" onclick="expandChart('googleTrends')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="googleTrendsChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Reddit Engagement Chart -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h4>Reddit Engagement</h4>
+                <button class="chart-expand" onclick="expandChart('redditEngagement')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="redditEngagementChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- YouTube Performance Chart -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h4>YouTube Performance</h4>
+                <button class="chart-expand" onclick="expandChart('youtubePerformance')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="youtubePerformanceChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Twitter Engagement Chart -->
+        <div class="chart-card">
+            <div class="chart-header">
+                <h4>Twitter Engagement</h4>
+                <button class="chart-expand" onclick="expandChart('twitterEngagement')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="twitterEngagementChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Trending Keywords Section -->
+<div class="trending-section">
+    <div class="section-header">
+        <h3>🔥 AI-Powered Trending Keywords</h3>
+        <button class="btn btn-outline" onclick="refreshTrending()">
+            <i class="fas fa-sync-alt"></i>
+            Refresh Analysis
+        </button>
+    </div>
+    
+    <div id="trendingKeywords" class="trending-grid">
+        {% if trending_keywords %}
+            {% for keyword_data in trending_keywords %}
+            <div class="trending-keyword-card">
+                <div class="keyword-rank">{{ loop.index }}</div>
+                <div class="keyword-content">
+                    <h4 class="keyword-text">{{ keyword_data.keyword }}</h4>
+                    <div class="keyword-details">
+                        <span class="trending-score">Score: {{ keyword_data.trending_score }}</span>
+                        <span class="keyword-mentions">{{ keyword_data.total_mentions }} mentions</span>
+                    </div>
+                    <div class="keyword-sources">
+                        {% for source in keyword_data.sources.keys() %}
+                        <span class="source-tag source-{{ source }}">{{ source.replace('_', ' ').title() }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="keyword-sentiment sentiment-{{ keyword_data.sentiment.sentiment_label.lower() }}">
+                        {{ keyword_data.sentiment.sentiment_label }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h4>No Trending Keywords Available</h4>
+                <p>Run data collection to discover trending keywords from your sources.</p>
+                <button class="btn btn-primary" onclick="showDataCollection()">
+                    <i class="fas fa-play"></i>
+                    Start Data Collection
+                </button>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Recent Activity Section -->
+<div class="activity-section">
+    <div class="section-header">
+        <h3>📊 Recent Data Activity</h3>
+        <button class="btn btn-outline" onclick="loadRecentActivity()">
+            <i class="fas fa-sync-alt"></i>
+            Refresh
+        </button>
+    </div>
+    
+    <div class="activity-grid">
+        <div class="activity-card">
+            <div class="activity-header">
+                <h4>📱 Latest Reddit Posts</h4>
+                <span class="activity-count">{{ stats.reddit_posts }} posts</span>
+            </div>
+            <div id="recentReddit" class="activity-content">
+                <!-- Recent Reddit posts will be loaded here -->
+            </div>
+        </div>
+        
+        <div class="activity-card">
+            <div class="activity-header">
+                <h4>🎥 Latest YouTube Videos</h4>
+                <span class="activity-count">{{ stats.youtube_videos }} videos</span>
+            </div>
+            <div id="recentYoutube" class="activity-content">
+                <!-- Recent YouTube videos will be loaded here -->
+            </div>
+        </div>
+        
+        <div class="activity-card">
+            <div class="activity-header">
+                <h4>🐦 Latest Twitter Posts</h4>
+                <span class="activity-count">{{ stats.twitter_tweets }} tweets</span>
+            </div>
+            <div id="recentTwitter" class="activity-content">
+                <!-- Recent Twitter posts will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="dashboard-footer">
+    <div class="footer-content">
+        <p>📊 Keyword Trends Dashboard | Real-time Multi-Platform Analysis</p>
+        <p class="footer-timestamp">Last updated: <span id="lastUpdated"></span></p>
+    </div>
+</footer>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Load dashboard data on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadDashboardData();
+    updateTimestamp();
+    
+    // Refresh data every 5 minutes
+    setInterval(refreshData, 300000);
+});
+
+function updateTimestamp() {
+    const timestampEl = document.getElementById('lastUpdated');
+    if (timestampEl) {
+        timestampEl.textContent = new Date().toLocaleString();
+    }
+}
+
+// Global refresh function (called from top nav)
+window.refreshData = async function() {
+    await loadDashboardData();
+    updateTimestamp();
+    showNotification('Data refreshed successfully!', 'success');
+}
+</script>
+{% endblock %} 

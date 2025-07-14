@@ -1,0 +1,369 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - Keyword Trends Dashboard{% endblock %}
+
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_subtitle %}Detailed analysis of {{ source }} data{% endblock %}
+
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-grid">
+    <!-- Source-specific metrics -->
+    <div class="metrics-section">
+        <div class="metric-cards" id="sourceMetrics">
+            <!-- Metrics will be loaded here -->
+        </div>
+    </div>
+    
+    <!-- Source-specific charts -->
+    <div class="charts-section">
+        <div class="chart-container">
+            <canvas id="sourceChart"></canvas>
+        </div>
+    </div>
+    
+    <!-- Source-specific data display -->
+    <div class="data-section">
+        <div class="data-container" id="sourceData">
+            <!-- Data will be loaded here -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Load source-specific data
+    const dataSource = '{{ source }}';
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        loadSourceData(dataSource);
+        loadSourceMetrics(dataSource);
+    });
+    
+    async function loadSourceData(source) {
+        try {
+            // Load data based on source type
+            let apiEndpoint = `/api/${source}`;
+            if (source === 'google') {
+                apiEndpoint = '/api/google-trends';
+            }
+            
+            const response = await fetch(apiEndpoint);
+            const data = await response.json();
+            
+            if (response.ok) {
+                displaySourceData(source, data);
+                createSourceChart(source, data);
+            } else {
+                document.getElementById('sourceData').innerHTML = 
+                    `<div class="error-message">No ${source} data available</div>`;
+            }
+        } catch (error) {
+            console.error(`Error loading ${source} data:`, error);
+            document.getElementById('sourceData').innerHTML = 
+                `<div class="error-message">Failed to load ${source} data</div>`;
+        }
+    }
+    
+    async function loadSourceMetrics(source) {
+        try {
+            const response = await fetch('/api/stats');
+            const stats = await response.json();
+            
+            if (response.ok && stats) {
+                const metricsContainer = document.getElementById('sourceMetrics');
+                let count = 0;
+                let label = '';
+                
+                switch(source) {
+                    case 'reddit':
+                        count = stats.reddit_posts;
+                        label = 'Reddit Posts';
+                        break;
+                    case 'youtube':
+                        count = stats.youtube_videos;
+                        label = 'YouTube Videos';
+                        break;
+                    case 'twitter':
+                        count = stats.twitter_tweets;
+                        label = 'Twitter Tweets';
+                        break;
+                    case 'google':
+                        count = stats.google_trends_count;
+                        label = 'Google Trends Data Points';
+                        break;
+                }
+                
+                metricsContainer.innerHTML = `
+                    <div class="metric-card">
+                        <div class="metric-content">
+                            <div class="metric-icon">
+                                <i class="fas fa-${getSourceIcon(source)}"></i>
+                            </div>
+                            <div class="metric-details">
+                                <h3>${count.toLocaleString()}</h3>
+                                <p>${label}</p>
+                                <div class="metric-change positive">Active</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error loading source metrics:', error);
+        }
+    }
+    
+    function getSourceIcon(source) {
+        switch(source) {
+            case 'reddit': return 'reddit';
+            case 'youtube': return 'youtube';
+            case 'twitter': return 'twitter';
+            case 'google': return 'google';
+            default: return 'chart-bar';
+        }
+    }
+    
+    function displaySourceData(source, data) {
+        const container = document.getElementById('sourceData');
+        
+        switch(source) {
+            case 'reddit':
+                displayRedditData(data, container);
+                break;
+            case 'youtube':
+                displayYouTubeData(data, container);
+                break;
+            case 'twitter':
+                displayTwitterData(data, container);
+                break;
+            case 'google':
+                displayGoogleTrendsData(data, container);
+                break;
+        }
+    }
+    
+    function displayRedditData(data, container) {
+        const posts = data.posts || [];
+        container.innerHTML = `
+            <div class="section-header">
+                <h3>Reddit Posts (${posts.length})</h3>
+            </div>
+            <div class="data-list">
+                ${posts.slice(0, 20).map(post => `
+                    <div class="data-item">
+                        <h4>${post.title || 'No title'}</h4>
+                        <p><strong>Score:</strong> ${post.score || 0} | 
+                           <strong>Comments:</strong> ${post.num_comments || 0} |
+                           <strong>Subreddit:</strong> r/${post.subreddit || 'unknown'}</p>
+                        <p>${(post.content || '').substring(0, 200)}...</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    function displayYouTubeData(data, container) {
+        const videos = data.videos || [];
+        container.innerHTML = `
+            <div class="section-header">
+                <h3>YouTube Videos (${videos.length})</h3>
+            </div>
+            <div class="data-list">
+                ${videos.slice(0, 20).map(video => `
+                    <div class="data-item">
+                        <h4>${video.title || 'No title'}</h4>
+                        <p><strong>Views:</strong> ${parseInt(video.view_count || 0).toLocaleString()} | 
+                           <strong>Likes:</strong> ${parseInt(video.like_count || 0).toLocaleString()} |
+                           <strong>Channel:</strong> ${video.channel_title || 'unknown'}</p>
+                        <p>${(video.description || '').substring(0, 200)}...</p>
+                        ${video.video_id ? `<a href="https://youtube.com/watch?v=${video.video_id}" target="_blank">Watch Video</a>` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    function displayTwitterData(data, container) {
+        if (!Array.isArray(data) || data.length === 0) {
+            container.innerHTML = '<div class="info-message">No Twitter data available</div>';
+            return;
+        }
+        
+        container.innerHTML = `
+            <div class="section-header">
+                <h3>Twitter Posts (${data.length})</h3>
+            </div>
+            <div class="data-list">
+                ${data.slice(0, 20).map(tweet => `
+                    <div class="data-item">
+                        <p><strong>@${tweet.author_username || 'unknown'}:</strong> ${tweet.text || 'No text'}</p>
+                        <p><strong>Likes:</strong> ${tweet.like_count || 0} | 
+                           <strong>Retweets:</strong> ${tweet.retweet_count || 0}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+    
+    function displayGoogleTrendsData(data, container) {
+        const interestData = data.interest_data || [];
+        const relatedQueries = data.related_queries || [];
+        
+        container.innerHTML = `
+            <div class="section-header">
+                <h3>Google Trends Data</h3>
+            </div>
+            <div class="trends-sections">
+                <div class="interest-section">
+                    <h4>Interest Over Time (${interestData.length} data points)</h4>
+                    <div class="data-list">
+                        ${interestData.slice(0, 10).map(item => `
+                            <div class="data-item">
+                                <p><strong>Date:</strong> ${item.date}</p>
+                                <p><strong>Values:</strong> ${Object.entries(item.values || {}).map(([k,v]) => `${k}: ${v}`).join(', ')}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="queries-section">
+                    <h4>Related Queries (${relatedQueries.length} groups)</h4>
+                    <div class="data-list">
+                        ${relatedQueries.slice(0, 5).map(group => `
+                            <div class="data-item">
+                                <h5>${group.keyword || 'Unknown keyword'}</h5>
+                                <ul>
+                                    ${(group.queries || []).slice(0, 5).map(q => `
+                                        <li>${q.query}: ${q.value}</li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    function createSourceChart(source, data) {
+        const ctx = document.getElementById('sourceChart');
+        if (!ctx) return;
+        
+        let chartData = {};
+        let chartTitle = '';
+        
+        switch(source) {
+            case 'reddit':
+                const posts = data.posts || [];
+                const subreddits = {};
+                posts.forEach(post => {
+                    const sub = post.subreddit || 'unknown';
+                    subreddits[sub] = (subreddits[sub] || 0) + 1;
+                });
+                
+                const topSubreddits = Object.entries(subreddits)
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 10);
+                
+                chartData = {
+                    labels: topSubreddits.map(([sub]) => `r/${sub}`),
+                    datasets: [{
+                        label: 'Posts Count',
+                        data: topSubreddits.map(([,count]) => count),
+                        backgroundColor: '#ff4500'
+                    }]
+                };
+                chartTitle = 'Posts by Subreddit';
+                break;
+                
+            case 'youtube':
+                const videos = data.videos || [];
+                const channels = {};
+                videos.forEach(video => {
+                    const channel = video.channel_title || 'unknown';
+                    channels[channel] = (channels[channel] || 0) + 1;
+                });
+                
+                const topChannels = Object.entries(channels)
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 10);
+                
+                chartData = {
+                    labels: topChannels.map(([channel]) => channel),
+                    datasets: [{
+                        label: 'Videos Count',
+                        data: topChannels.map(([,count]) => count),
+                        backgroundColor: '#ff0000'
+                    }]
+                };
+                chartTitle = 'Videos by Channel';
+                break;
+                
+            case 'twitter':
+                if (Array.isArray(data) && data.length > 0) {
+                    const engagementData = data.slice(0, 10).map((tweet, index) => ({
+                        label: `Tweet ${index + 1}`,
+                        engagement: (tweet.like_count || 0) + (tweet.retweet_count || 0)
+                    }));
+                    
+                    chartData = {
+                        labels: engagementData.map(d => d.label),
+                        datasets: [{
+                            label: 'Engagement',
+                            data: engagementData.map(d => d.engagement),
+                            backgroundColor: '#1da1f2'
+                        }]
+                    };
+                    chartTitle = 'Twitter Engagement';
+                } else {
+                    return;
+                }
+                break;
+                
+            case 'google':
+                const interestData = data.interest_data || [];
+                if (interestData.length > 0) {
+                    const recentData = interestData.slice(-10);
+                    chartData = {
+                        labels: recentData.map(d => d.date),
+                        datasets: [{
+                            label: 'Interest',
+                            data: recentData.map(d => Object.values(d.values || {}).reduce((a, b) => a + b, 0)),
+                            backgroundColor: '#4285f4',
+                            borderColor: '#4285f4',
+                            type: 'line'
+                        }]
+                    };
+                    chartTitle = 'Google Trends Interest';
+                } else {
+                    return;
+                }
+                break;
+        }
+        
+        new Chart(ctx, {
+            type: source === 'google' ? 'line' : 'bar',
+            data: chartData,
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: chartTitle
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+{% endblock %} 

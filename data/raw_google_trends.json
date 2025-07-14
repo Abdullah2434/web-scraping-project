@@ -1,20 +1,455 @@
 {
   "collection_info": {
     "keywords": [
+      "climate change",
+      "cryptocurrency",
+      "space exploration",
+      "renewable energy",
       "AI"
     ],
-    "total_keywords": 1,
+    "total_keywords": 5,
     "region": "US",
-    "timeframe": "today 3-m",
-    "collection_timestamp": "2025-07-10T19:15:10.777189"
+    "timeframe": "today 12-m",
+    "collection_timestamp": "2025-07-14T15:51:22.924682"
   },
   "interest_over_time": {
-    "AI": {
+    "climate change_cryptocurrency_space exploration_renewable energy_AI": {
       "keywords": [
+        "climate change",
+        "cryptocurrency",
+        "space exploration",
+        "renewable energy",
         "AI"
       ],
-      "error": "The request failed: Google returned a response with code 429",
-      "timestamp": "2025-07-10T19:15:12.202764"
+      "timeframe": "today 12-m",
+      "region": "US",
+      "data": [
+        {
+          "date": "2024-07-14 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 33
+        },
+        {
+          "date": "2024-07-21 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 34
+        },
+        {
+          "date": "2024-07-28 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 33
+        },
+        {
+          "date": "2024-08-04 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 35
+        },
+        {
+          "date": "2024-08-11 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 38
+        },
+        {
+          "date": "2024-08-18 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 39
+        },
+        {
+          "date": "2024-08-25 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 39
+        },
+        {
+          "date": "2024-09-01 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 40
+        },
+        {
+          "date": "2024-09-08 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 44
+        },
+        {
+          "date": "2024-09-15 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 43
+        },
+        {
+          "date": "2024-09-22 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 47
+        },
+        {
+          "date": "2024-09-29 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 46
+        },
+        {
+          "date": "2024-10-06 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 47
+        },
+        {
+          "date": "2024-10-13 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 45
+        },
+        {
+          "date": "2024-10-20 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 51
+        },
+        {
+          "date": "2024-10-27 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 49
+        },
+        {
+          "date": "2024-11-03 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 46
+        },
+        {
+          "date": "2024-11-10 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 50
+        },
+        {
+          "date": "2024-11-17 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 52
+        },
+        {
+          "date": "2024-11-24 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 44
+        },
+        {
+          "date": "2024-12-01 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 54
+        },
+        {
+          "date": "2024-12-08 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 58
+        },
+        {
+          "date": "2024-12-15 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 50
+        },
+        {
+          "date": "2024-12-22 00:00:00",
+          "climate change": 0,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 40
+        },
+        {
+          "date": "2024-12-29 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 42
+        },
+        {
+          "date": "2025-01-05 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 49
+        },
+        {
+          "date": "2025-01-12 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 50
+        },
+        {
+          "date": "2025-01-19 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 57
+        },
+        {
+          "date": "2025-01-26 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 62
+        },
+        {
+          "date": "2025-02-02 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 61
+        },
+        {
+          "date": "2025-02-09 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 60
+        },
+        {
+          "date": "2025-02-16 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 59
+        },
+        {
+          "date": "2025-02-23 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 66
+        },
+        {
+          "date": "2025-03-02 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 62
+        },
+        {
+          "date": "2025-03-09 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 60
+        },
+        {
+          "date": "2025-03-16 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 58
+        },
+        {
+          "date": "2025-03-23 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 61
+        },
+        {
+          "date": "2025-03-30 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 65
+        },
+        {
+          "date": "2025-04-06 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 66
+        },
+        {
+          "date": "2025-04-13 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 60
+        },
+        {
+          "date": "2025-04-20 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 63
+        },
+        {
+          "date": "2025-04-27 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 66
+        },
+        {
+          "date": "2025-05-04 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 66
+        },
+        {
+          "date": "2025-05-11 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 62
+        },
+        {
+          "date": "2025-05-18 00:00:00",
+          "climate change": 2,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 65
+        },
+        {
+          "date": "2025-05-25 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 62
+        },
+        {
+          "date": "2025-06-01 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 66
+        },
+        {
+          "date": "2025-06-08 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 74
+        },
+        {
+          "date": "2025-06-15 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 70
+        },
+        {
+          "date": "2025-06-22 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 1,
+          "AI": 72
+        },
+        {
+          "date": "2025-06-29 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 0,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 100
+        },
+        {
+          "date": "2025-07-06 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 63
+        },
+        {
+          "date": "2025-07-13 00:00:00",
+          "climate change": 1,
+          "cryptocurrency": 1,
+          "space exploration": 0,
+          "renewable energy": 0,
+          "AI": 59
+        }
+      ],
+      "timestamp": "2025-07-14T15:51:40.430666"
     }
   },
   "related_queries": {},

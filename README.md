@@ -7,7 +7,7 @@ A beginner-friendly Python project that scrapes trending data based on keywords 
 - **Google Trends Integration**: Fetch trending searches and related queries
 - **Reddit Data Collection**: Get top posts and discussions for keywords
 - **Data Cleaning**: Remove duplicates, normalize text, and process data
-- **Database Storage**: Store data in MongoDB or PostgreSQL
+- **JSON File Storage**: Store data in lightweight JSON files
 - **Interactive Dashboard**: Streamlit app with charts and search functionality
 
 ## 📁 Project Structure
@@ -19,7 +19,6 @@ web-scraping-project/
 ├── fetch_google_data.py     # Google Trends data collection
 ├── fetch_reddit_data.py     # Reddit data collection
 ├── clean_data.py            # Data cleaning and processing
-├── save_to_db.py            # Database operations
 ├── app.py                   # Streamlit dashboard
 └── README.md                # This file
 ```
@@ -58,18 +57,7 @@ REDDIT_USERNAME=your_reddit_username
 REDDIT_PASSWORD=your_reddit_password
 ```
 
-### 4. Database Setup (Choose One)
-
-#### Option A: MongoDB (Recommended for beginners)
-- Install [MongoDB Community Edition](https://docs.mongodb.com/manual/installation/)
-- Default connection: `mongodb://localhost:27017/`
-
-#### Option B: PostgreSQL
-- Install [PostgreSQL](https://www.postgresql.org/download/)
-- Create a database named `keyword_trends`
-- Update connection details in `config.py`
-
-### 5. Run the Application
+### 4. Run the Application
 
 #### Collect Data
 ```bash
@@ -81,9 +69,6 @@ python fetch_reddit_data.py
 
 # Clean and process data
 python clean_data.py
-
-# Save to database
-python save_to_db.py
 ```
 
 #### Launch Dashboard
@@ -104,9 +89,9 @@ streamlit run app.py
 
 Edit `config.py` to customize:
 - Keywords to search
-- Database connection settings
 - API rate limits
 - Data collection parameters
+- File storage paths
 
 ## 📚 Learning Resources
 
@@ -127,16 +112,15 @@ Edit `config.py` to customize:
 ### Common Issues
 
 1. **Reddit API Errors**: Check your `.env` file credentials
-2. **Database Connection**: Ensure MongoDB/PostgreSQL is running
-3. **Missing Data**: Run data collection scripts before dashboard
-4. **Streamlit Errors**: Check all dependencies are installed
+2. **Missing Data**: Run data collection scripts before dashboard
+3. **Streamlit Errors**: Check all dependencies are installed
 
 ### Getting Help
 
 - Check error messages in terminal
 - Verify all dependencies are installed: `pip list`
-- Ensure database is running and accessible
 - Review configuration in `config.py`
+- Ensure `data/` directory exists for JSON files
 
 ## 🎓 Next Steps
 

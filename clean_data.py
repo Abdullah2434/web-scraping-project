@@ -367,39 +367,253 @@ class DataCleaner:
         
         return cleaned_data
     
-    def create_unified_dataset(self, google_data: Dict[str, Any], reddit_data: Dict[str, Any]) -> Dict[str, Any]:
+    def clean_youtube_data(self, youtube_data: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Create a unified dataset combining Google Trends and Reddit data
+        Clean YouTube data
+        
+        Args:
+            youtube_data (Dict): Raw YouTube data
+            
+        Returns:
+            Dict: Cleaned YouTube data
+        """
+        logger.info("🎥 Cleaning YouTube data...")
+        
+        cleaned_data = {
+            'source': 'youtube',
+            'collection_info': youtube_data.get('collection_info', {}),
+            'cleaned_timestamp': datetime.now().isoformat(),
+            'videos': [],
+            'comments': [],
+            'keywords_analyzed': []
+        }
+        
+        # Process videos
+        videos = youtube_data.get('videos', [])
+        all_videos = []
+        
+        for video in videos:
+            if isinstance(video, dict) and 'video_id' in video:
+                # Clean video data
+                cleaned_video = {
+                    'search_keyword': video.get('search_keyword', ''),
+                    'video_id': video.get('video_id', ''),
+                    'title': self.clean_text(video.get('title', '')),
+                    'title_original': video.get('title', ''),
+                    'description': self.clean_text(video.get('description', '')),
+                    'description_original': video.get('description', ''),
+                    'channel_title': self.clean_text(video.get('channel_title', '')),
+                    'channel_id': video.get('channel_id', ''),
+                    'published_at': video.get('published_at', ''),
+                    'view_count': video.get('view_count', 0),
+                    'like_count': video.get('like_count', 0),
+                    'comment_count': video.get('comment_count', 0),
+                    'duration': video.get('duration', ''),
+                    'definition': video.get('definition', ''),
+                    'url': video.get('url', ''),
+                    'tags': video.get('tags', [])
+                }
+                
+                # Extract keywords from title, description, and tags
+                title_keywords = self.extract_keywords_from_text(cleaned_video['title'])
+                desc_keywords = self.extract_keywords_from_text(cleaned_video['description'])
+                tag_keywords = set()
+                for tag in cleaned_video['tags']:
+                    tag_keywords.update(self.extract_keywords_from_text(tag))
+                
+                cleaned_video['extracted_keywords'] = list(title_keywords.union(desc_keywords).union(tag_keywords))
+                all_videos.append(cleaned_video)
+        
+        # Remove duplicate videos based on video_id
+        cleaned_data['videos'] = self.remove_duplicates(all_videos, ['video_id'])
+        
+        # Process comments
+        comments = youtube_data.get('comments', [])
+        all_comments = []
+        
+        for comment in comments:
+            if isinstance(comment, dict) and 'comment_id' in comment:
+                cleaned_comment = {
+                    'video_id': comment.get('video_id', ''),
+                    'comment_id': comment.get('comment_id', ''),
+                    'text': self.clean_text(comment.get('text', '')),
+                    'text_original': comment.get('text', ''),
+                    'author': comment.get('author', ''),
+                    'like_count': comment.get('like_count', 0),
+                    'published_at': comment.get('published_at', ''),
+                    'collection_timestamp': comment.get('collection_timestamp', '')
+                }
+                
+                # Extract keywords from comment text
+                comment_keywords = self.extract_keywords_from_text(cleaned_comment['text'])
+                cleaned_comment['extracted_keywords'] = list(comment_keywords)
+                all_comments.append(cleaned_comment)
+        
+        # Remove duplicate comments based on comment_id
+        cleaned_data['comments'] = self.remove_duplicates(all_comments, ['comment_id'])
+        
+        # Extract unique keywords
+        all_keywords = set()
+        for video in cleaned_data['videos']:
+            all_keywords.add(video['search_keyword'])
+        
+        cleaned_data['keywords_analyzed'] = list(all_keywords)
+        
+        logger.info(f"✅ YouTube data cleaned: {len(cleaned_data['videos'])} videos, "
+                   f"{len(cleaned_data['comments'])} comments")
+        
+        return cleaned_data
+    
+    def clean_twitter_data(self, twitter_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Clean Twitter data
+        
+        Args:
+            twitter_data (Dict): Raw Twitter data
+            
+        Returns:
+            Dict: Cleaned Twitter data
+        """
+        logger.info("🐦 Cleaning Twitter data...")
+        
+        cleaned_data = {
+            'source': 'twitter',
+            'collection_info': twitter_data.get('collection_info', {}),
+            'cleaned_timestamp': datetime.now().isoformat(),
+            'tweets': [],
+            'hashtag_analysis': {},
+            'mention_analysis': {},
+            'keywords_analyzed': []
+        }
+        
+        # Process tweets
+        tweets = twitter_data.get('tweets', [])
+        all_tweets = []
+        
+        for tweet in tweets:
+            if isinstance(tweet, dict) and 'tweet_id' in tweet:
+                # Clean tweet data
+                cleaned_tweet = {
+                    'search_keyword': tweet.get('search_keyword', ''),
+                    'tweet_id': tweet.get('tweet_id', ''),
+                    'text': self.clean_text(tweet.get('text', ''), remove_urls=False),  # Keep URLs for context
+                    'text_original': tweet.get('text', ''),
+                    'created_at': tweet.get('created_at', ''),
+                    'author_id': tweet.get('author_id', ''),
+                    'author_username': tweet.get('author_username', ''),
+                    'author_name': self.clean_text(tweet.get('author_name', '')),
+                    'author_verified': tweet.get('author_verified', False),
+                    'lang': tweet.get('lang', ''),
+                    'retweet_count': tweet.get('retweet_count', 0),
+                    'like_count': tweet.get('like_count', 0),
+                    'reply_count': tweet.get('reply_count', 0),
+                    'quote_count': tweet.get('quote_count', 0),
+                    'author_followers_count': tweet.get('author_followers_count', 0),
+                    'hashtags': tweet.get('hashtags', []),
+                    'mentions': tweet.get('mentions', []),
+                    'url': tweet.get('url', '')
+                }
+                
+                # Extract keywords from tweet text (excluding hashtags and mentions for general keywords)
+                tweet_text_clean = self.clean_text(tweet.get('text', ''), remove_special_chars=True)
+                text_keywords = self.extract_keywords_from_text(tweet_text_clean)
+                
+                # Combine with hashtags and mentions
+                all_keywords = list(text_keywords)
+                all_keywords.extend([f"#{tag}" for tag in cleaned_tweet['hashtags']])
+                all_keywords.extend([f"@{mention}" for mention in cleaned_tweet['mentions']])
+                
+                cleaned_tweet['extracted_keywords'] = all_keywords
+                all_tweets.append(cleaned_tweet)
+        
+        # Remove duplicate tweets based on tweet_id
+        cleaned_data['tweets'] = self.remove_duplicates(all_tweets, ['tweet_id'])
+        
+        # Process hashtag analysis
+        hashtag_analysis = twitter_data.get('hashtag_analysis', {})
+        if isinstance(hashtag_analysis, dict):
+            cleaned_data['hashtag_analysis'] = {
+                'total_hashtags': hashtag_analysis.get('total_hashtags', 0),
+                'unique_hashtags': hashtag_analysis.get('unique_hashtags', 0),
+                'top_hashtags': hashtag_analysis.get('top_hashtags', [])
+            }
+        
+        # Process mention analysis
+        mention_analysis = twitter_data.get('mention_analysis', {})
+        if isinstance(mention_analysis, dict):
+            cleaned_data['mention_analysis'] = {
+                'total_mentions': mention_analysis.get('total_mentions', 0),
+                'unique_mentions': mention_analysis.get('unique_mentions', 0),
+                'top_mentions': mention_analysis.get('top_mentions', [])
+            }
+        
+        # Extract unique keywords
+        all_keywords = set()
+        for tweet in cleaned_data['tweets']:
+            all_keywords.add(tweet['search_keyword'])
+        
+        cleaned_data['keywords_analyzed'] = list(all_keywords)
+        
+        logger.info(f"✅ Twitter data cleaned: {len(cleaned_data['tweets'])} tweets, "
+                   f"{cleaned_data['hashtag_analysis'].get('unique_hashtags', 0)} unique hashtags")
+        
+        return cleaned_data
+    
+    def create_unified_dataset(self, google_data: Dict[str, Any], reddit_data: Dict[str, Any], 
+                              youtube_data: Optional[Dict[str, Any]] = None, 
+                              twitter_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """
+        Create a unified dataset combining data from all sources
         
         Args:
             google_data (Dict): Cleaned Google Trends data
             reddit_data (Dict): Cleaned Reddit data
+            youtube_data (Dict, optional): Cleaned YouTube data
+            twitter_data (Dict, optional): Cleaned Twitter data
             
         Returns:
             Dict: Unified dataset
         """
         logger.info("🔗 Creating unified dataset...")
         
-        # Get all unique keywords from both sources
+        # Get all unique keywords from all sources
         google_keywords = set(google_data.get('keywords_analyzed', []))
         reddit_keywords = set(reddit_data.get('keywords_analyzed', []))
-        all_keywords = google_keywords.union(reddit_keywords)
+        youtube_keywords = set(youtube_data.get('keywords_analyzed', [])) if youtube_data else set()
+        twitter_keywords = set(twitter_data.get('keywords_analyzed', [])) if twitter_data else set()
+        
+        all_keywords = google_keywords.union(reddit_keywords).union(youtube_keywords).union(twitter_keywords)
+        
+        # Determine which data sources are available
+        data_sources = ['google_trends', 'reddit']
+        if youtube_data:
+            data_sources.append('youtube')
+        if twitter_data:
+            data_sources.append('twitter')
         
         unified_data = {
             'creation_timestamp': datetime.now().isoformat(),
-            'data_sources': ['google_trends', 'reddit'],
+            'data_sources': data_sources,
             'keywords_analyzed': list(all_keywords),
             'summary_stats': {
                 'total_keywords': len(all_keywords),
                 'google_trends_keywords': len(google_keywords),
                 'reddit_keywords': len(reddit_keywords),
+                'youtube_keywords': len(youtube_keywords),
+                'twitter_keywords': len(twitter_keywords),
                 'google_interest_points': len(google_data.get('interest_data', [])),
                 'google_related_queries': len(google_data.get('related_queries', [])),
                 'reddit_posts': len(reddit_data.get('posts', [])),
-                'unique_subreddits': len(reddit_data.get('unique_subreddits', []))
+                'unique_subreddits': len(reddit_data.get('unique_subreddits', [])),
+                'youtube_videos': len(youtube_data.get('videos', [])) if youtube_data else 0,
+                'youtube_comments': len(youtube_data.get('comments', [])) if youtube_data else 0,
+                'twitter_tweets': len(twitter_data.get('tweets', [])) if twitter_data else 0,
+                'twitter_hashtags': twitter_data.get('hashtag_analysis', {}).get('unique_hashtags', 0) if twitter_data else 0
             },
             'google_trends_data': google_data,
             'reddit_data': reddit_data,
+            'youtube_data': youtube_data,
+            'twitter_data': twitter_data,
             'keyword_analysis': {}
         }
         
@@ -409,10 +623,18 @@ class DataCleaner:
                 'keyword': keyword,
                 'in_google_trends': keyword in google_keywords,
                 'in_reddit': keyword in reddit_keywords,
+                'in_youtube': keyword in youtube_keywords,
+                'in_twitter': keyword in twitter_keywords,
                 'reddit_posts_count': 0,
                 'reddit_avg_score': 0,
                 'reddit_subreddits': [],
-                'google_related_queries_count': 0
+                'google_related_queries_count': 0,
+                'youtube_videos_count': 0,
+                'youtube_avg_views': 0,
+                'youtube_avg_likes': 0,
+                'twitter_tweets_count': 0,
+                'twitter_avg_likes': 0,
+                'twitter_avg_retweets': 0
             }
             
             # Calculate Reddit stats for this keyword
@@ -428,21 +650,46 @@ class DataCleaner:
             google_queries = [q for q in google_data.get('related_queries', []) if q.get('keyword') == keyword]
             keyword_stats['google_related_queries_count'] = len(google_queries)
             
+            # Calculate YouTube stats for this keyword
+            if youtube_data:
+                youtube_videos = [v for v in youtube_data.get('videos', []) if v.get('search_keyword') == keyword]
+                keyword_stats['youtube_videos_count'] = len(youtube_videos)
+                
+                if youtube_videos:
+                    views = [v.get('view_count', 0) for v in youtube_videos if isinstance(v.get('view_count'), (int, float))]
+                    likes = [v.get('like_count', 0) for v in youtube_videos if isinstance(v.get('like_count'), (int, float))]
+                    keyword_stats['youtube_avg_views'] = sum(views) / len(views) if views else 0
+                    keyword_stats['youtube_avg_likes'] = sum(likes) / len(likes) if likes else 0
+            
+            # Calculate Twitter stats for this keyword
+            if twitter_data:
+                twitter_tweets = [t for t in twitter_data.get('tweets', []) if t.get('search_keyword') == keyword]
+                keyword_stats['twitter_tweets_count'] = len(twitter_tweets)
+                
+                if twitter_tweets:
+                    likes = [t.get('like_count', 0) for t in twitter_tweets if isinstance(t.get('like_count'), (int, float))]
+                    retweets = [t.get('retweet_count', 0) for t in twitter_tweets if isinstance(t.get('retweet_count'), (int, float))]
+                    keyword_stats['twitter_avg_likes'] = sum(likes) / len(likes) if likes else 0
+                    keyword_stats['twitter_avg_retweets'] = sum(retweets) / len(retweets) if retweets else 0
+            
             unified_data['keyword_analysis'][keyword] = keyword_stats
         
         logger.info(f"✅ Unified dataset created with {len(all_keywords)} keywords")
         return unified_data
 
 
-def load_raw_data() -> tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
+def load_raw_data() -> tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]], 
+                           Optional[Dict[str, Any]], Optional[Dict[str, Any]]]:
     """
-    Load raw data from JSON files
+    Load raw data from JSON files for all sources
     
     Returns:
-        tuple: (google_data, reddit_data) or (None, None) if loading fails
+        tuple: (google_data, reddit_data, youtube_data, twitter_data)
     """
     google_data = None
     reddit_data = None
+    youtube_data = None
+    twitter_data = None
     
     # Load Google Trends data
     try:
@@ -464,7 +711,27 @@ def load_raw_data() -> tuple[Optional[Dict[str, Any]], Optional[Dict[str, Any]]]
     except Exception as e:
         logger.error(f"❌ Error loading Reddit data: {e}")
     
-    return google_data, reddit_data
+    # Load YouTube data
+    try:
+        with open(DATA_PATHS['raw_youtube_data'], 'r', encoding='utf-8') as f:
+            youtube_data = json.load(f)
+        logger.info(f"✅ Loaded YouTube data from {DATA_PATHS['raw_youtube_data']}")
+    except FileNotFoundError:
+        logger.warning(f"⚠️  YouTube data not found: {DATA_PATHS['raw_youtube_data']}")
+    except Exception as e:
+        logger.error(f"❌ Error loading YouTube data: {e}")
+    
+    # Load Twitter data
+    try:
+        with open(DATA_PATHS['raw_twitter_data'], 'r', encoding='utf-8') as f:
+            twitter_data = json.load(f)
+        logger.info(f"✅ Loaded Twitter data from {DATA_PATHS['raw_twitter_data']}")
+    except FileNotFoundError:
+        logger.warning(f"⚠️  Twitter data not found: {DATA_PATHS['raw_twitter_data']}")
+    except Exception as e:
+        logger.error(f"❌ Error loading Twitter data: {e}")
+    
+    return google_data, reddit_data, youtube_data, twitter_data
 
 
 def save_cleaned_data(data: Dict[str, Any], filepath: Optional[str] = None) -> bool:
@@ -505,11 +772,11 @@ def main():
     try:
         # Load raw data
         print("📂 Loading raw data...")
-        google_data, reddit_data = load_raw_data()
+        google_data, reddit_data, youtube_data, twitter_data = load_raw_data()
         
-        if google_data is None and reddit_data is None:
+        if not any([google_data, reddit_data, youtube_data, twitter_data]):
             print("❌ No raw data found to clean.")
-            print("   Please run fetch_google_data.py and fetch_reddit_data.py first.")
+            print("   Please run data collection scripts first.")
             return
         
         # Initialize cleaner
@@ -518,6 +785,8 @@ def main():
         # Clean individual datasets
         cleaned_google = None
         cleaned_reddit = None
+        cleaned_youtube = None
+        cleaned_twitter = None
         
         if google_data:
             print("🔍 Cleaning Google Trends data...")
@@ -527,24 +796,25 @@ def main():
             print("📱 Cleaning Reddit data...")
             cleaned_reddit = cleaner.clean_reddit_data(reddit_data)
         
-        # Create unified dataset if both sources are available
-        if cleaned_google and cleaned_reddit:
+        if youtube_data:
+            print("🎥 Cleaning YouTube data...")
+            cleaned_youtube = cleaner.clean_youtube_data(youtube_data)
+        
+        if twitter_data:
+            print("🐦 Cleaning Twitter data...")
+            cleaned_twitter = cleaner.clean_twitter_data(twitter_data)
+        
+        # Create unified dataset - need at least Google or Reddit for base
+        if cleaned_google or cleaned_reddit:
             print("🔗 Creating unified dataset...")
-            unified_data = cleaner.create_unified_dataset(cleaned_google, cleaned_reddit)
-        elif cleaned_google:
-            unified_data = {
-                'creation_timestamp': datetime.now().isoformat(),
-                'data_sources': ['google_trends'],
-                'google_trends_data': cleaned_google
-            }
-        elif cleaned_reddit:
-            unified_data = {
-                'creation_timestamp': datetime.now().isoformat(),
-                'data_sources': ['reddit'],
-                'reddit_data': cleaned_reddit
-            }
+            unified_data = cleaner.create_unified_dataset(
+                cleaned_google or {'keywords_analyzed': [], 'interest_data': [], 'related_queries': []},
+                cleaned_reddit or {'keywords_analyzed': [], 'posts': [], 'unique_subreddits': []},
+                cleaned_youtube,
+                cleaned_twitter
+            )
         else:
-            print("❌ No valid data to process.")
+            print("❌ Need at least Google Trends or Reddit data to create unified dataset.")
             return
         
         # Save cleaned data
@@ -559,10 +829,18 @@ def main():
             print("\n📊 Cleaning Summary:")
             if 'summary_stats' in unified_data:
                 stats = unified_data['summary_stats']
+                sources = unified_data.get('data_sources', [])
+                print(f"   Data sources: {', '.join(sources)}")
                 print(f"   Total keywords: {stats.get('total_keywords', 0)}")
-                print(f"   Google Trends data: {stats.get('google_interest_points', 0)} interest points")
-                print(f"   Reddit data: {stats.get('reddit_posts', 0)} posts")
-                print(f"   Unique subreddits: {stats.get('unique_subreddits', 0)}")
+                
+                if 'google_trends' in sources:
+                    print(f"   Google Trends: {stats.get('google_interest_points', 0)} interest points")
+                if 'reddit' in sources:
+                    print(f"   Reddit: {stats.get('reddit_posts', 0)} posts, {stats.get('unique_subreddits', 0)} subreddits")
+                if 'youtube' in sources:
+                    print(f"   YouTube: {stats.get('youtube_videos', 0)} videos, {stats.get('youtube_comments', 0)} comments")
+                if 'twitter' in sources:
+                    print(f"   Twitter: {stats.get('twitter_tweets', 0)} tweets, {stats.get('twitter_hashtags', 0)} hashtags")
             
             if 'keyword_analysis' in unified_data:
                 print(f"   Keyword analysis: {len(unified_data['keyword_analysis'])} keywords processed")

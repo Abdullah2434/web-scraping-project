@@ -1,0 +1,1058 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics - Keyword Trends Dashboard{% endblock %}
+
+{% block page_title %}Analytics{% endblock %}
+{% block page_subtitle %}Deep dive into your keyword trends data with advanced analytics{% endblock %}
+
+{% block content %}
+<!-- Analytics Filters -->
+<div class="analytics-filters">
+    <div class="filter-card">
+        <div class="filter-section">
+            <label>Time Range</label>
+            <select id="timeRange" onchange="updateAnalytics()">
+                <option value="7">Last 7 days</option>
+                <option value="30" selected>Last 30 days</option>
+                <option value="90">Last 3 months</option>
+                <option value="365">Last year</option>
+            </select>
+        </div>
+        
+        <div class="filter-section">
+            <label>Data Source</label>
+            <select id="dataSource" onchange="updateAnalytics()">
+                <option value="all">All Sources</option>
+                <option value="reddit">Reddit</option>
+                <option value="youtube">YouTube</option>
+                <option value="twitter">Twitter</option>
+                <option value="google">Google Trends</option>
+            </select>
+        </div>
+        
+        <div class="filter-section">
+            <label>Keywords</label>
+            <select id="keywordSelect" onchange="updateAnalytics()">
+                <option value="all">All Keywords</option>
+                <option value="AI">AI</option>
+                <option value="ChatGPT">ChatGPT</option>
+                <option value="Machine Learning">Machine Learning</option>
+                <option value="Python Programming">Python Programming</option>
+            </select>
+        </div>
+        
+        <div class="filter-actions">
+            <button class="btn btn-outline" onclick="resetFilters()">
+                <i class="fas fa-undo"></i>
+                Reset
+            </button>
+            <button class="btn btn-primary" onclick="exportData()">
+                <i class="fas fa-download"></i>
+                Export
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Analytics Overview -->
+<div class="analytics-overview">
+    <div class="overview-grid">
+        <div class="overview-card">
+            <div class="card-header">
+                <h4>Total Content</h4>
+                <i class="fas fa-layer-group"></i>
+            </div>
+            <div class="card-body">
+                <div class="metric-large" id="totalContent">Loading...</div>
+                <div class="metric-change positive">All sources combined</div>
+            </div>
+        </div>
+        
+        <div class="overview-card">
+            <div class="card-header">
+                <h4>Trending Keywords</h4>
+                <i class="fas fa-fire"></i>
+            </div>
+            <div class="card-body">
+                <div class="metric-large" id="trendingCount">Loading...</div>
+                <div class="metric-change positive">AI-discovered trends</div>
+            </div>
+        </div>
+        
+        <div class="overview-card">
+            <div class="card-header">
+                <h4>Active Sources</h4>
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="card-body">
+                <div class="metric-large" id="activeSources">Loading...</div>
+                <div class="metric-change positive">Data platforms</div>
+            </div>
+        </div>
+        
+        <div class="overview-card">
+            <div class="card-header">
+                <h4>Analysis Status</h4>
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="card-body">
+                <div class="metric-large" id="analysisStatus">Active</div>
+                <div class="metric-change positive">Real-time monitoring</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Advanced Charts Grid -->
+<div class="advanced-charts">
+    <div class="charts-row">
+        <!-- Engagement Timeline -->
+        <div class="chart-card-large">
+            <div class="chart-header">
+                <h4>📈 Engagement Timeline</h4>
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-view="daily">Daily</button>
+                    <button class="chart-btn" data-view="weekly">Weekly</button>
+                    <button class="chart-btn" data-view="monthly">Monthly</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="engagementTimelineChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Source Comparison -->
+        <div class="chart-card-medium">
+            <div class="chart-header">
+                <h4>📊 Source Performance</h4>
+                <button class="chart-expand" onclick="expandChart('sourceComparison')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="sourceComparisonChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="charts-row">
+        <!-- Keyword Heatmap -->
+        <div class="chart-card-medium">
+            <div class="chart-header">
+                <h4>🔥 Keyword Heatmap</h4>
+                <button class="chart-expand" onclick="expandChart('keywordHeatmap')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="keywordHeatmapChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Sentiment Analysis -->
+        <div class="chart-card-medium">
+            <div class="chart-header">
+                <h4>😊 Sentiment Distribution</h4>
+                <button class="chart-expand" onclick="expandChart('sentimentAnalysis')">
+                    <i class="fas fa-expand"></i>
+                </button>
+            </div>
+            <div class="chart-container">
+                <canvas id="sentimentChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="charts-row">
+        <!-- Growth Trends -->
+        <div class="chart-card-large">
+            <div class="chart-header">
+                <h4>📈 Growth Trends</h4>
+                <div class="chart-legend">
+                    <span class="legend-item"><span class="legend-color" style="background: #1e3a8a;"></span>Reddit</span>
+                    <span class="legend-item"><span class="legend-color" style="background: #dc2626;"></span>YouTube</span>
+                    <span class="legend-item"><span class="legend-color" style="background: #059669;"></span>Twitter</span>
+                    <span class="legend-item"><span class="legend-color" style="background: #d97706;"></span>Google</span>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="growthTrendsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Data Tables Section -->
+<div class="data-tables-section">
+    <div class="section-header">
+        <h3>📋 Detailed Data Analysis</h3>
+        <div class="table-controls">
+            <input type="text" placeholder="Search..." id="dataSearch" onkeyup="filterTable()">
+            <select id="tableSource" onchange="filterTable()">
+                <option value="all">All Sources</option>
+                <option value="reddit">Reddit</option>
+                <option value="youtube">YouTube</option>
+                <option value="twitter">Twitter</option>
+                <option value="google">Google Trends</option>
+            </select>
+        </div>
+    </div>
+    
+    <div class="tables-grid">
+        <!-- Top Performing Content -->
+        <div class="table-card">
+            <div class="table-header">
+                <h4>🏆 Top Performing Content</h4>
+                <span class="table-count">Showing top 10</span>
+            </div>
+            <div class="table-container">
+                <table id="topContentTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Content</th>
+                            <th>Source</th>
+                            <th>Engagement</th>
+                            <th>Keyword</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Keyword Performance -->
+        <div class="table-card">
+            <div class="table-header">
+                <h4>🔑 Keyword Performance</h4>
+                <span class="table-count">All keywords</span>
+            </div>
+            <div class="table-container">
+                <table id="keywordTable" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Keyword</th>
+                            <th>Mentions</th>
+                            <th>Avg. Engagement</th>
+                            <th>Trend</th>
+                            <th>Sentiment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Analytics page initialization
+document.addEventListener('DOMContentLoaded', function() {
+    initializeAnalytics();
+    loadAnalyticsData();
+});
+
+function initializeAnalytics() {
+    // Load analytics data and create all charts
+    loadAnalyticsData();
+    loadKeywordOptions();
+    
+    // Create advanced charts in parallel
+    Promise.all([
+        createEngagementTimelineChart(),
+        createSourceComparisonChart(),
+        createKeywordHeatmapChart(),
+        createSentimentChart(),
+        createGrowthTrendsChart()
+    ]).then(() => {
+        console.log('All analytics charts loaded');
+    }).catch(error => {
+        console.error('Error loading analytics charts:', error);
+    });
+    
+    // Load data tables
+    loadTopContentTable();
+    loadKeywordTable();
+}
+
+// Load real keywords for filter dropdown
+async function loadKeywordOptions() {
+    try {
+        const response = await fetch('/api/stats');
+        const stats = await response.json();
+        
+        if (response.ok && stats && stats.keywords_analyzed) {
+            const keywordSelect = document.getElementById('keywordSelect');
+            
+            // Clear existing options except "All"
+            keywordSelect.innerHTML = '<option value="all">All Keywords</option>';
+            
+            // Add real keywords
+            stats.keywords_analyzed.forEach(keyword => {
+                const option = document.createElement('option');
+                option.value = keyword;
+                option.textContent = keyword;
+                keywordSelect.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading keyword options:', error);
+    }
+}
+
+function updateAnalytics() {
+    const timeRange = document.getElementById('timeRange').value;
+    const dataSource = document.getElementById('dataSource').value;
+    const keyword = document.getElementById('keywordSelect').value;
+    
+    console.log('Updating analytics with filters:', {timeRange, dataSource, keyword});
+    
+    // Apply filters to charts and data
+    filterAnalyticsData(timeRange, dataSource, keyword);
+}
+
+function resetFilters() {
+    document.getElementById('timeRange').value = '30';
+    document.getElementById('dataSource').value = 'all';
+    document.getElementById('keywordSelect').value = 'all';
+    updateAnalytics();
+}
+
+function exportData() {
+    try {
+        const dataSource = document.getElementById('dataSource').value;
+        const keyword = document.getElementById('keywordSelect').value;
+        
+        // Create export data
+        const exportData = {
+            exported_at: new Date().toISOString(),
+            filters: {
+                dataSource: dataSource,
+                keyword: keyword,
+                timeRange: document.getElementById('timeRange').value
+            },
+            analytics: 'Filtered analytics data would be here'
+        };
+        
+        // Create and download file
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `analytics_export_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showNotification('Analytics data exported successfully!', 'success');
+    } catch (error) {
+        console.error('Export error:', error);
+        showNotification('Export failed. Please try again.', 'error');
+    }
+}
+
+async function filterAnalyticsData(timeRange, dataSource, keyword) {
+    try {
+        // Filter engagement timeline chart
+        await updateEngagementTimeline(dataSource, parseInt(timeRange));
+        
+        // Filter source comparison
+        await updateSourceComparison(dataSource);
+        
+        // Update data tables with filters
+        await updateDataTables(dataSource, keyword);
+        
+        showNotification(`Analytics updated for ${dataSource} data`, 'success');
+    } catch (error) {
+        console.error('Error filtering analytics:', error);
+        showNotification('Failed to update analytics filters', 'error');
+    }
+}
+
+async function updateEngagementTimeline(sourceFilter, days) {
+    const ctx = document.getElementById('engagementTimelineChart');
+    if (!ctx) return;
+    
+    try {
+        const response = await fetch('/api/data');
+        const data = await response.json();
+        
+        if (!response.ok || !data) return;
+        
+        const dateRange = generateDateRange(days);
+        let datasets = [];
+        
+        if (sourceFilter === 'all' || sourceFilter === 'reddit') {
+            const redditData = data.reddit_data?.posts || [];
+            const redditEngagement = dateRange.map(date => {
+                const dayPosts = redditData.filter(post => {
+                    if (!post.created_date) return false;
+                    const postDate = new Date(post.created_date);
+                    return postDate.toDateString() === date.toDateString();
+                });
+                return dayPosts.reduce((sum, post) => sum + (post.score || 0), 0);
+            });
+            
+            datasets.push({
+                label: 'Reddit Score',
+                data: redditEngagement,
+                borderColor: '#ff4500',
+                backgroundColor: 'rgba(255, 69, 0, 0.1)',
+                fill: true,
+                tension: 0.4
+            });
+        }
+        
+        if (sourceFilter === 'all' || sourceFilter === 'youtube') {
+            const youtubeData = data.youtube_data?.videos || [];
+            const youtubeEngagement = dateRange.map(date => {
+                const dayVideos = youtubeData.filter(video => {
+                    if (!video.published_at) return false;
+                    const videoDate = new Date(video.published_at);
+                    return videoDate.toDateString() === date.toDateString();
+                });
+                return dayVideos.reduce((sum, video) => sum + (parseInt(video.view_count) || 0), 0) / 1000;
+            });
+            
+            datasets.push({
+                label: 'YouTube Views (K)',
+                data: youtubeEngagement,
+                borderColor: '#ff0000',
+                backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                fill: true,
+                tension: 0.4
+            });
+        }
+        
+        if (sourceFilter === 'all' || sourceFilter === 'twitter') {
+            const twitterData = data.twitter_data || [];
+            const twitterEngagement = dateRange.map(date => {
+                const dayTweets = twitterData.filter(tweet => {
+                    if (!tweet.created_at) return false;
+                    const tweetDate = new Date(tweet.created_at);
+                    return tweetDate.toDateString() === date.toDateString();
+                });
+                return dayTweets.reduce((sum, tweet) => sum + (tweet.like_count || 0) + (tweet.retweet_count || 0), 0);
+            });
+            
+            datasets.push({
+                label: 'Twitter Engagement',
+                data: twitterEngagement,
+                borderColor: '#1da1f2',
+                backgroundColor: 'rgba(29, 161, 242, 0.1)',
+                fill: true,
+                tension: 0.4
+            });
+        }
+        
+        // Update existing chart
+        if (window.engagementChart) {
+            window.engagementChart.destroy();
+        }
+        
+        window.engagementChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dateRange.map(d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })),
+                datasets: datasets
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `Engagement Timeline - Last ${days} Days (${sourceFilter === 'all' ? 'All Sources' : sourceFilter.charAt(0).toUpperCase() + sourceFilter.slice(1)})`
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error updating engagement timeline:', error);
+    }
+}
+
+async function updateSourceComparison(sourceFilter) {
+    const ctx = document.getElementById('sourceComparisonChart');
+    if (!ctx) return;
+    
+    try {
+        const response = await fetch('/api/stats');
+        const stats = await response.json();
+        
+        if (!response.ok || !stats) return;
+        
+        let labels = [];
+        let data = [];
+        let colors = [];
+        
+        if (sourceFilter === 'all') {
+            labels = ['Reddit', 'YouTube', 'Twitter', 'Google Trends'];
+            data = [
+                stats.reddit_posts || 0,
+                stats.youtube_videos || 0,
+                stats.twitter_tweets || 0,
+                stats.google_trends_count || 0
+            ];
+            colors = ['#ff4500', '#ff0000', '#1da1f2', '#4285f4'];
+        } else {
+            switch(sourceFilter) {
+                case 'reddit':
+                    labels = ['Reddit Posts'];
+                    data = [stats.reddit_posts || 0];
+                    colors = ['#ff4500'];
+                    break;
+                case 'youtube':
+                    labels = ['YouTube Videos'];
+                    data = [stats.youtube_videos || 0];
+                    colors = ['#ff0000'];
+                    break;
+                case 'twitter':
+                    labels = ['Twitter Tweets'];
+                    data = [stats.twitter_tweets || 0];
+                    colors = ['#1da1f2'];
+                    break;
+                case 'google':
+                    labels = ['Google Trends'];
+                    data = [stats.google_trends_count || 0];
+                    colors = ['#4285f4'];
+                    break;
+            }
+        }
+        
+        // Update existing chart
+        if (window.sourceChart) {
+            window.sourceChart.destroy();
+        }
+        
+        window.sourceChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Data Points',
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `Source Comparison (${sourceFilter === 'all' ? 'All Sources' : sourceFilter.charAt(0).toUpperCase() + sourceFilter.slice(1)})`
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Error updating source comparison:', error);
+    }
+}
+
+async function updateDataTables(sourceFilter, keywordFilter) {
+    // Update top content table
+    try {
+        const response = await fetch('/api/recent-activity');
+        const data = await response.json();
+        
+        if (!response.ok) return;
+        
+        const tbody = document.querySelector('#topContentTable tbody');
+        if (!tbody) return;
+        
+        let content = [];
+        
+        // Filter and add content based on source filter
+        if (sourceFilter === 'all' || sourceFilter === 'reddit') {
+            if (data.reddit && data.reddit.length > 0) {
+                data.reddit.forEach(post => {
+                    if (keywordFilter === 'all' || post.search_keyword === keywordFilter) {
+                        content.push({
+                            title: post.title || 'No title',
+                            source: 'Reddit',
+                            engagement: post.score || 0,
+                            keyword: post.search_keyword || 'N/A',
+                            date: post.created_date || 'N/A'
+                        });
+                    }
+                });
+            }
+        }
+        
+        if (sourceFilter === 'all' || sourceFilter === 'youtube') {
+            if (data.youtube && data.youtube.length > 0) {
+                data.youtube.forEach(video => {
+                    if (keywordFilter === 'all' || video.search_keyword === keywordFilter) {
+                        content.push({
+                            title: video.title || 'No title',
+                            source: 'YouTube',
+                            engagement: parseInt(video.view_count) || 0,
+                            keyword: video.search_keyword || 'N/A',
+                            date: video.published_at || 'N/A'
+                        });
+                    }
+                });
+            }
+        }
+        
+        if (sourceFilter === 'all' || sourceFilter === 'twitter') {
+            if (data.twitter && data.twitter.length > 0) {
+                data.twitter.forEach(tweet => {
+                    if (keywordFilter === 'all' || tweet.keyword === keywordFilter) {
+                        content.push({
+                            title: tweet.text || 'No text',
+                            source: 'Twitter',
+                            engagement: (tweet.like_count || 0) + (tweet.retweet_count || 0),
+                            keyword: tweet.keyword || 'N/A',
+                            date: tweet.created_at || 'N/A'
+                        });
+                    }
+                });
+            }
+        }
+        
+        // Sort by engagement
+        content.sort((a, b) => b.engagement - a.engagement);
+        
+        // Update table
+        tbody.innerHTML = content.slice(0, 10).map(item => `
+            <tr>
+                <td>${item.title.substring(0, 50)}...</td>
+                <td><span class="source-badge ${item.source.toLowerCase()}">${item.source}</span></td>
+                <td>${item.engagement.toLocaleString()}</td>
+                <td>${item.keyword}</td>
+                <td>${item.date.split('T')[0] || item.date}</td>
+            </tr>
+        `).join('');
+        
+    } catch (error) {
+        console.error('Error updating data tables:', error);
+    }
+}
+
+// Load real keywords for filter dropdown
+async function loadKeywordOptions() {
+    try {
+        const response = await fetch('/api/stats');
+        const stats = await response.json();
+        
+        if (response.ok && stats && stats.keywords_analyzed) {
+            const keywordSelect = document.getElementById('keywordSelect');
+            
+            // Clear existing options except "All"
+            keywordSelect.innerHTML = '<option value="all">All Keywords</option>';
+            
+            // Add real keywords
+            stats.keywords_analyzed.forEach(keyword => {
+                const option = document.createElement('option');
+                option.value = keyword;
+                option.textContent = keyword;
+                keywordSelect.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error loading keyword options:', error);
+    }
+}
+
+async function loadAnalyticsData() {
+    try {
+        const response = await fetch('/api/stats');
+        const stats = await response.json();
+        
+        if (response.ok && stats) {
+            // Update overview cards with real data
+            const totalContent = stats.reddit_posts + stats.youtube_videos + stats.twitter_tweets + stats.google_trends_count;
+            document.getElementById('totalContent').textContent = totalContent.toLocaleString();
+            
+            // Get trending keywords count
+            const trendingResponse = await fetch('/api/trending');
+            const trendingData = await trendingResponse.json();
+            const trendingCount = trendingResponse.ok && trendingData.trending_keywords ? 
+                trendingData.trending_keywords.length : 0;
+            document.getElementById('trendingCount').textContent = trendingCount;
+            
+            document.getElementById('activeSources').textContent = stats.data_sources ? stats.data_sources.length : 0;
+        }
+    } catch (error) {
+        console.error('Error loading analytics data:', error);
+    }
+}
+
+// Helper functions
+function generateDateRange(days) {
+    const dates = [];
+    for (let i = days - 1; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        dates.push(date);
+    }
+    return dates;
+}
+
+function showChartError(ctx, message) {
+    const container = ctx.parentElement;
+    container.innerHTML = `
+        <div style="display: flex; align-items: center; justify-content: center; height: 300px; color: #9ca3af; text-align: center;">
+            <div>
+                <i class="fas fa-chart-bar" style="font-size: 2rem; margin-bottom: 1rem; opacity: 0.5;"></i>
+                <p>${message}</p>
+            </div>
+        </div>
+    `;
+}
+</script>
+
+<style>
+/* Analytics-specific styles */
+.analytics-filters {
+    margin-bottom: 2rem;
+}
+
+.filter-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.filter-section label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+}
+
+.filter-section select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    min-width: 150px;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-left: auto;
+}
+
+.analytics-overview {
+    margin-bottom: 2rem;
+}
+
+.overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.overview-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.card-header h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.card-header i {
+    color: #1e3a8a;
+    font-size: 1.25rem;
+}
+
+.metric-large {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.advanced-charts {
+    margin-bottom: 2rem;
+}
+
+.charts-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.charts-row:nth-child(2) {
+    grid-template-columns: 1fr 1fr;
+}
+
+.chart-card-large,
+.chart-card-medium {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.chart-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chart-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.chart-btn.active {
+    background: #1e3a8a;
+    color: white;
+    border-color: #1e3a8a;
+}
+
+.chart-legend {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.data-tables-section {
+    margin-bottom: 2rem;
+}
+
+.table-controls {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.table-controls input {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    width: 200px;
+}
+
+.tables-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.table-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.table-count {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    text-align: left;
+    padding: 0.75rem 0.5rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.data-table th {
+    font-weight: 600;
+    color: #374151;
+    background: #f8fafc;
+    position: sticky;
+    top: 0;
+}
+
+.insights-section {
+    margin-bottom: 2rem;
+}
+
+.insights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.insight-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    display: flex;
+    gap: 1rem;
+}
+
+.insight-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.insight-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.insight-content p {
+    color: #64748b;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.insight-meta {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+/* Analytics-specific styling */
+.source-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.source-reddit {
+    background: #ff4500;
+    color: white;
+}
+
+.source-youtube {
+    background: #ff0000;
+    color: white;
+}
+
+.source-twitter {
+    background: #1da1f2;
+    color: white;
+}
+
+.source-google {
+    background: #4285f4;
+    color: white;
+}
+
+.sentiment-positive {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.sentiment-negative {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+.sentiment-neutral {
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.data-table tr:hover {
+    background-color: #f8fafc;
+}
+
+.data-table td {
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .filter-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .filter-actions {
+        margin-left: 0;
+        justify-content: center;
+    }
+    
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .tables-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %} 

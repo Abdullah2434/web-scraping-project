@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Keyword Trends Dashboard{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <i class="fas fa-chart-line"></i>
+                <span class="brand-text">Analytics</span>
+            </div>
+        </div>
+        
+        <div class="sidebar-menu">
+            <div class="menu-section">
+                <p class="menu-title">MAIN</p>
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="{{ url_for('dashboard') }}" class="menu-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" onclick="showDataCollection()">
+                            <i class="fas fa-download"></i>
+                            <span>Collect Data</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <p class="menu-title">DATA SOURCES</p>
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" onclick="showRedditData()">
+                            <i class="fab fa-reddit"></i>
+                            <span>Reddit</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" onclick="showYouTubeData()">
+                            <i class="fab fa-youtube"></i>
+                            <span>YouTube</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" onclick="showTwitterData()">
+                            <i class="fab fa-twitter"></i>
+                            <span>Twitter</span>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" onclick="showGoogleTrends()">
+                            <i class="fab fa-google"></i>
+                            <span>Google Trends</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <p class="menu-title">ANALYSIS</p>
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="#" class="menu-link" onclick="showTrendingAnalysis()">
+                            <i class="fas fa-fire"></i>
+                            <span>Trending Analysis</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="menu-section">
+                <p class="menu-title">SETTINGS</p>
+                <ul class="menu-list">
+                    <li class="menu-item">
+                        <a href="{{ url_for('settings') }}" class="menu-link {% if request.endpoint == 'settings' %}active{% endif %}">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Upgrade Section -->
+        <div class="sidebar-footer">
+            <div class="upgrade-card">
+                <div class="upgrade-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h4>Upgrade to Pro</h4>
+                <p>Get advanced analytics and more data sources</p>
+                <button class="upgrade-btn" onclick="showUpgradeModal()">
+                    Upgrade now
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <h1 class="page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+                <p class="page-subtitle">{% block page_subtitle %}Monitor your keyword trends across multiple platforms{% endblock %}</p>
+            </div>
+            
+            <div class="header-right">
+                <div class="header-actions">
+                    <button class="btn btn-outline" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                        Refresh
+                    </button>
+                    <button class="btn btn-primary" onclick="showDataCollection()">
+                        <i class="fas fa-plus"></i>
+                        Collect Data
+                    </button>
+                </div>
+                
+                <div class="user-menu">
+                    <div class="user-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Data+Analyst&background=1e3a8a&color=fff" alt="User">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">Data Analyst</span>
+                        <span class="user-role">Admin</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Page Content -->
+        <div class="page-content">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading data...</p>
+        </div>
+    </div>
+    
+    <!-- Data Collection Modal -->
+    <div id="dataCollectionModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🚀 Collect Data with Current Keywords</h3>
+                <button class="modal-close" onclick="hideDataCollection()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- Current Keywords Display -->
+                <div class="form-group">
+                    <label>🔍 Current Keywords:</label>
+                    <div id="currentKeywordsDisplay" class="current-keywords-display">
+                        <div class="keywords-loading">
+                            <div class="spinner"></div>
+                            <span>Loading keywords...</span>
+                        </div>
+                    </div>
+                    <p class="help-text">Data will be collected for the keywords shown above. <a href="/settings" target="_blank">Manage keywords in Settings</a></p>
+                </div>
+                
+                <!-- Keyword Selection -->
+                <div class="form-group">
+                    <label>📋 Select Keywords for Collection:</label>
+                    <div id="keywordSelectionContainer" class="checkbox-group">
+                        <!-- Keyword checkboxes will be populated here -->
+                    </div>
+                    <div id="noKeywordsMessage" style="display: none;" class="warning-message">
+                        ⚠️ No keywords configured. <a href="/settings">Add keywords in Settings</a> first.
+                    </div>
+                </div>
+                
+                <!-- Data Sources Selection -->
+                <div class="form-group">
+                    <label>📊 Data Sources:</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="collectGoogle" checked>
+                            <span class="checkmark"></span>
+                            📈 Google Trends
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="collectReddit" checked>
+                            <span class="checkmark"></span>
+                            🤖 Reddit
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="collectYoutube" checked>
+                            <span class="checkmark"></span>
+                            📺 YouTube
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="collectTwitter" checked>
+                            <span class="checkmark"></span>
+                            🐦 Twitter
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Collection Options -->
+                <div class="form-group">
+                    <label>⚙️ Collection Options:</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="selectAllKeywords" checked onchange="toggleAllKeywords()">
+                            <span class="checkmark"></span>
+                            Select All Keywords
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="selectAllSources" checked onchange="toggleAllSources()">
+                            <span class="checkmark"></span>
+                            Select All Sources
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideDataCollection()">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button class="btn btn-secondary" onclick="refreshKeywordsInModal()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh Keywords
+                </button>
+                <button class="btn btn-primary" onclick="startDataCollection()">
+                    <i class="fas fa-download"></i>
+                    Start Collection
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

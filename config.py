@@ -12,16 +12,18 @@ load_dotenv()
 # ===== GENERAL SETTINGS =====
 # Default keywords to search (you can modify this list)
 DEFAULT_KEYWORDS = [
-    "AI", 
-    "ChatGPT", 
-    "Pakistan Elections",
-    "Machine Learning",
-    "Python Programming"
+    "climate change",
+    "cryptocurrency", 
+    "space exploration",
+    "renewable energy",
+    "AI"
 ]
 
 # Data collection settings
 MAX_REDDIT_POSTS = 50  # Maximum number of Reddit posts to fetch per keyword
-GOOGLE_TRENDS_TIMEFRAME = 'today 3-m'  # Last 3 months (options: 'today 1-m', 'today 12-m', etc.)
+MAX_YOUTUBE_VIDEOS = 50  # Maximum number of YouTube videos to fetch per keyword
+MAX_TWITTER_TWEETS = 10  # Reduced to avoid rate limits
+GOOGLE_TRENDS_TIMEFRAME = 'today 12-m'  # Last 12 months (will give ~365+ data points)
 GOOGLE_TRENDS_REGION = 'US'  # Region for Google Trends (US, PK, UK, etc.)
 
 # ===== REDDIT API SETTINGS =====
@@ -42,16 +44,55 @@ REDDIT_SETTINGS = {
     'limit': MAX_REDDIT_POSTS
 }
 
-# ===== DATABASE SETTINGS =====
-# Using MongoDB only
-DATABASE_TYPE = 'mongodb'
+# ===== YOUTUBE API SETTINGS =====
+# YouTube Data API v3 credentials (get from Google Cloud Console)
+YOUTUBE_CONFIG = {
+    'api_key': os.getenv('YOUTUBE_API_KEY', 'your_youtube_api_key_here'),
+    'application_name': 'Keyword Trend Analyzer'
+}
 
-# MongoDB settings
-MONGODB_CONFIG = {
-    'host': 'localhost',
-    'port': 27017,
-    'database_name': 'keyword_trends',
-    'collection_name': 'scraped_data'
+# YouTube search settings
+YOUTUBE_SETTINGS = {
+    'order': 'relevance',  # Options: 'relevance', 'date', 'rating', 'viewCount', 'title'
+    'published_after': 'week',  # Options: 'hour', 'day', 'week', 'month', 'year'
+    'type': 'video',  # Options: 'video', 'channel', 'playlist'
+    'region_code': 'US',  # Region code for localized results
+    'relevance_language': 'en',  # Language for search results
+    'max_results': MAX_YOUTUBE_VIDEOS
+}
+
+# ===== TWITTER/X API SETTINGS =====
+# Twitter API v2 credentials (get from Twitter Developer Portal)
+TWITTER_CONFIG = {
+    'bearer_token': os.getenv('TWITTER_BEARER_TOKEN', 'your_bearer_token_here'),
+    'api_key': os.getenv('TWITTER_API_KEY', 'your_api_key_here'),
+    'api_secret': os.getenv('TWITTER_API_SECRET', 'your_api_secret_here'),
+    'access_token': os.getenv('TWITTER_ACCESS_TOKEN', 'your_access_token_here'),
+    'access_token_secret': os.getenv('TWITTER_ACCESS_TOKEN_SECRET', 'your_access_token_secret_here')
+}
+
+# Twitter search settings
+TWITTER_SETTINGS = {
+    'result_type': 'recent',  # Options: 'recent', 'popular', 'mixed'
+    'lang': 'en',  # Language filter
+    'tweet_fields': ['created_at', 'author_id', 'public_metrics', 'context_annotations', 'lang'],
+    'user_fields': ['username', 'name', 'verified', 'public_metrics'],
+    'max_results': MAX_TWITTER_TWEETS
+}
+
+# ===== TRENDING ANALYSIS SETTINGS =====
+TRENDING_CONFIG = {
+    'min_keyword_length': 3,  # Minimum length for trending keywords
+    'max_trending_keywords': 20,  # Maximum number of trending keywords to show
+    'trending_threshold': 5,  # Minimum mentions across sources to be considered trending
+    'sentiment_analysis': True,  # Enable sentiment analysis for trending keywords
+    'time_window_hours': 24,  # Time window for trending analysis
+    'weight_factors': {  # Weight different sources for trending calculation
+        'google_trends': 1.0,
+        'reddit': 0.8,
+        'youtube': 0.7,
+        'twitter': 0.9
+    }
 }
 
 # ===== FILE PATHS =====
@@ -59,7 +100,10 @@ MONGODB_CONFIG = {
 DATA_PATHS = {
     'raw_google_data': 'data/raw_google_trends.json',
     'raw_reddit_data': 'data/raw_reddit_data.json',
+    'raw_youtube_data': 'data/raw_youtube_data.json',
+    'raw_twitter_data': 'data/raw_twitter_data.json',
     'cleaned_data': 'data/cleaned_data.json',
+    'trending_analysis': 'data/trending_analysis.json',
     'data_directory': 'data/'
 }
 
@@ -68,12 +112,14 @@ DATA_PATHS = {
 API_DELAYS = {
     'google_trends': 15,  # Delay between Google Trends requests (very conservative to avoid rate limiting)
     'reddit': 2,          # Delay between Reddit requests
+    'youtube': 1,         # Delay between YouTube API requests
+    'twitter': 1,         # Delay between Twitter API requests
 }
 
 # ===== GOOGLE TRENDS COLLECTION MODES =====
 # Control what data to collect from Google Trends (to avoid rate limiting)
-GOOGLE_TRENDS_COLLECT_RELATED_QUERIES = False  # Disable related queries (causes HTTP 429)
-GOOGLE_TRENDS_COLLECT_REGIONAL_DATA = False    # Disable regional data (causes HTTP 429)
+GOOGLE_TRENDS_COLLECT_RELATED_QUERIES = False  # Disable related queries (causes timeouts)
+GOOGLE_TRENDS_COLLECT_REGIONAL_DATA = False    # Disable regional data (causes timeouts)
 GOOGLE_TRENDS_COLLECT_INTEREST_ONLY = True     # Only collect interest over time data
 
 # ===== STREAMLIT DASHBOARD SETTINGS =====
@@ -94,7 +140,8 @@ CHART_COLORS = [
 LOGGING_CONFIG = {
     'level': 'INFO',  # Options: 'DEBUG', 'INFO', 'WARNING', 'ERROR'
     'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    'log_file': 'scraping.log'
+    'log_file': 'scraping.log',
+    'encoding': 'utf-8'  # Fix emoji encoding issues on Windows
 }
 
 # ===== VALIDATION FUNCTIONS =====
@@ -111,22 +158,29 @@ def validate_reddit_config():
             return False
     return True
 
-def validate_database_config():
+def validate_youtube_config():
     """
-    Validate MongoDB configuration
+    Validate YouTube API configuration
     Returns True if configuration is valid, False otherwise
     """
-    if DATABASE_TYPE != 'mongodb':
-        print("⚠️  Error: DATABASE_TYPE must be 'mongodb'")
+    if not YOUTUBE_CONFIG['api_key'] or YOUTUBE_CONFIG['api_key'] == 'your_youtube_api_key_here':
+        print("⚠️  Warning: YouTube API key not configured properly")
+        print("Please get an API key from Google Cloud Console and update your .env file")
         return False
     return True
 
-def get_mongodb_uri():
+def validate_twitter_config():
     """
-    Get MongoDB connection URI
+    Validate Twitter API configuration
+    Returns True if configuration is valid, False otherwise
     """
-    config = MONGODB_CONFIG
-    return f"mongodb://{config['host']}:{config['port']}/{config['database_name']}"
+    required_fields = ['bearer_token']  # Bearer token is minimum required for v2 API
+    for field in required_fields:
+        if not TWITTER_CONFIG[field] or TWITTER_CONFIG[field] == f'your_{field}_here':
+            print(f"⚠️  Warning: Twitter {field} not configured properly")
+            print(f"Please update your .env file or config.py")
+            return False
+    return True
 
 # ===== UTILITY FUNCTIONS =====
 def ensure_data_directory():
@@ -145,10 +199,14 @@ def print_config_summary():
     """
     print("🔧 Configuration Summary:")
     print(f"   Keywords: {DEFAULT_KEYWORDS}")
-    print(f"   Database: {DATABASE_TYPE}")
     print(f"   Max Reddit Posts: {MAX_REDDIT_POSTS}")
+    print(f"   Max YouTube Videos: {MAX_YOUTUBE_VIDEOS}")
+    print(f"   Max Twitter Tweets: {MAX_TWITTER_TWEETS}")
     print(f"   Google Trends Region: {GOOGLE_TRENDS_REGION}")
     print(f"   Reddit API Configured: {validate_reddit_config()}")
+    print(f"   YouTube API Configured: {validate_youtube_config()}")
+    print(f"   Twitter API Configured: {validate_twitter_config()}")
+    print(f"   Trending Analysis Enabled: {TRENDING_CONFIG['sentiment_analysis']}")
     print()
 
 if __name__ == "__main__":

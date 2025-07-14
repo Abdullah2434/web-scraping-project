@@ -1,0 +1,501 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Keyword Trends Dashboard{% endblock %}
+
+{% block page_title %}Settings{% endblock %}
+{% block page_subtitle %}Configure your keywords and dashboard preferences{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+    <!-- Keywords Management Section -->
+    <div class="settings-card">
+        <div class="settings-header">
+            <h3>🔍 Keywords Management</h3>
+            <p>Manage your keywords for trending analysis (Maximum 5 keywords)</p>
+        </div>
+        
+        <div class="settings-content">
+            <!-- Current Keywords Display -->
+            <div class="setting-section">
+                <h4>Current Keywords</h4>
+                <div id="keywordsContainer">
+                    <div class="keywords-loading">
+                        <div class="spinner"></div>
+                        <span>Loading keywords...</span>
+                    </div>
+                </div>
+                
+                <!-- Keywords Stats -->
+                <div id="keywordsStats" class="keywords-stats" style="display: none;">
+                    <div class="stat-item">
+                        <span class="stat-label">Active Keywords:</span>
+                        <span id="keywordCount" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Last Updated:</span>
+                        <span id="lastUpdated" class="stat-value">Never</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Last Collection:</span>
+                        <span id="lastCollection" class="stat-value">Never</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add New Keyword -->
+            <div class="setting-section">
+                <h4>Add New Keyword</h4>
+                <div class="add-keyword-form">
+                    <input type="text" id="newKeywordInput" placeholder="Enter a keyword (e.g. artificial intelligence)" maxlength="50">
+                    <button id="addKeywordBtn" class="btn btn-primary">Add Keyword</button>
+                </div>
+                <div class="keyword-help">
+                    <small>💡 Keywords should be 2-50 characters. Examples: "artificial intelligence", "climate change", "cryptocurrency"</small>
+                </div>
+            </div>
+            
+            <!-- Bulk Keywords Management -->
+            <div class="setting-section">
+                <h4>Bulk Management</h4>
+                <div class="bulk-actions">
+                    <button id="resetKeywordsBtn" class="btn btn-outline">🔄 Reset to Defaults</button>
+                    <button id="validateKeywordsBtn" class="btn btn-outline">✓ Validate Current</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Data Collection Settings -->
+    <div class="settings-card">
+        <div class="settings-header">
+            <h3>⚙️ Collection Settings</h3>
+            <p>Configure automatic data collection preferences</p>
+        </div>
+        
+        <div class="settings-content">
+            <div class="setting-section">
+                <h4>Collection Schedule</h4>
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="autoCollectionEnabled" checked>
+                        <span class="checkmark"></span>
+                        Enable automatic collection every hour
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <label>Collection Sources</label>
+                    <div class="sources-grid">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sources" value="google" checked>
+                            <span class="checkmark"></span>
+                            📊 Google Trends
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sources" value="reddit" checked>
+                            <span class="checkmark"></span>
+                            🤖 Reddit
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sources" value="youtube" checked>
+                            <span class="checkmark"></span>
+                            📺 YouTube
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="sources" value="twitter" checked>
+                            <span class="checkmark"></span>
+                            🐦 Twitter
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setting-section">
+                <h4>Manual Collection</h4>
+                <div class="manual-collection">
+                    <p>Trigger data collection manually with current keywords</p>
+                    <button id="manualCollectBtn" class="btn btn-primary">🚀 Collect Data Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notifications Settings -->
+    <div class="settings-card">
+        <div class="settings-header">
+            <h3>🔔 Notifications</h3>
+            <p>Control when and how you receive updates</p>
+        </div>
+        
+        <div class="settings-content">
+            <div class="setting-section">
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="trendingAlerts" checked>
+                        <span class="checkmark"></span>
+                        Enable trending keyword alerts
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="collectionNotifications" checked>
+                        <span class="checkmark"></span>
+                        Data collection completion notifications
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="errorNotifications" checked>
+                        <span class="checkmark"></span>
+                        Error and warning notifications
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.settings-container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.settings-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.settings-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.settings-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.settings-header p {
+    color: #64748b;
+}
+
+.setting-section {
+    margin-bottom: 2rem;
+}
+
+.setting-section h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 1rem;
+}
+
+/* Keywords Management Styles */
+.keywords-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    color: #64748b;
+}
+
+.spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #e2e8f0;
+    border-top: 2px solid #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.keywords-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.keyword-tag {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 12px;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    transition: all 0.2s ease;
+}
+
+.keyword-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.keyword-text {
+    flex: 1;
+    margin-right: 0.5rem;
+}
+
+.remove-keyword {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    opacity: 0.8;
+    transition: all 0.2s ease;
+}
+
+.remove-keyword:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.keywords-stats {
+    display: flex;
+    gap: 2rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.stat-value {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.add-keyword-form {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.add-keyword-form input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+}
+
+.add-keyword-form input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.keyword-help {
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.bulk-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.manual-collection {
+    padding: 1rem;
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.manual-collection p {
+    margin-bottom: 1rem;
+    color: #0369a1;
+}
+
+/* Form Controls */
+.setting-item {
+    margin-bottom: 1rem;
+}
+
+.setting-item label {
+    display: block;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.checkbox-label {
+    display: flex !important;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    margin-bottom: 0 !important;
+    font-weight: 500 !important;
+}
+
+.checkbox-label input[type="checkbox"] {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+
+.checkmark {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+    background: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark:after {
+    content: '✓';
+    position: absolute;
+    left: 3px;
+    top: -1px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Buttons */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-outline {
+    background: white;
+    color: #374151;
+    border: 2px solid #e5e7eb;
+}
+
+.btn-outline:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .settings-container {
+        margin: 0 1rem;
+    }
+    
+    .settings-card {
+        padding: 1.5rem;
+    }
+    
+    .keywords-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .add-keyword-form {
+        flex-direction: column;
+    }
+    
+    .bulk-actions {
+        justify-content: center;
+    }
+    
+    .keywords-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* Empty State */
+.keywords-empty {
+    text-align: center;
+    padding: 2rem;
+    color: #64748b;
+}
+
+.keywords-empty-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+</style>
+
+<script>
+// Keywords management functionality will be added to app.js
+document.addEventListener('DOMContentLoaded', function() {
+    initializeSettingsPage();
+});
+</script>
+{% endblock %} 

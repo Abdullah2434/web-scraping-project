@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block title %}Trending Analysis - Keyword Trends Dashboard{% endblock %}
+
+{% block page_title %}Trending Keywords Analysis{% endblock %}
+{% block page_subtitle %}AI-powered automatic keyword discovery from real content across all platforms{% endblock %}
+
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-grid">
+    <!-- Trending overview -->
+    <div class="trending-overview">
+        <div class="overview-cards" id="trendingOverview">
+            <!-- Overview cards will be loaded here -->
+        </div>
+    </div>
+    
+    <!-- Trending keywords list -->
+    <div class="trending-keywords">
+        <div class="section-header">
+            <h2>Top Trending Keywords</h2>
+            <button onclick="refreshTrendingAnalysis()" class="btn btn-primary">Refresh Analysis</button>
+        </div>
+        <div class="keywords-container" id="trendingKeywords">
+            <!-- Trending keywords will be loaded here -->
+        </div>
+    </div>
+    
+    <!-- Trending charts -->
+    <div class="trending-charts">
+        <div class="chart-container">
+            <h3>Trending Scores Distribution</h3>
+            <canvas id="trendingScoresChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h3>Sentiment Analysis</h3>
+            <canvas id="sentimentChart"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <h3>Source Distribution</h3>
+            <canvas id="sourceDistributionChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    let trendingData = null;
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        loadTrendingAnalysis();
+    });
+    
+    async function loadTrendingAnalysis() {
+        try {
+            showLoading();
+            
+            const response = await fetch('/api/trending');
+            const data = await response.json();
+            
+            if (response.ok) {
+                trendingData = data;
+                displayTrendingOverview(data);
+                displayTrendingKeywords(data);
+                createTrendingCharts(data);
+            } else {
+                document.getElementById('trendingKeywords').innerHTML = 
+                    '<div class="error-message">No trending analysis available. Try collecting data first.</div>';
+            }
+        } catch (error) {
+            console.error('Error loading trending analysis:', error);
+            document.getElementById('trendingKeywords').innerHTML = 
+                '<div class="error-message">Failed to load trending analysis</div>';
+        } finally {
+            hideLoading();
+        }
+    }
+    
+    function displayTrendingOverview(data) {
+        const trendingKeywords = data.trending_keywords || [];
+        const dataSources = data.data_sources_used || [];
+        const analysisTime = data.analysis_timestamp || 'Unknown';
+        
+        document.getElementById('trendingOverview').innerHTML = `
+            <div class="metric-card">
+                <div class="metric-value">${trendingKeywords.length}</div>
+                <div class="metric-label">Trending Keywords</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">${dataSources.length}</div>
+                <div class="metric-label">Data Sources</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">${new Date(analysisTime).toLocaleDateString()}</div>
+                <div class="metric-label">Last Analysis</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value">${dataSources.join(', ')}</div>
+                <div class="metric-label">Active Sources</div>
+            </div>
+        `;
+    }
+    
+    function displayTrendingKeywords(data) {
+        const trendingKeywords = data.trending_keywords || [];
+        
+        if (trendingKeywords.length === 0) {
+            document.getElementById('trendingKeywords').innerHTML = 
+                '<div class="info-message">No trending keywords found. Try collecting more data.</div>';
+            return;
+        }
+        
+        const keywordsHtml = trendingKeywords.slice(0, 20).map((keyword, index) => {
+            const sentimentColor = getSentimentColor(keyword.sentiment?.sentiment_label);
+            const sources = Object.keys(keyword.sources || {});
+            
+            return `
+                <div class="trending-keyword-card" onclick="expandKeyword(${index})">
+                    <div class="keyword-header">
+                        <div class="keyword-rank">#${index + 1}</div>
+                        <div class="keyword-info">
+                            <h3 class="keyword-text">${keyword.keyword}</h3>
+                            <div class="keyword-meta">
+                                <span class="trending-score">Score: ${keyword.trending_score}</span>
+                                <span class="total-mentions">${keyword.total_mentions} mentions</span>
+                                <span class="sentiment ${sentimentColor}">${keyword.sentiment?.sentiment_label || 'Neutral'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="keyword-sources">
+                        ${sources.map(source => `
+                            <span class="source-tag ${source}">${source.replace('_', ' ')}: ${keyword.sources[source]}</span>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="keyword-details" id="details-${index}" style="display: none;">
+                        <div class="sentiment-details">
+                            <p><strong>Sentiment Analysis:</strong></p>
+                            <p>Polarity: ${keyword.sentiment?.polarity?.toFixed(3) || 'N/A'}</p>
+                            <p>Subjectivity: ${keyword.sentiment?.subjectivity?.toFixed(3) || 'N/A'}</p>
+                            <p>Sample Count: ${keyword.sentiment?.sample_count || 0}</p>
+                        </div>
+                        
+                        <div class="contexts">
+                            <p><strong>Sample Contexts:</strong></p>
+                            ${(keyword.contexts || []).slice(0, 3).map(context => `
+                                <div class="context-item">
+                                    <small><strong>${context.source}:</strong> ${context.content}</small>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        document.getElementById('trendingKeywords').innerHTML = keywordsHtml;
+    }
+    
+    function getSentimentColor(sentiment) {
+        switch(sentiment) {
+            case 'Positive': return 'positive';
+            case 'Negative': return 'negative';
+            default: return 'neutral';
+        }
+    }
+    
+    function expandKeyword(index) {
+        const details = document.getElementById(`details-${index}`);
+        if (details) {
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+        }
+    }
+    
+    function createTrendingCharts(data) {
+        const trendingKeywords = data.trending_keywords || [];
+        
+        if (trendingKeywords.length === 0) return;
+        
+        // Trending Scores Chart
+        createTrendingScoresChart(trendingKeywords);
+        
+        // Sentiment Chart
+        createSentimentChart(trendingKeywords);
+        
+        // Source Distribution Chart
+        createSourceDistributionChart(trendingKeywords);
+    }
+    
+    function createTrendingScoresChart(keywords) {
+        const ctx = document.getElementById('trendingScoresChart');
+        if (!ctx) return;
+        
+        const top10 = keywords.slice(0, 10);
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: top10.map(k => k.keyword),
+                datasets: [{
+                    label: 'Trending Score',
+                    data: top10.map(k => k.trending_score),
+                    backgroundColor: '#1e3a8a',
+                    borderColor: '#1e40af',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    
+    function createSentimentChart(keywords) {
+        const ctx = document.getElementById('sentimentChart');
+        if (!ctx) return;
+        
+        const sentimentCounts = {
+            'Positive': 0,
+            'Negative': 0,
+            'Neutral': 0
+        };
+        
+        keywords.forEach(k => {
+            const sentiment = k.sentiment?.sentiment_label || 'Neutral';
+            sentimentCounts[sentiment]++;
+        });
+        
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: Object.keys(sentimentCounts),
+                datasets: [{
+                    data: Object.values(sentimentCounts),
+                    backgroundColor: ['#10b981', '#6b7280', '#ef4444']
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+    }
+    
+    function createSourceDistributionChart(keywords) {
+        const ctx = document.getElementById('sourceDistributionChart');
+        if (!ctx) return;
+        
+        const sourceCounts = {};
+        
+        keywords.forEach(k => {
+            Object.keys(k.sources || {}).forEach(source => {
+                sourceCounts[source] = (sourceCounts[source] || 0) + 1;
+            });
+        });
+        
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(sourceCounts),
+                datasets: [{
+                    label: 'Keywords by Source',
+                    data: Object.values(sourceCounts),
+                    backgroundColor: ['#ff4500', '#ff0000', '#1da1f2', '#4285f4']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+    
+    async function refreshTrendingAnalysis() {
+        showNotification('Refreshing trending analysis...', 'info');
+        await loadTrendingAnalysis();
+        showNotification('Trending analysis refreshed!', 'success');
+    }
+    
+    function showLoading() {
+        document.body.style.cursor = 'wait';
+    }
+    
+    function hideLoading() {
+        document.body.style.cursor = 'default';
+    }
+    
+    function showNotification(message, type) {
+        // Use the global notification function if available
+        if (window.showNotification) {
+            window.showNotification(message, type);
+        } else {
+            console.log(`${type.toUpperCase()}: ${message}`);
+        }
+    }
+</script>
+{% endblock %} 

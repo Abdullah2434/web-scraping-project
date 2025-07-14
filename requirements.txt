@@ -1,21 +1,44 @@
-# Core dependencies for web scraping project
-pytrends==4.9.2
-urllib3==1.26.18
-praw==7.7.1
-requests==2.31.0
-beautifulsoup4==4.12.2
-pandas==2.0.3
-numpy==1.24.3
+# Core data collection libraries
+requests>=2.31.0
+pandas>=2.0.0
+beautifulsoup4>=4.12.0
+praw>=7.7.0
+python-dotenv>=1.0.0
 
-# Database dependencies
-pymongo==4.5.0
+# Google APIs
+google-api-python-client>=2.90.0
+pytrends>=4.9.0
 
-# Dashboard and visualization
-streamlit==1.28.1
-plotly==5.17.0
-matplotlib==3.7.2
-seaborn==0.12.2
+# Social media APIs
+tweepy>=4.14.0
+
+# Text analysis
+textblob>=0.17.1
+wordcloud>=1.9.2
+
+# Web framework (Flask)
+Flask>=2.3.0
+Jinja2>=3.1.2
+
+# Streamlit (keeping for compatibility)
+streamlit>=1.25.0
+plotly>=5.15.0
+
+# Data processing
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Database support removed - using JSON files only
+
+# Logging and utilities
+colorama>=0.4.6
+
+# Development tools
+python-dateutil>=2.8.2
 
 # Additional utilities
-python-dotenv==1.0.0
-configparser==6.0.1 
+configparser==6.0.1
+
+# Dashboard and visualization
+matplotlib==3.7.2
+seaborn==0.12.2 
