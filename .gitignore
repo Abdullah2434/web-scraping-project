@@ -61,3 +61,4 @@ Thumbs.db
 data/raw_*.json
 data/trending_*.json
 scraping.log 
+.vercel

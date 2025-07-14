@@ -10,7 +10,7 @@
     "total_keywords": 5,
     "region": "US",
     "timeframe": "today 12-m",
-    "collection_timestamp": "2025-07-14T16:42:19.918519"
+    "collection_timestamp": "2025-07-14T17:42:42.873431"
   },
   "interest_over_time": {
     "climate change_cryptocurrency_space exploration_renewable energy_AI": {
@@ -30,7 +30,7 @@
           "cryptocurrency": 0,
           "space exploration": 0,
           "renewable energy": 0,
-          "AI": 33
+          "AI": 32
         },
         {
           "date": "2024-07-21 00:00:00",
@@ -62,7 +62,7 @@
           "cryptocurrency": 0,
           "space exploration": 0,
           "renewable energy": 0,
-          "AI": 38
+          "AI": 37
         },
         {
           "date": "2024-08-18 00:00:00",
@@ -126,7 +126,7 @@
           "cryptocurrency": 0,
           "space exploration": 0,
           "renewable energy": 0,
-          "AI": 47
+          "AI": 46
         },
         {
           "date": "2024-10-13 00:00:00",
@@ -190,7 +190,7 @@
           "cryptocurrency": 1,
           "space exploration": 0,
           "renewable energy": 1,
-          "AI": 54
+          "AI": 53
         },
         {
           "date": "2024-12-08 00:00:00",
@@ -302,7 +302,7 @@
           "cryptocurrency": 1,
           "space exploration": 0,
           "renewable energy": 1,
-          "AI": 60
+          "AI": 59
         },
         {
           "date": "2025-03-16 00:00:00",
@@ -438,7 +438,7 @@
           "cryptocurrency": 1,
           "space exploration": 0,
           "renewable energy": 0,
-          "AI": 60
+          "AI": 59
         },
         {
           "date": "2025-07-13 00:00:00",
@@ -446,10 +446,10 @@
           "cryptocurrency": 1,
           "space exploration": 0,
           "renewable energy": 0,
-          "AI": 59
+          "AI": 58
         }
       ],
-      "timestamp": "2025-07-14T16:42:36.563821"
+      "timestamp": "2025-07-14T17:43:00.738907"
     }
   },
   "related_queries": {},
