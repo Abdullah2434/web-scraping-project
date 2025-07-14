@@ -291,7 +291,7 @@ GET /api/charts/youtube-engagement
    - Connect your GitHub repository
    - Configure deployment settings:
      - **Build Command**: `pip install -r requirements.txt`
-     - **Start Command**: `python app.py`
+     - **Start Command**: `./start.sh`
      - **Environment**: `Python 3`
 
 3. **Set Environment Variables**
@@ -358,7 +358,30 @@ Deploy with:
 render services create --file render.yaml
 ```
 
+#### Option 3: Direct Gunicorn Commands
+
+For advanced users or other hosting platforms:
+
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Start with Gunicorn (production)
+gunicorn --config gunicorn.conf.py app:application
+
+# Or start manually with custom settings
+gunicorn --bind 0.0.0.0:10000 --workers 4 --timeout 120 app:application
+```
+
 ### Production Features
+
+#### Gunicorn WSGI Server
+The production deployment uses Gunicorn for optimal performance:
+- **Multiple Workers**: Automatically scales based on CPU cores
+- **Robust Handling**: Handles high traffic and concurrent requests
+- **Memory Management**: Automatic worker recycling to prevent memory leaks
+- **Production Logging**: Comprehensive access and error logging
+- **120s Timeout**: Extended timeout for data collection operations
 
 #### Built-in Scheduler
 The production deployment includes an automatic background scheduler that:

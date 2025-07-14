@@ -180,7 +180,7 @@ def create_keyword_frequency_chart_data(data: dict) -> dict:
         
         # Fallback to data keywords or defaults if no user keywords
         if not keywords:
-        keywords = data.get('keywords_analyzed', DEFAULT_KEYWORDS)
+            keywords = data.get('keywords_analyzed', DEFAULT_KEYWORDS)
         
         reddit_counts = []
         google_counts = []
@@ -750,11 +750,11 @@ def run_data_collection_with_logging(keywords, sources):
                     from fetch_google_data import save_google_data
                     save_success = save_google_data(google_data)
                     logger.info(f"SUCCESS: Google Trends data collection completed! Saved: {save_success}")
-                results['google'] = {
+                    results['google'] = {
                         'status': 'success',
                         'data_points': len(google_data.get('interest_over_time', {})),
                         'saved': save_success
-                }
+                    }
                 else:
                     logger.warning("WARNING: Google Trends data collection returned no data")
                     results['google'] = {'status': 'failed', 'error': 'No data returned'}
@@ -780,11 +780,11 @@ def run_data_collection_with_logging(keywords, sources):
                         posts_count = sum(len(posts) if isinstance(posts, list) else 0 
                                         for posts in reddit_data['keyword_posts'].values())
                     logger.info(f"SUCCESS: Reddit data collection completed! Found {posts_count} posts, Saved: {save_success}")
-                results['reddit'] = {
+                    results['reddit'] = {
                         'status': 'success',
                         'posts_count': posts_count,
                         'saved': save_success
-                }
+                    }
                 else:
                     error_msg = reddit_data.get('error', 'No data returned') if reddit_data else 'No data returned'
                     logger.warning(f"WARNING: Reddit data collection failed: {error_msg}")
@@ -816,8 +816,8 @@ def run_data_collection_with_logging(keywords, sources):
                     youtube_data = collect_youtube_data_with_timeout(keywords, timeout_seconds=60)
                     
                     if youtube_data and youtube_data.get('videos'):
-                    videos_count = len(youtube_data.get('videos', []))
-                    logger.info(f"SUCCESS: YouTube data collection completed! Found {videos_count} videos")
+                        videos_count = len(youtube_data.get('videos', []))
+                        logger.info(f"SUCCESS: YouTube data collection completed! Found {videos_count} videos")
                         # Save YouTube data
                         try:
                             from fetch_youtube_data import save_youtube_data
@@ -830,7 +830,7 @@ def run_data_collection_with_logging(keywords, sources):
                             'status': 'success',
                             'videos_count': videos_count
                         }
-                else:
+                    else:
                         logger.warning("WARNING: YouTube data collection returned no data or timed out")
                         results['youtube'] = {'status': 'failed', 'error': 'No data returned or timeout'}
                 else:
@@ -862,11 +862,11 @@ def run_data_collection_with_logging(keywords, sources):
                     save_success = save_twitter_data(twitter_data_dict)
                     tweets_count = len(twitter_data)
                     logger.info(f"SUCCESS: Twitter data collection completed! Found {tweets_count} tweets, Saved: {save_success}")
-                results['twitter'] = {
+                    results['twitter'] = {
                         'status': 'success',
                         'tweets_count': tweets_count,
                         'saved': save_success
-                }
+                    }
                 else:
                     logger.warning("WARNING: Twitter data collection returned no data")
                     results['twitter'] = {'status': 'failed', 'error': 'No valid tweets returned'}
@@ -971,7 +971,7 @@ def api_collect():
         logger.error(f"Data collection error: {e}")
         return jsonify({'error': str(e)}), 500
 
-# New chart data endpoints
+# Chart data endpoints
 @app.route('/api/charts/keyword-frequency')
 def api_keyword_frequency_chart():
     """API endpoint for keyword frequency chart data"""
