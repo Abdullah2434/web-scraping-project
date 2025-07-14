@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "last_run": "2025-07-14T16:44:41.112018",
-  "next_run": "2025-07-14T18:52:31.620283",
+  "next_run": "2025-07-14T19:10:03.535781",
   "collection_count": 1,
   "success_count": 1,
   "error_count": 0,
@@ -13,7 +13,7 @@
   ],
   "interval_minutes": 120,
   "created_at": "2025-07-14T13:45:04.623283",
-  "last_updated": "2025-07-14T16:52:31.620283",
+  "last_updated": "2025-07-14T17:10:03.536783",
   "last_successful_run": "2025-07-14T16:44:41.112018",
   "last_results": {
     "google": {
