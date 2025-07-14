@@ -10,6 +10,8 @@ Author: Web Scraping Project
 
 import os
 import logging
+import threading
+import time
 from flask import Flask
 
 # Set up logging for production
@@ -18,7 +20,7 @@ if os.getenv('FLASK_ENV') == 'production':
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
-        else:
+else:
     logging.basicConfig(level=logging.INFO)
 
 logger = logging.getLogger(__name__)
@@ -33,10 +35,6 @@ def create_app():
     if os.getenv('RENDER') or os.getenv('FLASK_ENV') == 'production':
         logger.info("🚀 Configuring app for Render deployment...")
         
-        # Import and setup Render scheduler
-        from render_scheduler_solution import setup_render_deployment
-        setup_render_deployment(app)
-        
         # Configure for production
         app.config['DEBUG'] = False
         app.config['TESTING'] = False
@@ -45,31 +43,41 @@ def create_app():
         port = int(os.getenv('PORT', 10000))
         
         logger.info(f"✅ App configured for production on port {port}")
-    
-        else:
+        
+        # Start background scheduler for data collection
+        def start_background_scheduler():
+            """Start the automated data collection in background"""
+            try:
+                # Import scheduler functions
+                from scheduler import start_scheduler
+                logger.info("🔄 Starting automated data collection scheduler...")
+                start_scheduler()
+                logger.info("✅ Background scheduler started successfully")
+            except Exception as e:
+                logger.error(f"❌ Failed to start background scheduler: {e}")
+        
+        # Start scheduler in a separate thread
+        scheduler_thread = threading.Thread(target=start_background_scheduler, daemon=True)
+        scheduler_thread.start()
+        
+    else:
         logger.info("📱 Configuring app for local development...")
-        port = 8080
     
-    return app, port
+    return app
 
 def main():
-    """Main entry point"""
-    try:
-        app, port = create_app()
-        
-        # Start the application
-        if os.getenv('FLASK_ENV') == 'production':
-            # Production on Render
-            logger.info(f"🌐 Starting production server on port {port}")
-            app.run(host='0.0.0.0', port=port, debug=False)
-        else:
-            # Local development
-            logger.info(f"🔧 Starting development server on port {port}")
-            app.run(host='127.0.0.1', port=port, debug=True)
-            
-    except Exception as e:
-        logger.error(f"❌ Failed to start application: {e}")
-        raise
+    """Main function for running the application"""
+    app = create_app()
+    
+    # Get port from environment or use default
+    port = int(os.getenv('PORT', 10000))
+    
+    if os.getenv('FLASK_ENV') == 'production':
+        logger.info(f"🚀 Starting production server on port {port}")
+        app.run(host='0.0.0.0', port=port, debug=False)
+    else:
+        logger.info(f"🔧 Starting development server on port {port}")
+        app.run(host='127.0.0.1', port=port, debug=True)
 
 if __name__ == '__main__':
     main() 

@@ -1,44 +1,34 @@
-# Core data collection libraries
+# Core Flask web framework
+Flask>=2.3.0
+Jinja2>=3.1.2
+
+# Data collection and processing
 requests>=2.31.0
 pandas>=2.0.0
 beautifulsoup4>=4.12.0
-praw>=7.7.0
 python-dotenv>=1.0.0
 
-# Google APIs
+# Reddit API
+praw>=7.7.0
+
+# Google APIs and Trends
 google-api-python-client>=2.90.0
 pytrends>=4.9.0
 
-# Social media APIs
+# Twitter API
 tweepy>=4.14.0
 
 # Text analysis
 textblob>=0.17.1
-wordcloud>=1.9.2
 
-# Web framework (Flask)
-Flask>=2.3.0
-Jinja2>=3.1.2
-
-# Streamlit (keeping for compatibility)
-streamlit>=1.25.0
-plotly>=5.15.0
-
-# Data processing
+# Data processing core
 numpy>=1.24.0
-scipy>=1.10.0
 
-# Database support removed - using JSON files only
+# Scheduling
+APScheduler>=3.10.0
 
-# Logging and utilities
-colorama>=0.4.6
-
-# Development tools
+# Date utilities
 python-dateutil>=2.8.2
 
-# Additional utilities
-configparser==6.0.1
-
-# Dashboard and visualization
-matplotlib==3.7.2
-seaborn==0.12.2 
+# Logging utilities (Windows compatibility)
+colorama>=0.4.6 

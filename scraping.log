@@ -6795,3 +6795,101 @@ The `max_results` query parameter value [5] is not between 10 and 100
 2025-07-14 16:42:41,090 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\http\\server.py', reloading
 2025-07-14 16:42:41,090 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\socketserver.py', reloading
 2025-07-14 16:42:41,738 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:42:45,228 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=60min
+2025-07-14 16:42:45,237 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:42:45.235921'}
+2025-07-14 16:42:45,263 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:42:45,269 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:42:45,316 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:42:45] "GET /api/charts/keyword-frequency?_t=1752493361744 HTTP/1.1" 200 -
+2025-07-14 16:42:45,761 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:42:45] "GET /api/charts/google-trends?_t=1752493365746 HTTP/1.1" 200 -
+2025-07-14 16:42:47,079 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:42:47] "GET /api/charts/reddit-engagement?_t=1752493366741 HTTP/1.1" 200 -
+2025-07-14 16:42:47,769 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:42:47] "GET /api/charts/youtube-engagement?_t=1752493367748 HTTP/1.1" 200 -
+2025-07-14 16:42:50,077 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:42:50] "GET /api/recent-activity?_t=1752493369742 HTTP/1.1" 200 -
+2025-07-14 16:43:06,575 - flask_app - INFO - SUCCESS: Google Trends data collection completed! Saved: True
+2025-07-14 16:43:06,576 - flask_app - INFO - STEP 2/5: Collecting Reddit data...
+2025-07-14 16:43:06,577 - fetch_reddit_data - INFO - Starting Reddit data collection for 5 keywords
+2025-07-14 16:43:06,789 - fetch_reddit_data - INFO - Reddit API connection established
+2025-07-14 16:43:06,789 - fetch_reddit_data - INFO -    User Agent: keyword_scraper_bot_1.0
+2025-07-14 16:43:06,789 - fetch_reddit_data - INFO -    Read-only mode: True
+2025-07-14 16:43:06,790 - fetch_reddit_data - INFO - Processing keyword: climate change
+2025-07-14 16:43:06,790 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'climate change' (limit: 50)
+2025-07-14 16:43:14,105 - fetch_reddit_data - INFO - Found 50 posts for keyword 'climate change'
+2025-07-14 16:43:16,106 - fetch_reddit_data - INFO - Processing keyword: cryptocurrency
+2025-07-14 16:43:16,106 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'cryptocurrency' (limit: 50)
+2025-07-14 16:43:22,855 - fetch_reddit_data - INFO - Found 50 posts for keyword 'cryptocurrency'
+2025-07-14 16:43:24,858 - fetch_reddit_data - INFO - Processing keyword: space exploration
+2025-07-14 16:43:24,858 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'space exploration' (limit: 50)
+2025-07-14 16:43:32,172 - fetch_reddit_data - INFO - Found 50 posts for keyword 'space exploration'
+2025-07-14 16:43:34,174 - fetch_reddit_data - INFO - Processing keyword: renewable energy
+2025-07-14 16:43:34,174 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'renewable energy' (limit: 50)
+2025-07-14 16:43:40,769 - fetch_reddit_data - INFO - Found 50 posts for keyword 'renewable energy'
+2025-07-14 16:43:42,770 - fetch_reddit_data - INFO - Processing keyword: AI
+2025-07-14 16:43:42,770 - fetch_reddit_data - INFO - Searching Reddit for keyword: 'AI' (limit: 50)
+2025-07-14 16:43:49,448 - fetch_reddit_data - INFO - Found 50 posts for keyword 'AI'
+2025-07-14 16:43:51,449 - fetch_reddit_data - INFO - Fetching trending subreddits...
+2025-07-14 16:43:51,450 - fetch_reddit_data - INFO - Fetching trending subreddits
+2025-07-14 16:43:53,331 - fetch_reddit_data - INFO - Collected data from 10 trending subreddits
+2025-07-14 16:43:53,331 - fetch_reddit_data - INFO - Reddit data collection completed! Total posts: 250
+2025-07-14 16:43:53,345 - fetch_reddit_data - INFO - Reddit data saved to: data/raw_reddit_data.json
+2025-07-14 16:43:53,346 - flask_app - INFO - SUCCESS: Reddit data collection completed! Found 250 posts, Saved: True
+2025-07-14 16:43:53,346 - flask_app - INFO - STEP 3/5: Collecting YouTube data...
+2025-07-14 16:43:53,719 - flask_app - INFO - Using keywords for YouTube: ['climate change', 'cryptocurrency', 'space exploration', 'renewable energy', 'AI']
+2025-07-14 16:43:53,742 - googleapiclient.discovery_cache - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-07-14 16:43:54,467 - fetch_youtube_data - INFO - YouTube API connection test successful
+2025-07-14 16:44:15,597 - flask_app - INFO - SUCCESS: YouTube data collection completed! Found 250 videos
+2025-07-14 16:44:15,620 - flask_app - INFO - YouTube data saved: True
+2025-07-14 16:44:15,620 - flask_app - INFO - STEP 4/5: Collecting Twitter data...
+2025-07-14 16:44:15,622 - fetch_twitter_data - INFO - Starting Twitter data collection for 5 keywords
+2025-07-14 16:44:15,626 - fetch_twitter_data - INFO - Twitter API collection attempted
+2025-07-14 16:44:15,637 - fetch_twitter_nitter - INFO - Processing keyword: climate change
+2025-07-14 16:44:16,325 - fetch_twitter_nitter - ERROR - Error scraping Nitter for 'climate change': 429 Client Error: Too Many Requests for url: https://nitter.net/search?q=climate+change&f=tweets
+2025-07-14 16:44:19,327 - fetch_twitter_nitter - INFO - Processing keyword: cryptocurrency
+2025-07-14 16:44:19,627 - fetch_twitter_nitter - ERROR - Error scraping Nitter for 'cryptocurrency': 429 Client Error: Too Many Requests for url: https://nitter.net/search?q=cryptocurrency&f=tweets
+2025-07-14 16:44:22,628 - fetch_twitter_nitter - INFO - Processing keyword: space exploration
+2025-07-14 16:44:30,058 - fetch_twitter_nitter - INFO - Processing keyword: renewable energy
+2025-07-14 16:44:30,368 - fetch_twitter_nitter - ERROR - Error scraping Nitter for 'renewable energy': 429 Client Error: Too Many Requests for url: https://nitter.net/search?q=renewable+energy&f=tweets
+2025-07-14 16:44:33,369 - fetch_twitter_nitter - INFO - Processing keyword: AI
+2025-07-14 16:44:40,635 - flask_app - INFO - SUCCESS: Twitter data collection completed! Found 6 tweets, Saved: True
+2025-07-14 16:44:40,635 - flask_app - INFO - STEP 5/5: Running data cleaning and trending analysis...
+2025-07-14 16:44:40,802 - trending_analysis - INFO - Processing 250 YouTube videos for keyword discovery...
+2025-07-14 16:44:41,091 - trending_analysis - INFO - Calculating trending scores for discovered keywords...
+2025-07-14 16:44:41,105 - flask_app - INFO - SUCCESS: Trending analysis completed! Found 20 trending keywords
+2025-07-14 16:44:41,105 - flask_app - INFO - COMPLETED: Data collection process completed!
+2025-07-14 16:44:41,105 - flask_app - INFO - RESULTS: 5/5 sources successful
+2025-07-14 16:44:41,113 - scheduler - INFO - Saved scheduler settings: {'last_run': '2025-07-14T16:44:41.112018', 'collection_count': 1, 'success_count': 1, 'last_successful_run': '2025-07-14T16:44:41.112018', 'last_results': {'google': {'status': 'success', 'data_points': 1, 'saved': True}, 'reddit': {'status': 'success', 'posts_count': 250, 'saved': True}, 'youtube': {'status': 'success', 'videos_count': 250}, 'twitter': {'status': 'success', 'tweets_count': 6, 'saved': True}, 'trending_analysis': {'status': 'success', 'keywords_found': 20}}}
+2025-07-14 16:44:41,125 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:42:18.920174'}
+2025-07-14 16:47:34,391 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\scheduler.py', reloading
+2025-07-14 16:47:34,928 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:47:37,159 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=60min
+2025-07-14 16:47:37,164 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:47:37.163157'}
+2025-07-14 16:47:37,182 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:47:37,186 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:47:41,090 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:47:41] "GET /api/stats?_t=1752493660749 HTTP/1.1" 200 -
+2025-07-14 16:47:41,105 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:47:41] "GET /api/trending?_t=1752493660749 HTTP/1.1" 200 -
+2025-07-14 16:47:41,765 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:47:41] "GET /api/charts/keyword-frequency?_t=1752493661749 HTTP/1.1" 200 -
+2025-07-14 16:47:43,066 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:47:43] "GET /api/charts/google-trends?_t=1752493662736 HTTP/1.1" 200 -
+2025-07-14 16:47:43,774 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:47:43] "GET /api/charts/reddit-engagement?_t=1752493663742 HTTP/1.1" 200 -
+2025-07-14 16:47:45,082 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:47:45] "GET /api/charts/youtube-engagement?_t=1752493664746 HTTP/1.1" 200 -
+2025-07-14 16:47:46,764 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 16:47:46] "GET /api/recent-activity?_t=1752493666750 HTTP/1.1" 200 -
+2025-07-14 16:48:03,457 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
+2025-07-14 16:48:03,462 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
+2025-07-14 16:48:03,463 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
+2025-07-14 16:48:04,571 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:48:07,610 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=60min
+2025-07-14 16:48:07,617 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:48:07.616179'}
+2025-07-14 16:48:07,643 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:48:07,649 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:48:22,243 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
+2025-07-14 16:48:22,246 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\app.py', reloading
+2025-07-14 16:48:23,006 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:48:25,967 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=60min
+2025-07-14 16:48:25,976 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:48:25.973401'}
+2025-07-14 16:48:26,004 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:48:26,011 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 16:48:59,803 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\test_deployment.py', reloading
+2025-07-14 16:48:59,803 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\test_deployment.py', reloading
+2025-07-14 16:48:59,804 - werkzeug - INFO -  * Detected change in 'C:\\Users\\hp\\OneDrive\\Desktop\\web-scraping project\\test_deployment.py', reloading
+2025-07-14 16:49:00,696 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 16:49:05,665 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=60min
+2025-07-14 16:49:05,674 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T17:49:05.672885'}
+2025-07-14 16:49:05,700 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 16:49:05,705 - werkzeug - INFO -  * Debugger PIN: 368-055-718
