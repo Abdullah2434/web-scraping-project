@@ -8640,3 +8640,91 @@ The `max_results` query parameter value [5] is not between 10 and 100
 2025-07-14 17:10:03,536 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T19:10:03.535781'}
 2025-07-14 17:10:03,553 - werkzeug - WARNING -  * Debugger is active!
 2025-07-14 17:10:03,556 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 17:12:41,175 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:41] "GET /api/stats?_t=1752495160748 HTTP/1.1" 200 -
+2025-07-14 17:12:41,237 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:41] "GET /api/trending?_t=1752495160748 HTTP/1.1" 200 -
+2025-07-14 17:12:41,766 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:41] "GET /api/charts/keyword-frequency?_t=1752495161745 HTTP/1.1" 200 -
+2025-07-14 17:12:43,065 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:43] "GET /api/charts/google-trends?_t=1752495162736 HTTP/1.1" 200 -
+2025-07-14 17:12:43,760 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:43] "GET /api/charts/reddit-engagement?_t=1752495163738 HTTP/1.1" 200 -
+2025-07-14 17:12:45,092 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:45] "GET /api/charts/youtube-engagement?_t=1752495164746 HTTP/1.1" 200 -
+2025-07-14 17:12:46,784 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:46] "GET /api/recent-activity?_t=1752495166750 HTTP/1.1" 200 -
+2025-07-14 17:12:57,101 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:57] "GET /api/stats?_t=1752495176753 HTTP/1.1" 200 -
+2025-07-14 17:12:57,108 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:57] "GET /api/trending?_t=1752495176753 HTTP/1.1" 200 -
+2025-07-14 17:12:57,757 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:57] "GET /api/charts/keyword-frequency?_t=1752495177743 HTTP/1.1" 200 -
+2025-07-14 17:12:59,077 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:59] "GET /api/charts/google-trends?_t=1752495178750 HTTP/1.1" 200 -
+2025-07-14 17:12:59,767 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:12:59] "GET /api/charts/reddit-engagement?_t=1752495179743 HTTP/1.1" 200 -
+2025-07-14 17:13:01,069 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:13:01] "GET /api/charts/youtube-engagement?_t=1752495180737 HTTP/1.1" 200 -
+2025-07-14 17:13:02,747 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:13:02] "GET /api/recent-activity?_t=1752495182735 HTTP/1.1" 200 -
+2025-07-14 17:14:58,810 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 17:14:58,881 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T19:14:58.877449'}
+2025-07-14 17:14:58,966 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8080
+2025-07-14 17:14:58,966 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-14 17:14:58,985 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 17:14:59,149 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 17:14:59,160 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T19:14:59.158041'}
+2025-07-14 17:14:59,220 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8080
+2025-07-14 17:14:59,220 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-07-14 17:14:59,240 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 17:15:05,926 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 17:15:05,942 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T19:15:05.939190'}
+2025-07-14 17:15:06,006 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 17:15:06,024 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 17:15:06,151 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 17:15:06,171 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T19:15:06.169181'}
+2025-07-14 17:15:06,219 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 17:15:06,232 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 17:17:41,062 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:41] "GET /api/stats?_t=1752495460737 HTTP/1.1" 200 -
+2025-07-14 17:17:41,068 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:41] "GET /api/trending?_t=1752495460737 HTTP/1.1" 200 -
+2025-07-14 17:17:41,759 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:41] "GET /api/charts/keyword-frequency?_t=1752495461745 HTTP/1.1" 200 -
+2025-07-14 17:17:43,061 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:43] "GET /api/charts/google-trends?_t=1752495462734 HTTP/1.1" 200 -
+2025-07-14 17:17:43,765 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:43] "GET /api/charts/reddit-engagement?_t=1752495463749 HTTP/1.1" 200 -
+2025-07-14 17:17:45,101 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:45] "GET /api/charts/youtube-engagement?_t=1752495464745 HTTP/1.1" 200 -
+2025-07-14 17:17:46,767 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:46] "GET /api/recent-activity?_t=1752495466750 HTTP/1.1" 200 -
+2025-07-14 17:17:57,073 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:57] "GET /api/stats?_t=1752495476746 HTTP/1.1" 200 -
+2025-07-14 17:17:57,079 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:57] "GET /api/trending?_t=1752495476746 HTTP/1.1" 200 -
+2025-07-14 17:17:57,764 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:57] "GET /api/charts/keyword-frequency?_t=1752495477747 HTTP/1.1" 200 -
+2025-07-14 17:17:59,084 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:59] "GET /api/charts/google-trends?_t=1752495478741 HTTP/1.1" 200 -
+2025-07-14 17:17:59,764 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:17:59] "GET /api/charts/reddit-engagement?_t=1752495479747 HTTP/1.1" 200 -
+2025-07-14 17:18:01,071 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:18:01] "GET /api/charts/youtube-engagement?_t=1752495480748 HTTP/1.1" 200 -
+2025-07-14 17:18:02,760 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:18:02] "GET /api/recent-activity?_t=1752495482740 HTTP/1.1" 200 -
+2025-07-14 17:22:41,064 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:41] "GET /api/stats?_t=1752495760742 HTTP/1.1" 200 -
+2025-07-14 17:22:41,069 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:41] "GET /api/trending?_t=1752495760742 HTTP/1.1" 200 -
+2025-07-14 17:22:41,759 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:41] "GET /api/charts/keyword-frequency?_t=1752495761743 HTTP/1.1" 200 -
+2025-07-14 17:22:43,072 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:43] "GET /api/charts/google-trends?_t=1752495762748 HTTP/1.1" 200 -
+2025-07-14 17:22:43,758 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:43] "GET /api/charts/reddit-engagement?_t=1752495763734 HTTP/1.1" 200 -
+2025-07-14 17:22:45,067 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:45] "GET /api/charts/youtube-engagement?_t=1752495764739 HTTP/1.1" 200 -
+2025-07-14 17:22:46,766 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:46] "GET /api/recent-activity?_t=1752495766748 HTTP/1.1" 200 -
+2025-07-14 17:22:57,061 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:57] "GET /api/stats?_t=1752495776737 HTTP/1.1" 200 -
+2025-07-14 17:22:57,066 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:57] "GET /api/trending?_t=1752495776737 HTTP/1.1" 200 -
+2025-07-14 17:22:57,757 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:57] "GET /api/charts/keyword-frequency?_t=1752495777738 HTTP/1.1" 200 -
+2025-07-14 17:22:59,070 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:59] "GET /api/charts/google-trends?_t=1752495778741 HTTP/1.1" 200 -
+2025-07-14 17:22:59,765 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:22:59] "GET /api/charts/reddit-engagement?_t=1752495779743 HTTP/1.1" 200 -
+2025-07-14 17:23:01,067 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:23:01] "GET /api/charts/youtube-engagement?_t=1752495780734 HTTP/1.1" 200 -
+2025-07-14 17:23:02,749 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:23:02] "GET /api/recent-activity?_t=1752495782736 HTTP/1.1" 200 -
+2025-07-14 17:27:41,073 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:41] "GET /api/stats?_t=1752496060745 HTTP/1.1" 200 -
+2025-07-14 17:27:41,078 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:41] "GET /api/trending?_t=1752496060746 HTTP/1.1" 200 -
+2025-07-14 17:27:41,766 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:41] "GET /api/charts/keyword-frequency?_t=1752496061748 HTTP/1.1" 200 -
+2025-07-14 17:27:43,066 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:43] "GET /api/charts/google-trends?_t=1752496062737 HTTP/1.1" 200 -
+2025-07-14 17:27:43,760 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:43] "GET /api/charts/reddit-engagement?_t=1752496063743 HTTP/1.1" 200 -
+2025-07-14 17:27:45,069 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:45] "GET /api/charts/youtube-engagement?_t=1752496064735 HTTP/1.1" 200 -
+2025-07-14 17:27:46,749 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:46] "GET /api/recent-activity?_t=1752496066737 HTTP/1.1" 200 -
+2025-07-14 17:27:57,090 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:57] "GET /api/stats?_t=1752496076753 HTTP/1.1" 200 -
+2025-07-14 17:27:57,095 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:57] "GET /api/trending?_t=1752496076754 HTTP/1.1" 200 -
+2025-07-14 17:27:57,759 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:57] "GET /api/charts/keyword-frequency?_t=1752496077741 HTTP/1.1" 200 -
+2025-07-14 17:27:59,056 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:59] "GET /api/charts/google-trends?_t=1752496078743 HTTP/1.1" 200 -
+2025-07-14 17:27:59,764 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:27:59] "GET /api/charts/reddit-engagement?_t=1752496079743 HTTP/1.1" 200 -
+2025-07-14 17:28:01,074 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:28:01] "GET /api/charts/youtube-engagement?_t=1752496080746 HTTP/1.1" 200 -
+2025-07-14 17:28:02,758 - werkzeug - INFO - 127.0.0.1 - - [14/Jul/2025 17:28:02] "GET /api/recent-activity?_t=1752496082745 HTTP/1.1" 200 -
+2025-07-14 17:29:14,165 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\argparse.py', reloading
+2025-07-14 17:29:14,166 - werkzeug - INFO -  * Detected change in 'C:\\ZKBioTime\\Python311\\Lib\\argparse.py', reloading
+2025-07-14 17:29:14,629 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 17:29:15,028 - werkzeug - INFO -  * Restarting with watchdog (windowsapi)
+2025-07-14 17:29:17,038 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 17:29:17,044 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T19:29:17.043465'}
+2025-07-14 17:29:17,063 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 17:29:17,068 - werkzeug - INFO -  * Debugger PIN: 368-055-718
+2025-07-14 17:29:17,398 - scheduler - INFO - Loaded scheduler settings: enabled=True, interval=120min
+2025-07-14 17:29:17,404 - scheduler - INFO - Saved scheduler settings: {'next_run': '2025-07-14T19:29:17.402226'}
+2025-07-14 17:29:17,420 - werkzeug - WARNING -  * Debugger is active!
+2025-07-14 17:29:17,424 - werkzeug - INFO -  * Debugger PIN: 368-055-718
