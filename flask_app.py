@@ -41,6 +41,7 @@ try:
     from fetch_reddit_data import collect_all_reddit_data
     from fetch_youtube_data import collect_all_youtube_data
     from fetch_twitter_data import collect_all_twitter_data
+    from fetch_upwork_data import collect_all_upwork_data, load_upwork_data, get_upwork_summary_stats
     from trending_analysis import run_automatic_trending_analysis, load_trending_analysis
     from keyword_manager import keyword_manager, get_current_keywords, update_collection_timestamp
     from scheduler import start_scheduler, stop_scheduler, get_scheduler_status, update_scheduler_settings, trigger_immediate_collection
@@ -463,6 +464,18 @@ class LogHandler(logging.Handler):
 log_handler = LogHandler()
 log_handler.setFormatter(logging.Formatter('%(message)s'))
 
+# Collection status tracking
+collection_status = {
+    'upwork': {
+        'running': False,
+        'completed': False,
+        'start_time': None,
+        'end_time': None,
+        'jobs_count': 0,
+        'error': None
+    }
+}
+
 def load_data():
     """Load data from JSON files - same logic as Streamlit app"""
     try:
@@ -651,6 +664,152 @@ def api_google_trends():
     if data and 'google_trends_data' in data:
         return jsonify(data['google_trends_data'])
     return jsonify({'error': 'No Google Trends data available'}), 404
+
+@app.route('/api/upwork')
+def api_upwork():
+    """API endpoint for Upwork jobs data"""
+    data = load_upwork_data()
+    if data:
+        response = jsonify(data)
+        return add_no_cache_headers(response)
+    return jsonify({'error': 'No Upwork data available'}), 404
+
+@app.route('/upwork')
+def upwork_jobs():
+    """Upwork jobs page"""
+    upwork_data = load_upwork_data()
+    upwork_stats = get_upwork_summary_stats()
+    
+    return render_template('upwork.html', 
+                         upwork_data=upwork_data, 
+                         upwork_stats=upwork_stats)
+
+@app.route('/api/collect-upwork', methods=['POST'])
+def api_collect_upwork():
+    """API endpoint to trigger Upwork data collection specifically"""
+    try:
+        data = request.get_json()
+        # Use dynamic keywords by default, fallback to provided keywords or DEFAULT_KEYWORDS
+        dynamic_keywords = get_current_keywords()
+        keywords = data.get('keywords', dynamic_keywords if dynamic_keywords else DEFAULT_KEYWORDS)
+        method = data.get('method', 'simulated')  # 'simulated', 'selenium', or 'manual'
+        
+        # Validate keywords
+        if not keywords or not isinstance(keywords, list) or len(keywords) == 0:
+            return jsonify({'error': 'No keywords provided'}), 400
+        
+        # Clean and validate keywords
+        keywords = [kw.strip() for kw in keywords if kw and kw.strip()]
+        if not keywords:
+            return jsonify({'error': 'No valid keywords provided'}), 400
+        
+        logger.info(f"Received Upwork collection request with {len(keywords)} keywords: {keywords}")
+        logger.info(f"Collection method: {method}")
+        
+        # Reset status before starting new collection
+        collection_status['upwork'] = {
+            'running': False,
+            'completed': False,
+            'start_time': None,
+            'end_time': None,
+            'jobs_count': 0,
+            'error': None
+        }
+        
+        # Run Upwork data collection in a separate thread
+        def collect_upwork_data():
+            try:
+                # Update status - collection starting
+                collection_status['upwork'].update({
+                    'running': True,
+                    'completed': False,
+                    'start_time': datetime.now().isoformat(),
+                    'end_time': None,
+                    'jobs_count': 0,
+                    'error': None
+                })
+                
+                logger.info(f"💼 Starting REAL Upwork data collection for: {keywords}")
+                
+                # ALWAYS use real browser automation - no simulated data
+                try:
+                    from fetch_upwork_data import collect_all_upwork_data
+                    logger.info("🎯 Using 100% real browser automation with file saving")
+                    upwork_data = collect_all_upwork_data(keywords, use_real_browser=True)
+                    jobs_data = upwork_data.get('jobs', [])
+                    
+                    logger.info(f"💾 Data automatically saved to file with {len(jobs_data)} jobs")
+                    
+                    # Update status - collection completed successfully
+                    collection_status['upwork'].update({
+                        'running': False,
+                        'completed': True,
+                        'end_time': datetime.now().isoformat(),
+                        'jobs_count': len(jobs_data),
+                        'error': None
+                    })
+                    
+                    logger.info(f"✅ REAL Upwork collection completed: {len(jobs_data)} genuine jobs")
+                    
+                except Exception as import_error:
+                    logger.error(f"❌ Real scraper error: {import_error}")
+                    logger.error("❌ CRITICAL: Real scraper failed - no fallback to dummy data!")
+                    
+                    # Update status - collection failed
+                    collection_status['upwork'].update({
+                        'running': False,
+                        'completed': True,
+                        'end_time': datetime.now().isoformat(),
+                        'jobs_count': 0,
+                        'error': str(import_error)
+                    })
+                
+            except Exception as e:
+                logger.error(f"❌ Upwork collection error: {e}")
+                # Update status - collection failed
+                collection_status['upwork'].update({
+                    'running': False,
+                    'completed': True,
+                    'end_time': datetime.now().isoformat(),
+                    'jobs_count': 0,
+                    'error': str(e)
+                })
+                
+        # Start collection in background
+        collection_thread = threading.Thread(target=collect_upwork_data)
+        collection_thread.daemon = True
+        collection_thread.start()
+        
+        return jsonify({
+            'status': 'success',
+            'message': f'REAL Upwork data collection started for {len(keywords)} keywords (100% genuine data only)',
+            'keywords': keywords,
+            'method': 'real_browser_guaranteed',
+            'note': 'No simulated data - only real scraped jobs'
+        })
+        
+    except Exception as e:
+        logger.error(f"Upwork collection API error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/upwork-status', methods=['GET'])
+def api_upwork_status():
+    """Check Upwork collection status"""
+    try:
+        status = collection_status['upwork'].copy()
+        
+        # Add elapsed time if running
+        if status['running'] and status['start_time']:
+            start_time = datetime.fromisoformat(status['start_time'])
+            elapsed = (datetime.now() - start_time).total_seconds()
+            status['elapsed_seconds'] = int(elapsed)
+            status['elapsed_formatted'] = f"{int(elapsed//60)}m {int(elapsed%60)}s"
+        
+        return jsonify(status)
+        
+    except Exception as e:
+        logger.error(f"Status check error: {e}")
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/trending')
 def api_trending():
@@ -874,6 +1033,28 @@ def run_data_collection_with_logging(keywords, sources):
                 logger.error(f"ERROR: Twitter collection failed: {e}")
                 results['twitter'] = {'status': 'error', 'error': str(e)}
         
+        if 'upwork' in sources:
+            current_step += 1
+            logger.info(f"STEP {current_step}/{total_steps}: Collecting Upwork jobs data...")
+            try:
+                # Use all keywords for Upwork
+                logger.info(f"💼 Using all keywords for Upwork: {keywords}")
+                
+                upwork_data = collect_all_upwork_data(keywords)
+                if upwork_data and upwork_data.get('jobs'):
+                    jobs_count = len(upwork_data.get('jobs', []))
+                    logger.info(f"SUCCESS: Upwork data collection completed! Found {jobs_count} jobs")
+                    results['upwork'] = {
+                        'status': 'success',
+                        'jobs_count': jobs_count
+                    }
+                else:
+                    logger.warning("WARNING: Upwork data collection returned no data")
+                    results['upwork'] = {'status': 'failed', 'error': 'No jobs returned'}
+            except Exception as e:
+                logger.error(f"ERROR: Upwork collection failed: {e}")
+                results['upwork'] = {'status': 'error', 'error': str(e)}
+        
         # Run data cleaning and trending analysis
         current_step += 1
         logger.info(f"STEP {current_step}/{total_steps}: Running data cleaning and trending analysis...")
@@ -928,7 +1109,7 @@ def api_collect():
         # Use dynamic keywords by default, fallback to provided keywords or DEFAULT_KEYWORDS
         dynamic_keywords = get_current_keywords()
         keywords = data.get('keywords', dynamic_keywords if dynamic_keywords else DEFAULT_KEYWORDS)
-        sources = data.get('sources', ['google', 'reddit', 'youtube', 'twitter'])
+        sources = data.get('sources', ['google', 'reddit', 'youtube', 'twitter', 'upwork'])
         
         # Validate keywords
         if not keywords or not isinstance(keywords, list) or len(keywords) == 0:

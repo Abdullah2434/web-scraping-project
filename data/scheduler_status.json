@@ -1,9 +1,9 @@
 {
   "enabled": true,
-  "last_run": "2025-07-14T17:45:34.180746",
-  "next_run": "2025-07-14T20:31:56.046882",
-  "collection_count": 2,
-  "success_count": 2,
+  "last_run": "2025-07-15T17:06:45.740227",
+  "next_run": "2025-07-15T19:03:26.723773",
+  "collection_count": 5,
+  "success_count": 5,
   "error_count": 0,
   "sources": [
     "google",
@@ -13,8 +13,8 @@
   ],
   "interval_minutes": 120,
   "created_at": "2025-07-14T13:45:04.623283",
-  "last_updated": "2025-07-14T18:31:56.048154",
-  "last_successful_run": "2025-07-14T17:45:34.180746",
+  "last_updated": "2025-07-15T17:06:45.752269",
+  "last_successful_run": "2025-07-15T17:06:45.740227",
   "last_results": {
     "google": {
       "status": "success",

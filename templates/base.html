@@ -76,6 +76,12 @@
                             <span>Google Trends</span>
                         </a>
                     </li>
+                    <li class="menu-item">
+                        <a href="{{ url_for('upwork_jobs') }}" class="menu-link {% if request.endpoint == 'upwork_jobs' %}active{% endif %}">
+                            <i class="fas fa-briefcase"></i>
+                            <span>Upwork Jobs</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             
@@ -220,6 +226,11 @@
                             <input type="checkbox" id="collectTwitter" checked>
                             <span class="checkmark"></span>
                             🐦 Twitter
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="collectUpwork" checked>
+                            <span class="checkmark"></span>
+                            💼 Upwork Jobs
                         </label>
                     </div>
                 </div>

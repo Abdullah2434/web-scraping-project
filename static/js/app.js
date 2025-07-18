@@ -214,7 +214,8 @@ function toggleAllSources() {
         document.getElementById('collectGoogle'),
         document.getElementById('collectReddit'),
         document.getElementById('collectYoutube'),
-        document.getElementById('collectTwitter')
+        document.getElementById('collectTwitter'),
+        document.getElementById('collectUpwork')
     ];
     
     sourceCheckboxes.forEach(checkbox => {
@@ -228,11 +229,12 @@ async function startDataCollection() {
         .map(checkbox => checkbox.value);
     
     // Get selected sources
-    const sources = [];
-    if (document.getElementById('collectGoogle').checked) sources.push('google');
-    if (document.getElementById('collectReddit').checked) sources.push('reddit');
-    if (document.getElementById('collectYoutube').checked) sources.push('youtube');
-    if (document.getElementById('collectTwitter').checked) sources.push('twitter');
+            const sources = [];
+        if (document.getElementById('collectGoogle').checked) sources.push('google');
+        if (document.getElementById('collectReddit').checked) sources.push('reddit');
+        if (document.getElementById('collectYoutube').checked) sources.push('youtube');
+        if (document.getElementById('collectTwitter').checked) sources.push('twitter');
+        if (document.getElementById('collectUpwork').checked) sources.push('upwork');
     
     // Validation
     if (selectedKeywords.length === 0) {

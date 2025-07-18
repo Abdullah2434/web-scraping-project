@@ -1,0 +1,1072 @@
+{% extends "base.html" %}
+
+{% block title %}Upwork Jobs - Keyword Trends Analytics{% endblock %}
+
+{% block page_title %}Upwork Jobs{% endblock %}
+{% block page_subtitle %}Latest freelance opportunities from Upwork based on your keywords{% endblock %}
+
+{% block head %}
+<style>
+/* Hide main header on Upwork page */
+.top-header {
+    display: none !important;
+}
+
+/* Adjust main content spacing since header is hidden */
+.main-content {
+    padding-top: 20px;
+}
+
+/* Upwork page specific styles */
+.upwork-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.upwork-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.upwork-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.upwork-header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+/* Keywords input section */
+.keywords-section {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.keywords-input-group {
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+    margin-bottom: 15px;
+}
+
+.keywords-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+}
+
+.keywords-input:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.add-keyword-btn {
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.add-keyword-btn:hover {
+    background: #1e40af;
+}
+
+.keywords-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.keyword-tag {
+    background: #f0f7ff;
+    color: #1e3a8a;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #bfdbfe;
+    position: relative;
+}
+
+.keyword-tag .remove-keyword {
+    margin-left: 8px;
+    cursor: pointer;
+    color: #ef4444;
+    font-weight: bold;
+}
+
+.keyword-tag .remove-keyword:hover {
+    color: #dc2626;
+}
+
+/* Collect section styling */
+.collect-section {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.collect-section h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+
+.collect-section p {
+    margin: 0 0 20px 0;
+    opacity: 0.9;
+}
+
+.collect-btn {
+    background: white;
+    color: #1e3a8a;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.collect-btn:hover {
+    background: #f8fafc;
+    transform: translateY(-1px);
+}
+
+.collect-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.job-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 24px;
+    margin-bottom: 20px;
+    border-left: 4px solid #1e3a8a;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.job-header {
+    display: flex;
+    justify-content: between;
+    align-items: start;
+    margin-bottom: 16px;
+}
+
+.job-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+}
+
+.job-budget {
+    background: #f0fdf4;
+    color: #166534;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    border: 1px solid #bbf7d0;
+}
+
+.job-description {
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 16px;
+}
+
+.job-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.job-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.job-meta-item i {
+    color: #1e3a8a;
+    width: 16px;
+}
+
+.job-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.skill-tag {
+    background: #e2e8f0;
+    color: #475569;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.job-footer {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.client-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.client-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #f59e0b;
+}
+
+.view-job-btn {
+    background: #1e3a8a;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+    margin-left: 15px;
+}
+
+.view-job-btn:hover {
+    background: #1e40af;
+    color: white;
+    text-decoration: none;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e3a8a;
+    display: block;
+}
+
+.stat-label {
+    color: #64748b;
+    font-weight: 500;
+    margin-top: 8px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+}
+
+.empty-state i {
+    font-size: 64px;
+    color: #cbd5e1;
+    margin-bottom: 20px;
+}
+
+.filters-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.filters-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.filter-group label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+}
+
+.filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    min-width: 120px;
+}
+
+/* Real proposals indicator */
+.proposals-count {
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* Updated empty state styling */
+.no-data-message {
+    text-align: center;
+    padding: 60px 20px;
+    color: #64748b;
+}
+
+.no-data-icon {
+    font-size: 48px;
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+
+.no-data-message h3 {
+    color: #374151;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.no-data-message p {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+/* Loading overlay styles */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-container {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.loading-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f4f6;
+    border-top: 4px solid #1e3a8a;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.logs-container {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.log-entry {
+    margin-bottom: 8px;
+    padding: 4px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.log-timestamp {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.log-message {
+    color: #374151;
+}
+
+.log-info { color: #1d4ed8; }
+.log-success { color: #059669; }
+.log-warning { color: #d97706; }
+.log-error { color: #dc2626; }
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    margin: 15px 0;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #1e3a8a, #3b82f6);
+    width: 0%;
+    transition: width 0.3s ease;
+    animation: progress-pulse 2s ease-in-out infinite;
+}
+
+@keyframes progress-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="upwork-container">
+    <!-- Custom Upwork Header -->
+    <div class="upwork-header">
+        <h1>
+            <i class="fas fa-briefcase"></i>
+            Upwork Jobs Scraper
+        </h1>
+        <p>Collect freelance opportunities from Upwork using your custom keywords</p>
+    </div>
+    
+    <!-- Keywords Management Section -->
+    <div class="keywords-section">
+        <h3 style="margin: 0 0 20px 0; color: #374151;">
+            <i class="fas fa-tags"></i>
+            Search Keywords
+        </h3>
+        
+        <div class="keywords-input-group">
+            <div style="flex: 1;">
+                <label for="keywordInput" style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">
+                    Add Keywords for Job Search
+                </label>
+                <input 
+                    type="text" 
+                    id="keywordInput" 
+                    class="keywords-input" 
+                    placeholder="e.g. python, web development, react, nodejs..."
+                    onkeypress="handleKeywordEnter(event)"
+                >
+            </div>
+            <button onclick="addKeyword()" class="add-keyword-btn">
+                <i class="fas fa-plus"></i>
+                Add
+            </button>
+        </div>
+        
+        <div class="keywords-display" id="keywordsDisplay">
+            <!-- Keywords will be displayed here -->
+        </div>
+        
+        <p style="margin: 15px 0 0 0; color: #64748b; font-size: 14px;">
+            <i class="fas fa-info-circle"></i>
+            Add multiple keywords to search for different types of jobs. Each keyword will be searched separately.
+        </p>
+    </div>
+
+    <!-- Stats Overview -->
+    {% if upwork_data and upwork_data.jobs %}
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-number">{{ upwork_stats.total_jobs }}</span>
+            <span class="stat-label">Total Jobs</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ upwork_stats.total_keywords }}</span>
+            <span class="stat-label">Keywords</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">${{ upwork_stats.avg_budget }}</span>
+            <span class="stat-label">Avg Budget</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number">{{ upwork_data.jobs|length }}</span>
+            <span class="stat-label">Recent Jobs</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Collect Data Section -->
+    <div class="collect-section">
+        <h3>Collect Upwork Jobs</h3>
+        <p>Scrape jobs based on your custom keywords</p>
+        
+        <button onclick="collectUpworkData()" class="collect-btn" id="collectBtn">
+            <i class="fas fa-download"></i> 
+            Collect Data
+        </button>
+    </div>
+
+    <!-- Filters Section -->
+    {% if upwork_data and upwork_data.jobs %}
+    <div class="filters-section">
+        <h3><i class="fas fa-filter"></i> Filter Jobs</h3>
+        <div class="filters-grid">
+            <div class="filter-group">
+                <label>Budget Type</label>
+                <select id="budgetFilter" onchange="filterJobs()">
+                    <option value="">All Types</option>
+                    <option value="hourly">Hourly</option>
+                    <option value="fixed">Fixed Price</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Experience Level</label>
+                <select id="experienceFilter" onchange="filterJobs()">
+                    <option value="">All Levels</option>
+                    <option value="Entry Level">Entry Level</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Expert">Expert</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Sort By</label>
+                <select id="sortFilter" onchange="filterJobs()">
+                    <option value="posted">Recently Posted</option>
+                    <option value="budget">Budget (High to Low)</option>
+                    <option value="proposals">Proposals (Low to High)</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Keyword</label>
+                <select id="keywordFilter" onchange="filterJobs()">
+                    <option value="">All Keywords</option>
+                    {% if upwork_data and upwork_data.metadata %}
+                        {% for keyword in upwork_data.metadata.keywords_analyzed %}
+                        <option value="{{ keyword }}">{{ keyword }}</option>
+                        {% endfor %}
+                    {% endif %}
+                </select>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Jobs List -->
+    <div id="jobsList">
+        {% if upwork_data and upwork_data.jobs %}
+            {% for job in upwork_data.jobs %}
+            <div class="job-card" data-keyword="{{ job.search_keyword }}" 
+                 data-budget-type="{{ job.budget.type }}" 
+                 data-experience="{{ job.job_details.experience_level }}"
+                 data-budget-amount="{{ job.budget.min_amount or 0 }}"
+                 data-proposals="{{ job.job_details.proposals_count }}">
+                
+                <div class="job-header">
+                    <div>
+                        <h3 class="job-title">{{ job.title }}</h3>
+                    </div>
+                    <div class="job-budget">
+                        {% if job.budget.type == 'hourly' and job.budget.min_amount %}
+                            ${{ "%.2f"|format(job.budget.min_amount) }}-${{ "%.2f"|format(job.budget.max_amount) }}/hr
+                        {% elif job.budget.type == 'fixed' and job.budget.min_amount %}
+                            ${{ "%.2f"|format(job.budget.min_amount) }}
+                        {% elif job.budget.raw_text and job.budget.raw_text != 'Budget not specified' %}
+                            {{ job.budget.raw_text }}
+                        {% else %}
+                            <span style="color: #64748b;">Budget pending</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="job-description">
+                    {{ job.description }}
+                </div>
+                
+                <div class="job-meta">
+                    <div class="job-meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span>{{ job.job_details.posted_time if job.job_details.posted_time != 'Time not specified' else 'Recently posted' }}</span>
+                    </div>
+                    <div class="job-meta-item">
+                        <i class="fas fa-users"></i>
+                        {% if job.job_details.proposals_count and job.job_details.proposals_count > 0 %}
+                            <span class="proposals-count">{{ job.job_details.proposals_count }} proposals</span>
+                        {% else %}
+                            <span style="color: #64748b;">Proposals: TBD</span>
+                        {% endif %}
+                    </div>
+                    <div class="job-meta-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>{{ job.job_details.duration if job.job_details.duration != 'Not specified' else 'Duration flexible' }}</span>
+                    </div>
+                    <div class="job-meta-item">
+                        <i class="fas fa-layer-group"></i>
+                        <span>{{ job.job_details.experience_level if job.job_details.experience_level != 'Not specified' else 'All levels' }}</span>
+                    </div>
+                    <div class="job-meta-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ job.client_info.location if job.client_info.location != 'Not specified' else 'Global' }}</span>
+                    </div>
+                </div>
+                
+                <div class="job-skills">
+                    {% for skill in job.skills_required %}
+                    <span class="skill-tag">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+                
+                <div class="job-footer">
+                    <div class="client-info">
+                        {% if job.client_info.rating and job.client_info.rating > 0 %}
+                        <div class="client-rating">
+                            <i class="fas fa-star"></i>
+                            <span>{{ "%.1f"|format(job.client_info.rating) }}</span>
+                        </div>
+                        {% endif %}
+                        {% if job.client_info.verified %}
+                        <span><i class="fas fa-check-circle" style="color: #10b981;"></i> Verified</span>
+                        {% endif %}
+                    </div>
+                    <a href="{{ job.url }}" target="_blank" class="view-job-btn">
+                        <i class="fas fa-external-link-alt"></i>
+                        View Job
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+        <div class="no-data-message">
+            <div class="no-data-icon">
+                <i class="fas fa-briefcase"></i>
+            </div>
+            <h3>No Jobs Available</h3>
+            <p>Add some keywords above and click "Collect Data" to fetch job listings from Upwork.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-container">
+        <div class="loading-header">
+            <div class="loading-spinner"></div>
+            <h3>Scraping Upwork Jobs</h3>
+            <p>Collecting job data from Upwork...</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+        </div>
+        
+        <div class="logs-container" id="logsContainer">
+            <div class="log-entry">
+                <span class="log-timestamp">00:00:00</span> - 
+                <span class="log-message log-info">Starting data collection...</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Keywords management
+let customKeywords = [];
+
+// Initialize keywords from localStorage or defaults
+function initializeKeywords() {
+    const savedKeywords = localStorage.getItem('upworkKeywords');
+    if (savedKeywords) {
+        customKeywords = JSON.parse(savedKeywords);
+    } else {
+        customKeywords = ['python', 'web development']; // default keywords
+    }
+    displayKeywords();
+}
+
+// Display keywords
+function displayKeywords() {
+    const container = document.getElementById('keywordsDisplay');
+    container.innerHTML = '';
+    
+    if (customKeywords.length === 0) {
+        container.innerHTML = '<p style="color: #64748b; font-style: italic;">No keywords added yet. Add some keywords to start scraping jobs.</p>';
+        return;
+    }
+    
+    customKeywords.forEach((keyword, index) => {
+        const keywordElement = document.createElement('div');
+        keywordElement.className = 'keyword-tag';
+        keywordElement.innerHTML = `
+            ${keyword}
+            <span class="remove-keyword" onclick="removeKeyword(${index})">&times;</span>
+        `;
+        container.appendChild(keywordElement);
+    });
+    
+    // Save to localStorage
+    localStorage.setItem('upworkKeywords', JSON.stringify(customKeywords));
+}
+
+// Add keyword
+function addKeyword() {
+    const input = document.getElementById('keywordInput');
+    const keyword = input.value.trim();
+    
+    if (!keyword) {
+        showNotification('Please enter a keyword', 'warning');
+        return;
+    }
+    
+    if (customKeywords.includes(keyword.toLowerCase())) {
+        showNotification('Keyword already exists', 'warning');
+        return;
+    }
+    
+    customKeywords.push(keyword);
+    input.value = '';
+    displayKeywords();
+    showNotification(`Added keyword: ${keyword}`, 'success');
+}
+
+// Remove keyword
+function removeKeyword(index) {
+    const removedKeyword = customKeywords[index];
+    customKeywords.splice(index, 1);
+    displayKeywords();
+    showNotification(`Removed keyword: ${removedKeyword}`, 'info');
+}
+
+// Handle Enter key in keyword input
+function handleKeywordEnter(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        addKeyword();
+    }
+}
+
+// Collect Upwork data function
+function collectUpworkData() {
+    if (customKeywords.length === 0) {
+        showNotification('Please add at least one keyword before collecting data', 'warning');
+        return;
+    }
+    
+    // Show loading overlay
+    showLoadingOverlay();
+    
+    // Start the collection process
+    fetch('/api/collect-upwork', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            keywords: customKeywords,
+            method: 'selenium'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Collection response:', data);
+        // Start real-time status polling instead of simulation
+        startStatusPolling();
+    })
+    .catch(error => {
+        console.error('Collection error:', error);
+        hideLoadingOverlay();
+        showNotification('❌ Error starting data collection. Please try again.', 'error');
+    });
+}
+
+// Show loading overlay
+function showLoadingOverlay() {
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.style.display = 'flex';
+    
+    // Reset logs and progress
+    const logsContainer = document.getElementById('logsContainer');
+    logsContainer.innerHTML = '';
+    document.getElementById('progressFill').style.width = '0%';
+    
+    // Add initial log
+    addLogEntry(`Starting collection for keywords: ${customKeywords.join(', ')}`, 'info');
+}
+
+// Hide loading overlay
+function hideLoadingOverlay() {
+    const overlay = document.getElementById('loadingOverlay');
+    overlay.style.display = 'none';
+}
+
+// Add log entry
+function addLogEntry(message, type = 'info') {
+    const logsContainer = document.getElementById('logsContainer');
+    const timestamp = new Date().toLocaleTimeString();
+    
+    const logEntry = document.createElement('div');
+    logEntry.className = 'log-entry';
+    logEntry.innerHTML = `
+        <span class="log-timestamp">${timestamp}</span> - 
+        <span class="log-message log-${type}">${message}</span>
+    `;
+    
+    logsContainer.appendChild(logEntry);
+    logsContainer.scrollTop = logsContainer.scrollHeight;
+}
+
+// Poll for real collection status
+function startStatusPolling() {
+    let pollCount = 0;
+    const maxPolls = 120; // 10 minutes max (5 second intervals)
+    
+    addLogEntry('Starting real-time status monitoring...', 'info');
+    
+    const pollInterval = setInterval(async () => {
+        pollCount++;
+        
+        try {
+            const response = await fetch('/api/upwork-status');
+            const status = await response.json();
+            
+            if (status.running) {
+                // Still running - show progress
+                const elapsed = status.elapsed_formatted || '0s';
+                addLogEntry(`⏳ Collection in progress... (${elapsed} elapsed)`, 'info');
+                
+                // Estimate progress based on elapsed time (rough estimate)
+                const elapsedSeconds = status.elapsed_seconds || 0;
+                const estimatedProgress = Math.min(95, (elapsedSeconds / 180) * 100); // Assume 3 minutes max
+                updateProgress(estimatedProgress);
+                
+            } else if (status.completed) {
+                // Collection completed!
+                clearInterval(pollInterval);
+                
+                if (status.error) {
+                    addLogEntry(`❌ Collection failed: ${status.error}`, 'error');
+                    updateProgress(100);
+                    setTimeout(() => {
+                        hideLoadingOverlay();
+                        showNotification('Collection failed. Please try again.', 'error');
+                    }, 2000);
+                } else {
+                    addLogEntry(`✅ Collection completed! Found ${status.jobs_count} jobs`, 'success');
+                    updateProgress(100);
+                    
+                    setTimeout(() => {
+                        addLogEntry('🔄 Refreshing page with fresh data...', 'info');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1500);
+                    }, 1000);
+                }
+                return;
+            }
+            
+            // Check if we've been polling too long
+            if (pollCount >= maxPolls) {
+                clearInterval(pollInterval);
+                addLogEntry('⚠️ Collection taking longer than expected...', 'warning');
+                addLogEntry('🔄 Refreshing page to check status...', 'info');
+                setTimeout(() => location.reload(), 2000);
+            }
+            
+        } catch (error) {
+            console.error('Status polling error:', error);
+            addLogEntry('⚠️ Status check failed, retrying...', 'warning');
+        }
+        
+    }, 5000); // Poll every 5 seconds
+}
+
+// Update progress bar
+function updateProgress(percentage) {
+    const progressFill = document.getElementById('progressFill');
+    progressFill.style.width = percentage + '%';
+}
+
+// Show notification function
+function showNotification(message, type) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    // Set background color based on type
+    const colors = {
+        success: '#10b981',
+        error: '#ef4444',
+        warning: '#f59e0b',
+        info: '#3b82f6'
+    };
+    notification.style.backgroundColor = colors[type] || colors.info;
+    notification.textContent = message;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+// Filter jobs function
+function filterJobs() {
+    const budgetFilter = document.getElementById('budgetFilter').value;
+    const experienceFilter = document.getElementById('experienceFilter').value;
+    const sortFilter = document.getElementById('sortFilter').value;
+    const keywordFilter = document.getElementById('keywordFilter').value;
+    
+    const jobCards = document.querySelectorAll('.job-card');
+    let visibleCards = [];
+    
+    jobCards.forEach(card => {
+        let shouldShow = true;
+        
+        if (budgetFilter && card.dataset.budgetType !== budgetFilter) {
+            shouldShow = false;
+        }
+        
+        if (experienceFilter && card.dataset.experience !== experienceFilter) {
+            shouldShow = false;
+        }
+        
+        if (keywordFilter && card.dataset.keyword !== keywordFilter) {
+            shouldShow = false;
+        }
+        
+        card.style.display = shouldShow ? 'block' : 'none';
+        if (shouldShow) visibleCards.push(card);
+    });
+    
+    // Sort visible cards
+    if (sortFilter && visibleCards.length > 0) {
+        visibleCards.sort((a, b) => {
+            switch (sortFilter) {
+                case 'budget':
+                    return parseFloat(b.dataset.budgetAmount) - parseFloat(a.dataset.budgetAmount);
+                case 'proposals':
+                    return parseInt(a.dataset.proposals) - parseInt(b.dataset.proposals);
+                default:
+                    return 0;
+            }
+        });
+        
+        const container = document.getElementById('jobsList');
+        visibleCards.forEach(card => container.appendChild(card));
+    }
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeKeywords();
+});
+
+// Add CSS animation for notifications
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+
+</script>
+{% endblock %} 
