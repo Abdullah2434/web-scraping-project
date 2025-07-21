@@ -345,13 +345,14 @@ def collect_all_google_data(keywords: Optional[List[str]] = None) -> Dict[str, A
     return all_data
 
 
-def save_google_data(data: Dict[str, Any], filepath: Optional[str] = None) -> bool:
+def save_google_data(data: Dict[str, Any], filepath: Optional[str] = None, use_persistence: bool = True) -> bool:
     """
-    Save Google Trends data to JSON file
+    Save Google Trends data to JSON file with persistence option
     
     Args:
         data (Dict[str, Any]): Data to save
         filepath (str, optional): File path. Uses default if None.
+        use_persistence (bool): Whether to append to existing data
         
     Returns:
         bool: True if successful, False otherwise
@@ -360,10 +361,19 @@ def save_google_data(data: Dict[str, Any], filepath: Optional[str] = None) -> bo
         filepath = DATA_PATHS['raw_google_data']
     
     try:
-        # Ensure data directory exists
+        if use_persistence:
+            # Use new persistence system to append data
+            from data_persistence import append_google_trends_data
+            success = append_google_trends_data(data)
+            if success:
+                logger.info(f"✅ Google Trends data appended to: {filepath}")
+                return True
+            else:
+                logger.warning("⚠️ Failed to append, falling back to overwrite")
+        
+        # Fallback to overwrite or if persistence is disabled
         ensure_data_directory()
         
-        # Save to JSON file with proper formatting
         with open(filepath, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False, default=str)
         

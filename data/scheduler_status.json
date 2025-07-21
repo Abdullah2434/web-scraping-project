@@ -1,9 +1,9 @@
 {
   "enabled": true,
-  "last_run": "2025-07-15T17:06:45.740227",
-  "next_run": "2025-07-15T19:03:26.723773",
-  "collection_count": 5,
-  "success_count": 5,
+  "last_run": "2025-07-21T12:19:33.035406",
+  "next_run": "2025-07-21T19:38:29.592171",
+  "collection_count": 8,
+  "success_count": 8,
   "error_count": 0,
   "sources": [
     "google",
@@ -13,8 +13,8 @@
   ],
   "interval_minutes": 120,
   "created_at": "2025-07-14T13:45:04.623283",
-  "last_updated": "2025-07-15T17:06:45.752269",
-  "last_successful_run": "2025-07-15T17:06:45.740227",
+  "last_updated": "2025-07-21T17:38:29.592651",
+  "last_successful_run": "2025-07-21T12:19:33.035414",
   "last_results": {
     "google": {
       "status": "success",
@@ -36,8 +36,8 @@
       "saved": true
     },
     "trending_analysis": {
-      "status": "success",
-      "keywords_found": 20
+      "status": "error",
+      "error": "\n**********************************************************************\n  Resource \u001b[93mpunkt_tab\u001b[0m not found.\n  Please use the NLTK Downloader to obtain the resource:\n\n  \u001b[31m>>> import nltk\n  >>> nltk.download('punkt_tab')\n  \u001b[0m\n  For more information see: https://www.nltk.org/data.html\n\n  Attempted to load \u001b[93mtokenizers/punkt_tab/english/\u001b[0m\n\n  Searched in:\n    - 'C:\\\\Users\\\\hp/nltk_data'\n    - 'C:\\\\Python313\\\\nltk_data'\n    - 'C:\\\\Python313\\\\share\\\\nltk_data'\n    - 'C:\\\\Python313\\\\lib\\\\nltk_data'\n    - 'C:\\\\Users\\\\hp\\\\AppData\\\\Roaming\\\\nltk_data'\n    - 'C:\\\\nltk_data'\n    - 'D:\\\\nltk_data'\n    - 'E:\\\\nltk_data'\n**********************************************************************\n"
     }
   }
 }

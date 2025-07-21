@@ -464,13 +464,14 @@ def collect_all_youtube_data(keywords: Optional[List[str]] = None) -> Dict[str, 
         }
 
 
-def save_youtube_data(data: Dict[str, Any], filepath: Optional[str] = None) -> bool:
+def save_youtube_data(data: Dict[str, Any], filepath: Optional[str] = None, use_persistence: bool = True) -> bool:
     """
-    Save YouTube data to JSON file
+    Save YouTube data to JSON file with persistence option
     
     Args:
         data (Dict[str, Any]): YouTube data to save
         filepath (str, optional): Custom file path. Uses default if None.
+        use_persistence (bool): Whether to append to existing data
         
     Returns:
         bool: True if successful, False otherwise
@@ -479,6 +480,17 @@ def save_youtube_data(data: Dict[str, Any], filepath: Optional[str] = None) -> b
         filepath = DATA_PATHS['raw_youtube_data']
     
     try:
+        if use_persistence:
+            # Use new persistence system to append data
+            from data_persistence import append_youtube_data
+            success = append_youtube_data(data)
+            if success:
+                logger.info(f"✅ YouTube data appended to: {filepath}")
+                return True
+            else:
+                logger.warning("⚠️ Failed to append, falling back to overwrite")
+        
+        # Fallback to overwrite or if persistence is disabled
         ensure_data_directory()
         
         with open(filepath, 'w', encoding='utf-8') as f:

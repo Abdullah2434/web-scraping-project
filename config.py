@@ -102,6 +102,7 @@ DATA_PATHS = {
     'raw_reddit_data': 'data/raw_reddit_data.json',
     'raw_youtube_data': 'data/raw_youtube_data.json',
     'raw_twitter_data': 'data/raw_twitter_data.json',
+    'raw_upwork_data': 'data/raw_upwork_data.json',
     'cleaned_data': 'data/cleaned_data.json',
     'trending_analysis': 'data/trending_analysis.json',
     'data_directory': 'data/'
@@ -141,7 +142,9 @@ LOGGING_CONFIG = {
     'level': 'INFO',  # Options: 'DEBUG', 'INFO', 'WARNING', 'ERROR'
     'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     'log_file': 'scraping.log',
-    'encoding': 'utf-8'  # Fix emoji encoding issues on Windows
+    'encoding': 'utf-8',  # Fix emoji encoding issues on Windows
+    'windows_safe': True,  # Use Windows-safe logging format
+    'stream_encoding': 'utf-8'  # Force UTF-8 for stream handlers
 }
 
 # ===== VALIDATION FUNCTIONS =====

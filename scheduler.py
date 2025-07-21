@@ -129,9 +129,9 @@ class DataCollectionScheduler:
         self.collection_thread = threading.Thread(target=self._run_scheduler, daemon=True)
         self.collection_thread.start()
         
-        logger.info("🕒 Automated scheduler started")
-        logger.info(f"   ⏰ Collection interval: {self.collection_interval // 60} minutes")
-        logger.info(f"   📊 Sources: {', '.join(self.sources)}")
+        logger.info("Automated scheduler started")
+        logger.info(f"   Collection interval: {self.collection_interval // 60} minutes")
+        logger.info(f"   Sources: {', '.join(self.sources)}")
     
     def stop(self):
         """Stop the automated scheduler"""
@@ -144,11 +144,11 @@ class DataCollectionScheduler:
             logger.info("Stopping scheduler...")
             # Thread will stop on next iteration
         
-        logger.info("🛑 Automated scheduler stopped")
+        logger.info("Automated scheduler stopped")
     
     def _run_scheduler(self):
         """Main scheduler loop"""
-        logger.info("📅 Scheduler loop started")
+        logger.info("Scheduler loop started")
         
         # Calculate next collection time
         self.next_collection_time = datetime.now() + timedelta(seconds=self.collection_interval)
@@ -160,14 +160,14 @@ class DataCollectionScheduler:
                 
                 # Check if it's time for collection
                 if current_time >= self.next_collection_time:
-                    logger.info("⏰ Scheduled collection time reached")
+                    logger.info("Scheduled collection time reached")
                     self._run_collection()
                     
                     # Schedule next collection
                     self.next_collection_time = current_time + timedelta(seconds=self.collection_interval)
                     self.save_settings(next_run=self.next_collection_time.isoformat())
                     
-                    logger.info(f"📅 Next collection scheduled for: {self.next_collection_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                    logger.info(f"Next collection scheduled for: {self.next_collection_time.strftime('%Y-%m-%d %H:%M:%S')}")
                 
                 # Sleep for a minute before checking again
                 time.sleep(60)
@@ -179,20 +179,20 @@ class DataCollectionScheduler:
     def _run_collection(self):
         """Run data collection with current settings"""
         try:
-            logger.info("🚀 Starting scheduled data collection")
+            logger.info("Starting scheduled data collection")
             
             # Get current keywords
             keywords = get_current_keywords()
             if not keywords:
-                logger.warning("⚠️ No keywords configured for collection")
+                logger.warning("No keywords configured for collection")
                 self.save_settings(
                     last_run=datetime.now().isoformat(),
                     error_count=self._increment_counter('error_count')
                 )
                 return
             
-            logger.info(f"📝 Using keywords: {keywords}")
-            logger.info(f"📊 Using sources: {self.sources}")
+            logger.info(f"Using keywords: {keywords}")
+            logger.info(f"Using sources: {self.sources}")
             
             # Import and run collection function
             from flask_app import run_data_collection_with_logging
@@ -205,8 +205,8 @@ class DataCollectionScheduler:
             
             if successful_sources:
                 success_count = self._increment_counter('success_count')
-                logger.info(f"✅ Scheduled collection completed successfully")
-                logger.info(f"   📊 Successful sources: {', '.join(successful_sources)}")
+                logger.info(f"Scheduled collection completed successfully")
+                logger.info(f"   Successful sources: {', '.join(successful_sources)}")
                 
                 # Update collection timestamp
                 update_collection_timestamp()
@@ -220,7 +220,7 @@ class DataCollectionScheduler:
                 )
             else:
                 error_count = self._increment_counter('error_count')
-                logger.error("❌ Scheduled collection failed - no sources successful")
+                logger.error("Scheduled collection failed - no sources successful")
                 
                 self.save_settings(
                     last_run=datetime.now().isoformat(),
@@ -230,7 +230,7 @@ class DataCollectionScheduler:
                 )
             
         except Exception as e:
-            logger.error(f"💥 Error in scheduled collection: {e}")
+            logger.error(f"Error in scheduled collection: {e}")
             
             error_count = self._increment_counter('error_count')
             self.save_settings(
@@ -288,7 +288,7 @@ class DataCollectionScheduler:
                 'current_time': datetime.now().isoformat()
             }
     
-    def update_settings(self, enabled: bool = None, sources: List[str] = None, interval_minutes: int = None):
+    def update_settings(self, enabled: Optional[bool] = None, sources: Optional[List[str]] = None, interval_minutes: Optional[int] = None):
         """Update scheduler settings"""
         updates = {}
         
@@ -308,14 +308,14 @@ class DataCollectionScheduler:
         
         # Restart scheduler if settings changed and it's running
         if self.is_running and updates:
-            logger.info("⚙️ Restarting scheduler with new settings")
+            logger.info("Restarting scheduler with new settings")
             self.stop()
             time.sleep(1)
             self.start()
     
     def trigger_immediate_collection(self):
         """Trigger an immediate data collection (outside of schedule)"""
-        logger.info("🚀 Triggering immediate data collection")
+        logger.info("Triggering immediate data collection")
         
         # Run collection in a separate thread to avoid blocking
         collection_thread = threading.Thread(target=self._run_collection, daemon=True)

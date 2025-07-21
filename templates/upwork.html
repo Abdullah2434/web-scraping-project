@@ -374,6 +374,40 @@
     font-weight: 500;
 }
 
+/* Enhanced status indicators */
+.job-meta-item span[style*="color: #059669"] {
+    background: #dcfce7;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 13px;
+}
+
+.job-meta-item span[style*="color: #dc2626"] {
+    background: #fee2e2;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 13px;
+}
+
+.job-meta-item span[style*="color: #f59e0b"] {
+    background: #fef3c7;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 13px;
+}
+
+/* Time display enhancement */
+.job-meta-item .fas.fa-clock + span {
+    font-weight: 500;
+    color: #1e40af;
+}
+
+/* Location display enhancement */
+.job-meta-item .fas.fa-map-marker-alt + span {
+    font-weight: 500;
+    color: #059669;
+}
+
 /* Updated empty state styling */
 .no-data-message {
     text-align: center;
@@ -501,6 +535,286 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
 }
+
+/* Modern Filters Section Styles */
+.modern-filters-section {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+    overflow: hidden;
+}
+
+.filters-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 20px 30px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filters-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filters-title i {
+    color: #1e3a8a;
+    font-size: 18px;
+}
+
+.filters-title h3 {
+    margin: 0;
+    color: #1e3a8a;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.jobs-count {
+    background: #1e3a8a;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+.clear-filters-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.clear-filters-btn:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+}
+
+.filters-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 30px;
+}
+
+.filter-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s ease;
+}
+
+.filter-card:hover {
+    border-color: #1e3a8a;
+    box-shadow: 0 2px 8px rgba(30, 58, 138, 0.1);
+}
+
+.filter-card.filter-card-budget {
+    grid-column: span 2;
+}
+
+.filter-icon {
+    width: 40px;
+    height: 40px;
+    background: #1e3a8a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.filter-icon i {
+    color: white;
+    font-size: 16px;
+}
+
+.filter-content {
+    width: 100%;
+}
+
+.filter-label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select select {
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.custom-select select:focus {
+    outline: none;
+    border-color: #1e3a8a;
+    box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+}
+
+.custom-select .select-arrow {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+    font-size: 12px;
+}
+
+.budget-range-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.budget-range-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.budget-range-item:hover {
+    border-color: #1e3a8a;
+    background: #f0f7ff;
+}
+
+.budget-range-item.active {
+    border-color: #1e3a8a;
+    background: #1e3a8a;
+    color: white;
+}
+
+.budget-label {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.budget-count {
+    background: #e2e8f0;
+    color: #374151;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 24px;
+    text-align: center;
+}
+
+.budget-range-item.active .budget-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.active-filters {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 20px 30px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.active-filters-label {
+    font-weight: 600;
+    color: #374151;
+    font-size: 14px;
+}
+
+.active-filters-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.active-filter-tag {
+    background: #1e3a8a;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.remove-filter {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+}
+
+.remove-filter:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive design for filters */
+@media (max-width: 768px) {
+    .filters-container {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+    
+    .filter-card.filter-card-budget {
+        grid-column: span 1;
+    }
+    
+    .filters-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .active-filters {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
 </style>
 {% endblock %}
 
@@ -571,59 +885,300 @@
             <span class="stat-label">Recent Jobs</span>
         </div>
     </div>
+    
+    <!-- Excel Download Section -->
+    <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
+        <h4 style="margin: 0 0 15px 0; color: #1e3a8a; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <i class="fas fa-file-excel" style="color: #10b981;"></i>
+            Excel Export
+        </h4>
+        <p style="margin: 0 0 15px 0; color: #64748b;">
+            Download all job data including URLs, budgets, and details in an organized Excel spreadsheet
+        </p>
+        <div style="display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <button onclick="downloadExcelFile()" class="excel-download-btn" id="downloadExcelBtn" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-download"></i>
+                Download Excel File
+            </button>
+            <button onclick="createExcelFile()" class="excel-create-btn" id="createExcelBtn" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-file-plus"></i>
+                Create New Excel
+            </button>
+        </div>
+        <div style="margin-top: 10px; font-size: 12px; color: #64748b;">
+            📊 Includes multiple sheets: All Jobs, Summary, URLs Only, and Keyword Breakdown
+        </div>
+    </div>
     {% endif %}
 
     <!-- Collect Data Section -->
     <div class="collect-section">
-        <h3>Collect Upwork Jobs</h3>
-        <p>Scrape jobs based on your custom keywords</p>
+        <h3>Comprehensive Individual Job Collection</h3>
+        <p>Visit each job page individually for detailed data including exact budgets, precise posting times, proposal counts, payment verification status, and comprehensive location details</p>
         
-        <button onclick="collectUpworkData()" class="collect-btn" id="collectBtn">
-            <i class="fas fa-download"></i> 
-            Collect Data
+        <div style="margin: 20px 0; display: flex; align-items: center; gap: 15px; justify-content: center; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label for="maxJobsInput" style="color: white; font-weight: 500;">Max Jobs per Keyword:</label>
+                <select id="maxJobsInput" style="padding: 8px 12px; border-radius: 6px; border: none;">
+                    <option value="3">3 jobs (Quick - ~2 min)</option>
+                    <option value="5" selected>5 jobs (Balanced - ~4 min)</option>
+                    <option value="10">10 jobs (Comprehensive - ~8 min)</option>
+                    <option value="15">15 jobs (Extensive - ~12 min)</option>
+                    <option value="20">20 jobs (Thorough - ~16 min)</option>
+                    <option value="30">30 jobs (Detailed - ~24 min)</option>
+                    <option value="50">50 jobs (Comprehensive - ~40 min)</option>
+                    <option value="70">70 jobs (Extensive - ~56 min)</option>
+                    <option value="100">100 jobs (Complete - ~80 min)</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <label for="skipPrivateJobsInput" style="color: white; font-weight: 500;">Skip Private Jobs:</label>
+                <select id="skipPrivateJobsInput" style="padding: 8px 12px; border-radius: 6px; border: none;">
+                    <option value="true" selected>Yes (Recommended)</option>
+                    <option value="false">No (Include All)</option>
+                </select>
+            </div>
+        </div>
+        
+        <button onclick="collectComprehensiveUpworkData()" class="collect-btn" id="collectBtn">
+            <i class="fas fa-search-plus"></i> 
+            Start Comprehensive Collection
         </button>
+        
+        <div style="margin-top: 15px; font-size: 14px; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
+            <strong>🔍 What you'll get:</strong><br>
+            ✅ Exact budget amounts from individual job pages<br>
+            ✅ Precise posting times (e.g., "44 minutes ago")<br>
+            ✅ Real proposal counts and competition data<br>
+            ✅ Payment verification status for each client<br>
+            ✅ Detailed location information<br>
+            ✅ Complete skills and requirements lists<br>
+            ✅ Client ratings and membership details<br>
+            🔒 Automatically skips private/confidential jobs (configurable)
+        </div>
     </div>
 
-    <!-- Filters Section -->
+    <!-- Modern Filters Section -->
     {% if upwork_data and upwork_data.jobs %}
-    <div class="filters-section">
-        <h3><i class="fas fa-filter"></i> Filter Jobs</h3>
-        <div class="filters-grid">
-            <div class="filter-group">
-                <label>Budget Type</label>
-                <select id="budgetFilter" onchange="filterJobs()">
-                    <option value="">All Types</option>
-                    <option value="hourly">Hourly</option>
-                    <option value="fixed">Fixed Price</option>
-                </select>
+    <div class="modern-filters-section">
+        <div class="filters-header">
+            <div class="filters-title">
+                <i class="fas fa-sliders-h"></i>
+                <h3>Smart Filters</h3>
+                <span class="jobs-count">{{ upwork_data.jobs|length }} jobs</span>
             </div>
-            <div class="filter-group">
-                <label>Experience Level</label>
-                <select id="experienceFilter" onchange="filterJobs()">
-                    <option value="">All Levels</option>
-                    <option value="Entry Level">Entry Level</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Expert">Expert</option>
-                </select>
+            <button class="clear-filters-btn" onclick="clearAllFilters()">
+                <i class="fas fa-times"></i>
+                Clear All
+            </button>
+        </div>
+        
+        <div class="filters-container">
+            <div class="filter-card">
+                <div class="filter-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Budget Type</label>
+                    <div class="custom-select">
+                        <select id="budgetFilter" onchange="filterJobs()">
+                            <option value="">All Budget Types</option>
+                            <option value="hourly">Hourly Rate</option>
+                            <option value="fixed">Fixed Price</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
             </div>
-            <div class="filter-group">
-                <label>Sort By</label>
-                <select id="sortFilter" onchange="filterJobs()">
-                    <option value="posted">Recently Posted</option>
-                    <option value="budget">Budget (High to Low)</option>
-                    <option value="proposals">Proposals (Low to High)</option>
-                </select>
+
+            <div class="filter-card">
+                <div class="filter-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Experience Level</label>
+                    <div class="custom-select">
+                        <select id="experienceFilter" onchange="filterJobs()">
+                            <option value="">All Experience Levels</option>
+                            <option value="Entry Level">Entry Level</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Expert">Expert</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
             </div>
-            <div class="filter-group">
-                <label>Keyword</label>
-                <select id="keywordFilter" onchange="filterJobs()">
-                    <option value="">All Keywords</option>
-                    {% if upwork_data and upwork_data.metadata %}
-                        {% for keyword in upwork_data.metadata.keywords_analyzed %}
-                        <option value="{{ keyword }}">{{ keyword }}</option>
-                        {% endfor %}
-                    {% endif %}
-                </select>
+
+            <div class="filter-card">
+                <div class="filter-icon">
+                    <i class="fas fa-sort"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Sort By</label>
+                    <div class="custom-select">
+                        <select id="sortFilter" onchange="filterJobs()">
+                            <option value="posted">Recently Posted</option>
+                            <option value="budget">Budget (High to Low)</option>
+                            <option value="proposals">Proposals (Low to High)</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-card">
+                <div class="filter-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Keyword</label>
+                    <div class="custom-select">
+                        <select id="keywordFilter" onchange="filterJobs()">
+                            <option value="">All Keywords</option>
+                            <!-- Keywords will be populated dynamically by JavaScript -->
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-card">
+                <div class="filter-icon">
+                    <i class="fas fa-calendar-day"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Days Filter</label>
+                    <div class="custom-select">
+                        <select id="timeRangeFilter" onchange="filterJobs()">
+                            <option value="">Any Day</option>
+                            <option value="today">Today</option>
+                            <option value="previous_day">Previous Day</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-card">
+                <div class="filter-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Hourly Filter</label>
+                    <div class="custom-select">
+                        <select id="hourlyFilter" onchange="filterJobs()">
+                            <option value="">Any Time</option>
+                            <option value="2">2 Hours Ago</option>
+                            <option value="5">5 Hours Ago</option>
+                            <option value="10">10 Hours Ago</option>
+                            <option value="24">24 Hours Ago</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-card">
+                <div class="filter-icon">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Payment Status</label>
+                    <div class="custom-select">
+                        <select id="paymentFilter" onchange="filterJobs()">
+                            <option value="">All Payments</option>
+                            <option value="verified">Verified Only</option>
+                            <option value="not_verified">Not Verified</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-card">
+                <div class="filter-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Location Filter</label>
+                    <div class="custom-select">
+                        <select id="locationFilter" onchange="filterJobs()">
+                            <option value="">All Locations</option>
+                            <option value="exclude_israel_india">Exclude Israel & India</option>
+                            <option value="usa_only">USA Only</option>
+                            <option value="europe_only">Europe Only</option>
+                        </select>
+                        <i class="fas fa-chevron-down select-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter-card filter-card-budget">
+                <div class="filter-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Budget Range</label>
+                    <div class="budget-range-container">
+                        <div class="budget-range-item" data-range="0-500">
+                            <span class="budget-label">Under $500</span>
+                            <span class="budget-count" id="budget-count-0-500">0</span>
+                        </div>
+                        <div class="budget-range-item" data-range="500-1000">
+                            <span class="budget-label">$500 - $1,000</span>
+                            <span class="budget-count" id="budget-count-500-1000">0</span>
+                        </div>
+                        <div class="budget-range-item" data-range="1000+">
+                            <span class="budget-label">$1,000+</span>
+                            <span class="budget-count" id="budget-count-1000+">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="filter-card filter-card-date">
+                <div class="filter-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="filter-content">
+                    <label class="filter-label">Collection Date Range</label>
+                    <div class="date-range-container">
+                        <div class="date-input-group">
+                            <label class="date-sub-label">From Date</label>
+                            <div class="custom-date-input">
+                                <input type="date" id="fromDate" onchange="filterJobs()">
+                                <i class="fas fa-calendar-day date-icon"></i>
+                            </div>
+                        </div>
+                        <div class="date-range-separator">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="date-input-group">
+                            <label class="date-sub-label">To Date</label>
+                            <div class="custom-date-input">
+                                <input type="date" id="toDate" onchange="filterJobs()">
+                                <i class="fas fa-calendar-day date-icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="date-presets">
+                        <button class="date-preset-btn" onclick="setDatePreset('today')">Today</button>
+                        <button class="date-preset-btn" onclick="setDatePreset('week')">Last 7 Days</button>
+                        <button class="date-preset-btn" onclick="setDatePreset('month')">Last 30 Days</button>
+                        <button class="date-preset-btn" onclick="setDatePreset('all')" title="Clear date filter">All Time</button>
+                    </div>
+                    <div class="date-filter-info">
+                        <span id="dateFilterInfo">All jobs shown</span>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+
+        <div class="active-filters">
+            <span class="active-filters-label">Active Filters:</span>
+            <div id="activeFiltersList" class="active-filters-list">
+                <!-- Active filters will be populated here -->
             </div>
         </div>
     </div>
@@ -633,25 +1188,44 @@
     <div id="jobsList">
         {% if upwork_data and upwork_data.jobs %}
             {% for job in upwork_data.jobs %}
-            <div class="job-card" data-keyword="{{ job.search_keyword }}" 
-                 data-budget-type="{{ job.budget.type }}" 
-                 data-experience="{{ job.job_details.experience_level }}"
-                 data-budget-amount="{{ job.budget.min_amount or 0 }}"
-                 data-proposals="{{ job.job_details.proposals_count }}">
+            <div class="job-card" data-keyword="{{ job.search_keyword or job.keyword or '' }}" 
+                 data-budget-type="{{ job.budget.type if job.budget else 'unknown' }}" 
+                 data-experience="{{ job.job_details.experience_level if job.job_details else 'All levels' }}"
+                 data-budget-amount="{{ job.budget.min_amount or 0 if job.budget else 0 }}"
+                 data-proposals="{{ job.job_details.proposals_count.count if (job.job_details.proposals_count is defined and job.job_details.proposals_count.count is defined) else (job.job_details.proposals_count if job.job_details.proposals_count is number else 0) }}"
+                 data-scraped-at="{{ job.scraped_at or '' }}">
                 
                 <div class="job-header">
                     <div>
                         <h3 class="job-title">{{ job.title }}</h3>
                     </div>
                     <div class="job-budget">
-                        {% if job.budget.type == 'hourly' and job.budget.min_amount %}
-                            ${{ "%.2f"|format(job.budget.min_amount) }}-${{ "%.2f"|format(job.budget.max_amount) }}/hr
-                        {% elif job.budget.type == 'fixed' and job.budget.min_amount %}
-                            ${{ "%.2f"|format(job.budget.min_amount) }}
-                        {% elif job.budget.raw_text and job.budget.raw_text != 'Budget not specified' %}
-                            {{ job.budget.raw_text }}
+                        {% if job.budget %}
+                            {% if job.budget.raw_text and job.budget.raw_text != 'Budget not specified' and job.budget.raw_text != 'Budget not available' %}
+                                <!-- Show raw text first as it's most reliable -->
+                                {{ job.budget.raw_text }}
+                            {% elif (job.budget.type == 'hourly' or 'hourly' in job.budget.type|lower) and job.budget.min_amount and job.budget.min_amount > 0 %}
+                                <!-- Hourly budget -->
+                                {% if job.budget.max_amount and job.budget.max_amount != job.budget.min_amount %}
+                                    ${{ "%.2f"|format(job.budget.min_amount) }}-${{ "%.2f"|format(job.budget.max_amount) }}/hr
+                                {% else %}
+                                    ${{ "%.2f"|format(job.budget.min_amount) }}/hr
+                                {% endif %}
+                            {% elif (job.budget.type == 'fixed' or 'fixed' in job.budget.type|lower) and job.budget.min_amount and job.budget.min_amount > 0 %}
+                                <!-- Fixed budget -->
+                                ${{ "%.2f"|format(job.budget.min_amount) }} Fixed
+                            {% elif job.budget.hourly_rate and job.budget.hourly_rate > 0 %}
+                                <!-- Fallback to hourly rate -->
+                                ${{ "%.2f"|format(job.budget.hourly_rate) }}/hr
+                            {% elif job.budget.type and job.budget.type != 'unknown' %}
+                                <!-- Show budget type if available -->
+                                <span style="color: #8b5cf6;">{{ job.budget.type|title }} Project</span>
+                            {% else %}
+                                <!-- Last resort fallback -->
+                                <span style="color: #64748b;">Budget TBD</span>
+                            {% endif %}
                         {% else %}
-                            <span style="color: #64748b;">Budget pending</span>
+                            <span style="color: #64748b;">Budget TBD</span>
                         {% endif %}
                     </div>
                 </div>
@@ -663,19 +1237,46 @@
                 <div class="job-meta">
                     <div class="job-meta-item">
                         <i class="fas fa-clock"></i>
-                        <span>{{ job.job_details.posted_time if job.job_details.posted_time != 'Time not specified' else 'Recently posted' }}</span>
+                        {% if job.job_details.posted_time is defined and job.job_details.posted_time.display is defined %}
+                            <span>{{ job.job_details.posted_time.display }}</span>
+                        {% elif job.job_details.posted_time is defined and job.job_details.posted_time.original is defined %}
+                            <span>{{ job.job_details.posted_time.original }}</span>
+                        {% elif job.job_details.posted_time is defined and job.job_details.posted_time %}
+                            {% set time_text = job.job_details.posted_time %}
+                            {% if time_text != 'Time not specified' and time_text != 'Recently posted' and time_text != 'Unknown' %}
+                                <span>{{ time_text }}</span>
+                            {% else %}
+                                <span>Posted recently</span>
+                            {% endif %}
+                        {% else %}
+                            <span>Posted recently</span>
+                        {% endif %}
                     </div>
                     <div class="job-meta-item">
                         <i class="fas fa-users"></i>
-                        {% if job.job_details.proposals_count and job.job_details.proposals_count > 0 %}
-                            <span class="proposals-count">{{ job.job_details.proposals_count }} proposals</span>
+                        {% if job.job_details.proposals_count is defined and job.job_details.proposals_count.display is defined %}
+                            <span class="proposals-count">{{ job.job_details.proposals_count.display }}</span>
+                        {% elif job.job_details.proposals_count is defined and job.job_details.proposals_count.count is defined %}
+                            {% set count = job.job_details.proposals_count.count %}
+                            {% if count > 0 %}
+                                <span class="proposals-count">{{ count }} {% if count == 1 %}proposal{% else %}proposals{% endif %}</span>
+                            {% else %}
+                                <span class="proposals-count">0 proposals</span>
+                            {% endif %}
+                        {% elif job.job_details.proposals_count is defined and job.job_details.proposals_count is number %}
+                            {% set count = job.job_details.proposals_count %}
+                            {% if count > 0 %}
+                                <span class="proposals-count">{{ count }} {% if count == 1 %}proposal{% else %}proposals{% endif %}</span>
+                            {% else %}
+                                <span class="proposals-count">0 proposals</span>
+                            {% endif %}
                         {% else %}
-                            <span style="color: #64748b;">Proposals: TBD</span>
+                            <span class="proposals-count">0 proposals</span>
                         {% endif %}
                     </div>
                     <div class="job-meta-item">
                         <i class="fas fa-calendar"></i>
-                        <span>{{ job.job_details.duration if job.job_details.duration != 'Not specified' else 'Duration flexible' }}</span>
+                        <span>{{ job.job_details.duration if job.job_details.duration and job.job_details.duration != 'Not specified' else 'Duration flexible' }}</span>
                     </div>
                     <div class="job-meta-item">
                         <i class="fas fa-layer-group"></i>
@@ -683,7 +1284,57 @@
                     </div>
                     <div class="job-meta-item">
                         <i class="fas fa-map-marker-alt"></i>
-                        <span>{{ job.client_info.location if job.client_info.location != 'Not specified' else 'Global' }}</span>
+                        {% if job.job_details.client_country is defined and job.job_details.client_country not in ['Unknown', 'Not specified', ''] %}
+                            <span>{{ job.job_details.client_country }}</span>
+                        {% elif job.job_details.client_location is defined and job.job_details.client_location not in ['Unknown', 'Not specified', ''] %}
+                            <span>{{ job.job_details.client_location }}</span>
+                        {% elif job.client_info and job.client_info.location is defined and job.client_info.location not in ['Unknown', 'Not specified', ''] %}
+                            <span>{{ job.client_info.location }}</span>
+                        {% elif job.client_info and job.client_info.country is defined and job.client_info.country not in ['Unknown', 'Not specified', ''] %}
+                            <span>{{ job.client_info.country }}</span>
+                        {% else %}
+                            <span>Worldwide</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="job-meta-item">
+                        <i class="fas fa-credit-card"></i>
+                        {% if job.job_details.payment_verified is defined and job.job_details.payment_verified.display is defined %}
+                            {% set payment_status = job.job_details.payment_verified.status %}
+                            {% if payment_status == 'verified' %}
+                                <span style="color: #059669; font-weight: 500;">
+                                    <i class="fas fa-check-circle"></i> {{ job.job_details.payment_verified.display }}
+                                </span>
+                            {% elif payment_status == 'not_verified' %}
+                                <span style="color: #dc2626; font-weight: 500;">
+                                    <i class="fas fa-times-circle"></i> {{ job.job_details.payment_verified.display }}
+                                </span>
+                            {% else %}
+                                <span style="color: #f59e0b; font-weight: 500;">
+                                    <i class="fas fa-question-circle"></i> {{ job.job_details.payment_verified.display }}
+                                </span>
+                            {% endif %}
+                        {% elif job.job_details.payment_verified is defined and job.job_details.payment_verified.verified %}
+                            <span style="color: #059669; font-weight: 500;">
+                                <i class="fas fa-check-circle"></i> Payment verified
+                            </span>
+                        {% elif job.job_details.payment_verified is defined and job.job_details.payment_verified.status == 'not_verified' %}
+                            <span style="color: #dc2626; font-weight: 500;">
+                                <i class="fas fa-times-circle"></i> Payment not verified
+                            </span>
+                        {% elif job.job_details.verified_payment is defined and job.job_details.verified_payment %}
+                            <span style="color: #059669; font-weight: 500;">
+                                <i class="fas fa-check-circle"></i> Payment verified
+                            </span>
+                        {% elif job.client_info and job.client_info.verified is defined and job.client_info.verified %}
+                            <span style="color: #059669; font-weight: 500;">
+                                <i class="fas fa-check-circle"></i> Client verified
+                            </span>
+                        {% else %}
+                            <span style="color: #f59e0b; font-weight: 500;">
+                                <i class="fas fa-question-circle"></i> Payment status pending
+                            </span>
+                        {% endif %}
                     </div>
                 </div>
                 
@@ -695,13 +1346,13 @@
                 
                 <div class="job-footer">
                     <div class="client-info">
-                        {% if job.client_info.rating and job.client_info.rating > 0 %}
-                        <div class="client-rating">
-                            <i class="fas fa-star"></i>
-                            <span>{{ "%.1f"|format(job.client_info.rating) }}</span>
-                        </div>
-                        {% endif %}
-                        {% if job.client_info.verified %}
+                                        {% if (job.client_info.rating if job.client_info else job.job_details.client_rating) and (job.client_info.rating if job.client_info else job.job_details.client_rating) > 0 %}
+                <div class="client-rating">
+                    <i class="fas fa-star"></i>
+                    <span>{{ "%.1f"|format(job.client_info.rating if job.client_info else job.job_details.client_rating) }}</span>
+                </div>
+                {% endif %}
+                {% if (job.client_info.verified if job.client_info else job.job_details.verified_payment) %}
                         <span><i class="fas fa-check-circle" style="color: #10b981;"></i> Verified</span>
                         {% endif %}
                     </div>
@@ -822,17 +1473,37 @@ function handleKeywordEnter(event) {
     }
 }
 
-// Collect Upwork data function
-function collectUpworkData() {
+// Comprehensive Upwork data collection function
+function collectComprehensiveUpworkData() {
     if (customKeywords.length === 0) {
         showNotification('Please add at least one keyword before collecting data', 'warning');
         return;
     }
     
-    // Show loading overlay
-    showLoadingOverlay();
+    // Get max jobs per keyword setting
+    const maxJobsPerKeyword = parseInt(document.getElementById('maxJobsInput').value) || 5;
+    const estimatedTime = customKeywords.length * maxJobsPerKeyword * 0.5; // rough estimate
     
-    // Start the collection process
+    // Get skip private jobs setting
+    const skipPrivateJobs = document.getElementById('skipPrivateJobsInput').value === 'true';
+    
+    // Show comprehensive loading overlay
+    showComprehensiveLoadingOverlay(maxJobsPerKeyword, estimatedTime);
+    
+    // Get current filter values from dropdowns
+    const filters = {
+        time_range: document.getElementById('timeRangeFilter')?.value || 'today',
+        hourly_filter: document.getElementById('hourlyFilter')?.value || '',
+        budget_range: 'any',  // Keep existing logic for budget
+        job_type: 'any',      // Keep existing logic for job type
+        experience_level: 'any',  // Keep existing logic for experience
+        payment_status: document.getElementById('paymentFilter')?.value || 'both',
+        sort_by: 'recency'
+    };
+    
+    console.log(`🚀 Starting comprehensive collection: ${customKeywords.length} keywords × ${maxJobsPerKeyword} jobs = ${customKeywords.length * maxJobsPerKeyword} total jobs`);
+    
+    // Start the comprehensive collection process
     fetch('/api/collect-upwork', {
         method: 'POST',
         headers: {
@@ -840,26 +1511,50 @@ function collectUpworkData() {
         },
         body: JSON.stringify({
             keywords: customKeywords,
-            method: 'selenium'
+            method: 'comprehensive',  // Use comprehensive method
+            filters: filters,
+            max_jobs_per_keyword: maxJobsPerKeyword,
+            use_persistence: true,  // Always append to existing data
+            skip_private_jobs: skipPrivateJobs  // Include private job skipping setting
         })
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Collection response:', data);
-        // Start real-time status polling instead of simulation
-        startStatusPolling();
+        console.log('Comprehensive collection response:', data);
+        // Start real-time status polling for comprehensive collection
+        startComprehensiveStatusPolling(maxJobsPerKeyword);
     })
     .catch(error => {
-        console.error('Collection error:', error);
+        console.error('Comprehensive collection error:', error);
         hideLoadingOverlay();
-        showNotification('❌ Error starting data collection. Please try again.', 'error');
+        showNotification('❌ Error starting comprehensive data collection. Please try again.', 'error');
     });
 }
 
-// Show loading overlay
-function showLoadingOverlay() {
+// Legacy function for backward compatibility
+function collectUpworkData() {
+    // Redirect to comprehensive collection
+    collectComprehensiveUpworkData();
+}
+
+// Show comprehensive loading overlay with detailed info
+function showComprehensiveLoadingOverlay(maxJobsPerKeyword, estimatedTime) {
     const overlay = document.getElementById('loadingOverlay');
     overlay.style.display = 'flex';
+    
+    // Update header for comprehensive collection
+    const header = overlay.querySelector('.loading-header');
+    header.innerHTML = `
+        <div class="loading-spinner"></div>
+        <h3>🔍 Comprehensive Individual Job Collection</h3>
+        <p>Visiting each job page individually for premium data quality...</p>
+        <div style="background: rgba(30, 58, 138, 0.1); padding: 10px; border-radius: 8px; margin: 10px 0;">
+            <strong>📊 Collection Plan:</strong><br>
+            🎯 ${customKeywords.length} keywords × ${maxJobsPerKeyword} jobs = ${customKeywords.length * maxJobsPerKeyword} total jobs<br>
+            ⏱️ Estimated time: ${estimatedTime.toFixed(1)} minutes<br>
+            🏆 Data quality: Premium (individual page extraction)
+        </div>
+    `;
     
     // Reset logs and progress
     const logsContainer = document.getElementById('logsContainer');
@@ -867,7 +1562,14 @@ function showLoadingOverlay() {
     document.getElementById('progressFill').style.width = '0%';
     
     // Add initial log
-    addLogEntry(`Starting collection for keywords: ${customKeywords.join(', ')}`, 'info');
+    addLogEntry(`🚀 Starting COMPREHENSIVE collection for keywords: ${customKeywords.join(', ')}`, 'info');
+    addLogEntry(`📋 Collection settings: ${maxJobsPerKeyword} jobs per keyword, premium data extraction`, 'info');
+    addLogEntry(`⏰ Expected completion time: ~${estimatedTime.toFixed(1)} minutes`, 'info');
+}
+
+// Show regular loading overlay (fallback)
+function showLoadingOverlay() {
+    showComprehensiveLoadingOverlay(5, 2.5);
 }
 
 // Hide loading overlay
@@ -892,12 +1594,16 @@ function addLogEntry(message, type = 'info') {
     logsContainer.scrollTop = logsContainer.scrollHeight;
 }
 
-// Poll for real collection status
-function startStatusPolling() {
+// Poll for comprehensive collection status
+function startComprehensiveStatusPolling(maxJobsPerKeyword) {
     let pollCount = 0;
-    const maxPolls = 120; // 10 minutes max (5 second intervals)
+    const totalExpectedJobs = customKeywords.length * maxJobsPerKeyword;
+    const maxPolls = Math.max(240, totalExpectedJobs * 2); // Dynamic max based on job count
     
-    addLogEntry('Starting real-time status monitoring...', 'info');
+    addLogEntry('🔍 Starting comprehensive collection monitoring...', 'info');
+    addLogEntry(`📊 Tracking progress for ${totalExpectedJobs} individual job pages`, 'info');
+    
+    let lastJobsCount = 0;
     
     const pollInterval = setInterval(async () => {
         pollCount++;
@@ -907,32 +1613,47 @@ function startStatusPolling() {
             const status = await response.json();
             
             if (status.running) {
-                // Still running - show progress
+                // Still running - show detailed progress
                 const elapsed = status.elapsed_formatted || '0s';
-                addLogEntry(`⏳ Collection in progress... (${elapsed} elapsed)`, 'info');
+                const currentJobs = status.jobs_count || 0;
                 
-                // Estimate progress based on elapsed time (rough estimate)
-                const elapsedSeconds = status.elapsed_seconds || 0;
-                const estimatedProgress = Math.min(95, (elapsedSeconds / 180) * 100); // Assume 3 minutes max
-                updateProgress(estimatedProgress);
+                // Calculate progress based on jobs collected
+                const jobProgress = Math.min(95, (currentJobs / totalExpectedJobs) * 100);
+                updateProgress(jobProgress);
+                
+                // Show detailed progress
+                if (currentJobs > lastJobsCount) {
+                    addLogEntry(`✅ Collected ${currentJobs}/${totalExpectedJobs} comprehensive job profiles (${elapsed} elapsed)`, 'success');
+                    lastJobsCount = currentJobs;
+                } else {
+                    addLogEntry(`🔍 Processing individual job pages... ${currentJobs}/${totalExpectedJobs} complete (${elapsed} elapsed)`, 'info');
+                }
+                
+                // Show keyword progress if available
+                const currentKeyword = Math.ceil(currentJobs / maxJobsPerKeyword);
+                if (currentKeyword <= customKeywords.length) {
+                    addLogEntry(`📋 Current focus: Keyword ${currentKeyword}/${customKeywords.length} - "${customKeywords[currentKeyword-1] || 'Processing...'}"`, 'info');
+                }
                 
             } else if (status.completed) {
                 // Collection completed!
                 clearInterval(pollInterval);
                 
                 if (status.error) {
-                    addLogEntry(`❌ Collection failed: ${status.error}`, 'error');
+                    addLogEntry(`❌ Comprehensive collection failed: ${status.error}`, 'error');
                     updateProgress(100);
                     setTimeout(() => {
                         hideLoadingOverlay();
-                        showNotification('Collection failed. Please try again.', 'error');
+                        showNotification('Comprehensive collection failed. Please try again.', 'error');
                     }, 2000);
                 } else {
-                    addLogEntry(`✅ Collection completed! Found ${status.jobs_count} jobs`, 'success');
+                    addLogEntry(`🎉 COMPREHENSIVE COLLECTION COMPLETED!`, 'success');
+                    addLogEntry(`📊 Successfully collected ${status.jobs_count} jobs with premium detail level`, 'success');
+                    addLogEntry(`🏆 Data includes: exact budgets, precise times, proposal counts, payment status, and more!`, 'success');
                     updateProgress(100);
                     
                     setTimeout(() => {
-                        addLogEntry('🔄 Refreshing page with fresh data...', 'info');
+                        addLogEntry('🔄 Refreshing page with premium quality data...', 'info');
                         setTimeout(() => {
                             location.reload();
                         }, 1500);
@@ -944,17 +1665,24 @@ function startStatusPolling() {
             // Check if we've been polling too long
             if (pollCount >= maxPolls) {
                 clearInterval(pollInterval);
-                addLogEntry('⚠️ Collection taking longer than expected...', 'warning');
-                addLogEntry('🔄 Refreshing page to check status...', 'info');
-                setTimeout(() => location.reload(), 2000);
+                addLogEntry('⚠️ Comprehensive collection taking longer than expected...', 'warning');
+                addLogEntry(`ℹ️ This is normal for ${totalExpectedJobs} individual job pages`, 'info');
+                addLogEntry('🔄 Refreshing page to check final status...', 'info');
+                setTimeout(() => location.reload(), 3000);
             }
             
         } catch (error) {
-            console.error('Status polling error:', error);
+            console.error('Comprehensive status polling error:', error);
             addLogEntry('⚠️ Status check failed, retrying...', 'warning');
         }
         
-    }, 5000); // Poll every 5 seconds
+    }, 7000); // Poll every 7 seconds for comprehensive collection
+}
+
+// Legacy status polling function
+function startStatusPolling() {
+    // Redirect to comprehensive polling
+    startComprehensiveStatusPolling(5);
 }
 
 // Update progress bar
@@ -1002,59 +1730,924 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// Filter jobs function
+// Global filter state
+let activeFilters = {
+    budget: '',
+    experience: '',
+    keyword: '',
+    sort: '',
+    budgetRange: '',
+    fromDate: '',
+    toDate: '',
+    timeRange: '',
+    hourly: '',
+    payment: '',
+    location: ''
+};
+
+// Enhanced filter jobs function
 function filterJobs() {
+    console.log('🔍 FilterJobs called');
+    
     const budgetFilter = document.getElementById('budgetFilter').value;
     const experienceFilter = document.getElementById('experienceFilter').value;
     const sortFilter = document.getElementById('sortFilter').value;
     const keywordFilter = document.getElementById('keywordFilter').value;
+    const timeRangeFilter = document.getElementById('timeRangeFilter').value;
+    const hourlyFilter = document.getElementById('hourlyFilter').value;
+    const paymentFilter = document.getElementById('paymentFilter').value;
+    const locationFilter = document.getElementById('locationFilter').value;
+    
+    console.log('📋 Active filters:', {
+        budget: budgetFilter,
+        experience: experienceFilter,
+        keyword: keywordFilter,
+        timeRange: timeRangeFilter,
+        hourly: hourlyFilter,
+        payment: paymentFilter,
+        location: locationFilter
+    });
+    
+    // Update active filters
+    activeFilters.budget = budgetFilter;
+    activeFilters.experience = experienceFilter;
+    activeFilters.keyword = keywordFilter;
+    activeFilters.sort = sortFilter;
+    activeFilters.timeRange = timeRangeFilter;
+    activeFilters.hourly = hourlyFilter;
+    activeFilters.payment = paymentFilter;
+    activeFilters.location = locationFilter;
+    
+    // Get date filters (with null checks)
+    const fromDateElement = document.getElementById('fromDate');
+    const toDateElement = document.getElementById('toDate');
+    const fromDate = fromDateElement ? fromDateElement.value : '';
+    const toDate = toDateElement ? toDateElement.value : '';
+    activeFilters.fromDate = fromDate;
+    activeFilters.toDate = toDate;
     
     const jobCards = document.querySelectorAll('.job-card');
     let visibleCards = [];
     
+    console.log(`📊 Processing ${jobCards.length} job cards`);
+    
     jobCards.forEach(card => {
         let shouldShow = true;
         
+        // Budget type filter
         if (budgetFilter && card.dataset.budgetType !== budgetFilter) {
             shouldShow = false;
         }
         
+        // Experience level filter
         if (experienceFilter && card.dataset.experience !== experienceFilter) {
             shouldShow = false;
         }
         
+        // Keyword filter
         if (keywordFilter && card.dataset.keyword !== keywordFilter) {
             shouldShow = false;
         }
         
-        card.style.display = shouldShow ? 'block' : 'none';
-        if (shouldShow) visibleCards.push(card);
+        // Budget range filter
+        if (activeFilters.budgetRange) {
+            const budgetAmount = parseFloat(card.dataset.budgetAmount) || 0;
+            let rangeMatch = false;
+            
+            switch (activeFilters.budgetRange) {
+                case '0-500':
+                    rangeMatch = budgetAmount < 500;
+                    break;
+                case '500-1000':
+                    rangeMatch = budgetAmount >= 500 && budgetAmount <= 1000;
+                    break;
+                case '1000+':
+                    rangeMatch = budgetAmount > 1000;
+                    break;
+            }
+            
+            if (!rangeMatch) {
+                shouldShow = false;
+            }
+        }
+        
+        // Time range filter (today/previous_day)
+        if (timeRangeFilter && shouldShow) {
+            const jobDate = getJobDate(card);
+            if (jobDate) {
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const yesterday = new Date(today);
+                yesterday.setDate(yesterday.getDate() - 1);
+                
+                if (timeRangeFilter === 'today' && jobDate < today) {
+                    shouldShow = false;
+                } else if (timeRangeFilter === 'previous_day' && (jobDate < yesterday || jobDate >= today)) {
+                    shouldShow = false;
+                }
+            }
+        }
+        
+        // Hourly filter (X hours ago)
+        if (hourlyFilter && shouldShow) {
+            const jobDate = getJobDate(card);
+            if (jobDate) {
+                const now = new Date();
+                const hoursAgo = parseInt(hourlyFilter);
+                const cutoffTime = new Date(now.getTime() - (hoursAgo * 60 * 60 * 1000));
+                
+                if (jobDate < cutoffTime) {
+                    shouldShow = false;
+                }
+            }
+        }
+        
+        // Payment verification filter
+        if (paymentFilter && shouldShow) {
+            // This would need to check payment verification data
+            // For now, we'll implement basic logic - you may need to adjust based on your data structure
+            const paymentVerified = card.querySelector('.fas.fa-check-circle') !== null;
+            
+            if (paymentFilter === 'verified' && !paymentVerified) {
+                shouldShow = false;
+            } else if (paymentFilter === 'not_verified' && paymentVerified) {
+                shouldShow = false;
+            }
+        }
+        
+        // Location filter
+        if (locationFilter && shouldShow) {
+            const locationElement = card.querySelector('.fas.fa-map-marker-alt + span');
+            const location = locationElement ? locationElement.textContent.trim().toLowerCase() : '';
+            
+            if (locationFilter === 'exclude_israel_india') {
+                if (location.includes('israel') || location.includes('india')) {
+                    shouldShow = false;
+                }
+            } else if (locationFilter === 'usa_only') {
+                if (!location.includes('united states') && !location.includes('usa') && !location.includes('us')) {
+                    shouldShow = false;
+                }
+            } else if (locationFilter === 'europe_only') {
+                const europeanCountries = ['united kingdom', 'germany', 'france', 'italy', 'spain', 'netherlands', 'poland', 'belgium', 'czech', 'portugal', 'sweden', 'austria', 'switzerland', 'denmark', 'finland', 'norway', 'ireland', 'croatia', 'slovakia', 'slovenia', 'estonia', 'latvia', 'lithuania', 'luxembourg', 'malta', 'cyprus'];
+                const isEuropean = europeanCountries.some(country => location.includes(country));
+                if (!isEuropean) {
+                    shouldShow = false;
+                }
+            }
+        }
+        
+        // Date range filter
+        if ((fromDate || toDate) && shouldShow) {
+            const jobDate = getJobDate(card);
+            
+            if (jobDate) {
+                if (fromDate && jobDate < new Date(fromDate)) {
+                    shouldShow = false;
+                }
+                if (toDate && jobDate > new Date(toDate + 'T23:59:59')) {
+                    shouldShow = false;
+                }
+            }
+        }
+        
+        // Show/hide card with animation
+        if (shouldShow) {
+            card.style.display = 'block';
+            card.style.animation = 'fadeIn 0.3s ease';
+            visibleCards.push(card);
+        } else {
+            card.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => {
+                card.style.display = 'none';
+            }, 300);
+        }
     });
     
     // Sort visible cards
     if (sortFilter && visibleCards.length > 0) {
+        console.log(`🔄 Sorting ${visibleCards.length} cards by: ${sortFilter}`);
+        
         visibleCards.sort((a, b) => {
             switch (sortFilter) {
+                case 'posted':
+                    // Sort by posted time (newest first)
+                    const dateA = getJobDate(a) || new Date(0);
+                    const dateB = getJobDate(b) || new Date(0);
+                    return dateB - dateA;
+                    
                 case 'budget':
-                    return parseFloat(b.dataset.budgetAmount) - parseFloat(a.dataset.budgetAmount);
+                    // Sort by budget amount (highest first)
+                    const budgetA = parseFloat(a.dataset.budgetAmount) || 0;
+                    const budgetB = parseFloat(b.dataset.budgetAmount) || 0;
+                    console.log(`💰 Budget comparison: ${budgetA} vs ${budgetB}`);
+                    return budgetB - budgetA;
+                    
                 case 'proposals':
-                    return parseInt(a.dataset.proposals) - parseInt(b.dataset.proposals);
+                    // Sort by proposal count (lowest first - easier to get)
+                    const proposalsA = parseInt(a.dataset.proposals) || 0;
+                    const proposalsB = parseInt(b.dataset.proposals) || 0;
+                    console.log(`👥 Proposals comparison: ${proposalsA} vs ${proposalsB}`);
+                    return proposalsA - proposalsB;
+                    
                 default:
                     return 0;
             }
         });
         
+        console.log(`✅ Sorting complete, reordering DOM elements`);
         const container = document.getElementById('jobsList');
         visibleCards.forEach(card => container.appendChild(card));
     }
+    
+    // Update active filters display
+    updateActiveFiltersDisplay();
+    
+    // Update job count
+    updateJobCount(visibleCards.length);
+    
+    // Update budget range counts
+    updateBudgetRangeCounts();
+    
+    // Update keyword dropdown counts (but don't repopulate during filtering)
+    updateKeywordCounts();
+    
+    console.log(`✅ Filtering complete: ${visibleCards.length}/${jobCards.length} jobs visible`);
+}
+
+// Budget range filter functionality
+function initializeBudgetRangeFilters() {
+    const budgetRangeItems = document.querySelectorAll('.budget-range-item');
+    
+    budgetRangeItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const range = this.dataset.range;
+            
+            // Toggle selection
+            if (this.classList.contains('active')) {
+                this.classList.remove('active');
+                activeFilters.budgetRange = '';
+            } else {
+                // Remove active from all items
+                budgetRangeItems.forEach(i => i.classList.remove('active'));
+                // Add active to clicked item
+                this.classList.add('active');
+                activeFilters.budgetRange = range;
+            }
+            
+            filterJobs();
+        });
+    });
+}
+
+// Update budget range counts
+function updateBudgetRangeCounts() {
+    const jobCards = document.querySelectorAll('.job-card');
+    const counts = {
+        '0-500': 0,
+        '500-1000': 0,
+        '1000+': 0
+    };
+    
+    jobCards.forEach(card => {
+        // Only count cards that would be visible with current filters (excluding budget range)
+        let shouldCount = true;
+        
+        if (activeFilters.budget && card.dataset.budgetType !== activeFilters.budget) {
+            shouldCount = false;
+        }
+        if (activeFilters.experience && card.dataset.experience !== activeFilters.experience) {
+            shouldCount = false;
+        }
+        if (activeFilters.keyword && card.dataset.keyword !== activeFilters.keyword) {
+            shouldCount = false;
+        }
+        
+        if (shouldCount) {
+            const budgetAmount = parseFloat(card.dataset.budgetAmount) || 0;
+            
+            if (budgetAmount < 500) {
+                counts['0-500']++;
+            } else if (budgetAmount >= 500 && budgetAmount <= 1000) {
+                counts['500-1000']++;
+            } else if (budgetAmount > 1000) {
+                counts['1000+']++;
+            }
+        }
+    });
+    
+    // Update count displays
+    Object.keys(counts).forEach(range => {
+        const countElement = document.getElementById(`budget-count-${range}`);
+        if (countElement) {
+            countElement.textContent = counts[range];
+            
+            // Add visual feedback for zero counts
+            const parentItem = countElement.closest('.budget-range-item');
+            if (parentItem) {
+                if (counts[range] === 0) {
+                    parentItem.style.opacity = '0.5';
+                    countElement.style.color = '#9ca3af';
+                } else {
+                    parentItem.style.opacity = '1';
+                    countElement.style.color = '';
+                }
+            }
+        }
+    });
+}
+
+// Update active filters display
+function updateActiveFiltersDisplay() {
+    const activeFiltersList = document.getElementById('activeFiltersList');
+    activeFiltersList.innerHTML = '';
+    
+    Object.entries(activeFilters).forEach(([key, value]) => {
+        if (value) {
+            const filterTag = document.createElement('div');
+            filterTag.className = 'active-filter-tag';
+            
+            let displayText = value;
+            let filterKey = key;
+            
+            if (key === 'budgetRange') {
+                const rangeTexts = {
+                    '0-500': 'Under $500',
+                    '500-1000': '$500 - $1,000',
+                    '1000+': '$1,000+'
+                };
+                displayText = rangeTexts[value] || value;
+            } else if (key === 'sort') {
+                const sortTexts = {
+                    'posted': 'Recently Posted',
+                    'budget': 'Budget (High to Low)',
+                    'proposals': 'Proposals (Low to High)'
+                };
+                displayText = sortTexts[value] || value;
+            } else if (key === 'fromDate' || key === 'toDate') {
+                // Skip individual date filters - we'll show them combined
+                return;
+            }
+            
+            filterTag.innerHTML = `
+                <span>${filterKey}: ${displayText}</span>
+                <button class="remove-filter" onclick="removeFilter('${key}')">×</button>
+            `;
+            
+            activeFiltersList.appendChild(filterTag);
+        }
+    });
+    
+    // Add combined date range filter if either date is set
+    if (activeFilters.fromDate || activeFilters.toDate) {
+        const filterTag = document.createElement('div');
+        filterTag.className = 'active-filter-tag';
+        
+        let dateText = '';
+        if (activeFilters.fromDate && activeFilters.toDate) {
+            const fromFormatted = new Date(activeFilters.fromDate).toLocaleDateString();
+            const toFormatted = new Date(activeFilters.toDate).toLocaleDateString();
+            dateText = `${fromFormatted} - ${toFormatted}`;
+        } else if (activeFilters.fromDate) {
+            const fromFormatted = new Date(activeFilters.fromDate).toLocaleDateString();
+            dateText = `From ${fromFormatted}`;
+        } else if (activeFilters.toDate) {
+            const toFormatted = new Date(activeFilters.toDate).toLocaleDateString();
+            dateText = `Until ${toFormatted}`;
+        }
+        
+        filterTag.innerHTML = `
+            <span>Date Range: ${dateText}</span>
+            <button class="remove-filter" onclick="removeFilter('dateRange')">×</button>
+        `;
+        
+        activeFiltersList.appendChild(filterTag);
+    }
+}
+
+// Get job date for filtering
+function getJobDate(jobCard) {
+    try {
+        // Look for scraped_at data attribute or extract from job data
+        const scrapedAt = jobCard.dataset.scrapedAt;
+        if (scrapedAt) {
+            return new Date(scrapedAt);
+        }
+        
+        // If no data attribute, try to find it in the job data structure
+        // This would require adding scraped_at to the job card data attributes
+        return null;
+    } catch (error) {
+        console.warn('Error parsing job date:', error);
+        return null;
+    }
+}
+
+// Set date preset
+function setDatePreset(preset) {
+    const today = new Date();
+    const fromDateInput = document.getElementById('fromDate');
+    const toDateInput = document.getElementById('toDate');
+    
+    // If date inputs don't exist, return early
+    if (!fromDateInput || !toDateInput) {
+        return;
+    }
+    
+    // Remove active class from all preset buttons
+    document.querySelectorAll('.date-preset-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+    
+    switch (preset) {
+        case 'today':
+            const todayStr = today.toISOString().split('T')[0];
+            fromDateInput.value = todayStr;
+            toDateInput.value = todayStr;
+            break;
+            
+        case 'week':
+            const weekAgo = new Date(today);
+            weekAgo.setDate(today.getDate() - 7);
+            fromDateInput.value = weekAgo.toISOString().split('T')[0];
+            toDateInput.value = today.toISOString().split('T')[0];
+            break;
+            
+        case 'month':
+            const monthAgo = new Date(today);
+            monthAgo.setDate(today.getDate() - 30);
+            fromDateInput.value = monthAgo.toISOString().split('T')[0];
+            toDateInput.value = today.toISOString().split('T')[0];
+            break;
+            
+        case 'all':
+            fromDateInput.value = '';
+            toDateInput.value = '';
+            break;
+    }
+    
+    // Update filter info and apply filters
+    updateDateFilterInfo();
+    filterJobs();
+}
+
+// Update date filter info display
+function updateDateFilterInfo() {
+    const fromDateElement = document.getElementById('fromDate');
+    const toDateElement = document.getElementById('toDate');
+    const fromDate = fromDateElement ? fromDateElement.value : '';
+    const toDate = toDateElement ? toDateElement.value : '';
+    const infoElement = document.getElementById('dateFilterInfo');
+    
+    // If info element doesn't exist, return early
+    if (!infoElement) {
+        return;
+    }
+    
+    if (!fromDate && !toDate) {
+        infoElement.textContent = 'All jobs shown';
+        infoElement.classList.remove('active');
+    } else if (fromDate && toDate) {
+        const fromFormatted = new Date(fromDate).toLocaleDateString();
+        const toFormatted = new Date(toDate).toLocaleDateString();
+        infoElement.textContent = `Jobs from ${fromFormatted} to ${toFormatted}`;
+        infoElement.classList.add('active');
+    } else if (fromDate) {
+        const fromFormatted = new Date(fromDate).toLocaleDateString();
+        infoElement.textContent = `Jobs from ${fromFormatted} onwards`;
+        infoElement.classList.add('active');
+    } else if (toDate) {
+        const toFormatted = new Date(toDate).toLocaleDateString();
+        infoElement.textContent = `Jobs up to ${toFormatted}`;
+        infoElement.classList.add('active');
+    }
+}
+
+// Remove individual filter
+function removeFilter(filterType) {
+    switch (filterType) {
+        case 'budget':
+            document.getElementById('budgetFilter').value = '';
+            activeFilters.budget = '';
+            break;
+        case 'experience':
+            document.getElementById('experienceFilter').value = '';
+            activeFilters.experience = '';
+            break;
+        case 'keyword':
+            document.getElementById('keywordFilter').value = '';
+            activeFilters.keyword = '';
+            break;
+        case 'sort':
+            document.getElementById('sortFilter').value = 'posted';
+            activeFilters.sort = '';
+            break;
+        case 'budgetRange':
+            document.querySelectorAll('.budget-range-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            activeFilters.budgetRange = '';
+            break;
+        case 'fromDate':
+            const fromDateElement = document.getElementById('fromDate');
+            if (fromDateElement) fromDateElement.value = '';
+            activeFilters.fromDate = '';
+            updateDateFilterInfo();
+            break;
+        case 'toDate':
+            const toDateElement = document.getElementById('toDate');
+            if (toDateElement) toDateElement.value = '';
+            activeFilters.toDate = '';
+            updateDateFilterInfo();
+            break;
+        case 'dateRange':
+            const fromDateEl = document.getElementById('fromDate');
+            const toDateEl = document.getElementById('toDate');
+            if (fromDateEl) fromDateEl.value = '';
+            if (toDateEl) toDateEl.value = '';
+            activeFilters.fromDate = '';
+            activeFilters.toDate = '';
+            document.querySelectorAll('.date-preset-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            updateDateFilterInfo();
+            break;
+        case 'timeRange':
+            document.getElementById('timeRangeFilter').value = '';
+            activeFilters.timeRange = '';
+            break;
+        case 'hourly':
+            document.getElementById('hourlyFilter').value = '';
+            activeFilters.hourly = '';
+            break;
+        case 'payment':
+            document.getElementById('paymentFilter').value = '';
+            activeFilters.payment = '';
+            break;
+        case 'location':
+            document.getElementById('locationFilter').value = '';
+            activeFilters.location = '';
+            break;
+    }
+    
+    filterJobs();
+}
+
+// Clear all filters
+function clearAllFilters() {
+    // Reset select dropdowns
+    document.getElementById('budgetFilter').value = '';
+    document.getElementById('experienceFilter').value = '';
+    document.getElementById('keywordFilter').value = '';
+    document.getElementById('sortFilter').value = 'posted'; // Reset to default
+    document.getElementById('timeRangeFilter').value = '';
+    document.getElementById('hourlyFilter').value = '';
+    document.getElementById('paymentFilter').value = '';
+    document.getElementById('locationFilter').value = '';
+    
+    // Reset budget range items
+    document.querySelectorAll('.budget-range-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    
+    // Reset date filters (with null checks)
+    const fromDateElement = document.getElementById('fromDate');
+    const toDateElement = document.getElementById('toDate');
+    if (fromDateElement) fromDateElement.value = '';
+    if (toDateElement) toDateElement.value = '';
+    document.querySelectorAll('.date-preset-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    // Reset active filters
+    activeFilters = {
+        budget: '',
+        experience: '',
+        keyword: '',
+        sort: '',
+        budgetRange: '',
+        fromDate: '',
+        toDate: '',
+        timeRange: '',
+        hourly: '',
+        payment: '',
+        location: ''
+    };
+    
+    // Update date filter info
+    updateDateFilterInfo();
+    
+    // Show all jobs
+    filterJobs();
+    
+    // Show success notification
+    showNotification('All filters cleared!', 'success');
+}
+
+// Update job count in header
+function updateJobCount(count) {
+    const jobsCountElement = document.querySelector('.jobs-count');
+    if (jobsCountElement) {
+        const total = document.querySelectorAll('.job-card').length;
+        jobsCountElement.textContent = `${count} of ${total} jobs`;
+    }
+}
+
+// Populate keyword dropdown dynamically
+function populateKeywordDropdown() {
+    const keywordFilter = document.getElementById('keywordFilter');
+    const jobCards = document.querySelectorAll('.job-card');
+    
+    // Count jobs per keyword
+    const keywordCounts = {};
+    
+    jobCards.forEach(card => {
+        const keyword = card.dataset.keyword;
+        if (keyword) {
+            keywordCounts[keyword] = (keywordCounts[keyword] || 0) + 1;
+        }
+    });
+    
+    // Clear existing options (except "All Keywords")
+    while (keywordFilter.children.length > 1) {
+        keywordFilter.removeChild(keywordFilter.lastChild);
+    }
+    
+    // Add options for each keyword
+    Object.keys(keywordCounts)
+        .sort()
+        .forEach(keyword => {
+            const option = document.createElement('option');
+            option.value = keyword;
+            option.textContent = `${keyword} (${keywordCounts[keyword]} jobs)`;
+            keywordFilter.appendChild(option);
+        });
+    
+    console.log(`📊 Populated keyword dropdown with ${Object.keys(keywordCounts).length} keywords:`, keywordCounts);
+}
+
+// Update keyword counts in dropdown without repopulating
+function updateKeywordCounts() {
+    const keywordFilter = document.getElementById('keywordFilter');
+    const jobCards = document.querySelectorAll('.job-card');
+    
+    // Count visible jobs per keyword (respecting current filters except keyword filter)
+    const keywordCounts = {};
+    
+    jobCards.forEach(card => {
+        const keyword = card.dataset.keyword;
+        if (keyword && card.style.display !== 'none') {
+            // Only count if the job would be visible with other filters
+            let shouldCount = true;
+            
+            // Check non-keyword filters
+            if (activeFilters.budget && card.dataset.budgetType !== activeFilters.budget) {
+                shouldCount = false;
+            }
+            if (activeFilters.experience && card.dataset.experience !== activeFilters.experience) {
+                shouldCount = false;
+            }
+            if (activeFilters.budgetRange) {
+                const budgetAmount = parseFloat(card.dataset.budgetAmount) || 0;
+                let rangeMatch = false;
+                
+                switch (activeFilters.budgetRange) {
+                    case '0-500':
+                        rangeMatch = budgetAmount < 500;
+                        break;
+                    case '500-1000':
+                        rangeMatch = budgetAmount >= 500 && budgetAmount <= 1000;
+                        break;
+                    case '1000+':
+                        rangeMatch = budgetAmount > 1000;
+                        break;
+                }
+                
+                if (!rangeMatch) shouldCount = false;
+            }
+            
+            // Check date filters
+            if ((activeFilters.fromDate || activeFilters.toDate) && shouldCount) {
+                const jobDate = getJobDate(card);
+                if (jobDate) {
+                    if (activeFilters.fromDate && jobDate < new Date(activeFilters.fromDate)) {
+                        shouldCount = false;
+                    }
+                    if (activeFilters.toDate && jobDate > new Date(activeFilters.toDate + 'T23:59:59')) {
+                        shouldCount = false;
+                    }
+                }
+            }
+            
+            if (shouldCount) {
+                keywordCounts[keyword] = (keywordCounts[keyword] || 0) + 1;
+            }
+        }
+    });
+    
+    // Update the text of existing options
+    Array.from(keywordFilter.options).forEach(option => {
+        if (option.value && option.value !== '') {
+            const keyword = option.value;
+            const count = keywordCounts[keyword] || 0;
+            option.textContent = `${keyword} (${count} jobs)`;
+            
+            // Optionally disable/style options with 0 jobs
+            if (count === 0) {
+                option.style.color = '#9ca3af';
+                option.textContent = `${keyword} (0 jobs)`;
+            } else {
+                option.style.color = '';
+            }
+        }
+    });
 }
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
     initializeKeywords();
+    initializeBudgetRangeFilters();
+    updateBudgetRangeCounts();
+    updateDateFilterInfo();
+    populateKeywordDropdown(); // Add this
+    enhanceTimeDisplays(); // Add this to enhance time displays
+    
+    // Initialize job count
+    const totalJobs = document.querySelectorAll('.job-card').length;
+    updateJobCount(totalJobs);
+    
+    // Add change listeners for date inputs (with null checks)
+    const fromDateElement = document.getElementById('fromDate');
+    const toDateElement = document.getElementById('toDate');
+    if (fromDateElement) fromDateElement.addEventListener('change', updateDateFilterInfo);
+    if (toDateElement) toDateElement.addEventListener('change', updateDateFilterInfo);
 });
 
-// Add CSS animation for notifications
+// Convert relative time to exact time display
+function formatTimeExactly(timeString) {
+    if (!timeString || timeString === 'Unknown' || timeString === 'Recently posted') {
+        return 'Posted recently';
+    }
+    
+    // If it's already formatted properly, return as is
+    if (timeString.includes('hour') || timeString.includes('minute') || timeString.includes('day')) {
+        return timeString;
+    }
+    
+    // Parse common time formats
+    const now = new Date();
+    const timeStr = timeString.toLowerCase();
+    
+    if (timeStr.includes('just now') || timeStr.includes('now')) {
+        return 'Just posted';
+    } else if (timeStr.includes('minute')) {
+        const minutes = parseInt(timeStr.match(/\d+/)?.[0] || '1');
+        return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
+    } else if (timeStr.includes('hour')) {
+        const hours = parseInt(timeStr.match(/\d+/)?.[0] || '1');
+        return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    } else if (timeStr.includes('day')) {
+        const days = parseInt(timeStr.match(/\d+/)?.[0] || '1');
+        return `${days} day${days !== 1 ? 's' : ''} ago`;
+    } else if (timeStr.includes('week')) {
+        const weeks = parseInt(timeStr.match(/\d+/)?.[0] || '1');
+        return `${weeks} week${weeks !== 1 ? 's' : ''} ago`;
+    } else if (timeStr.includes('month')) {
+        const months = parseInt(timeStr.match(/\d+/)?.[0] || '1');
+        return `${months} month${months !== 1 ? 's' : ''} ago`;
+    }
+    
+    return timeString; // Return original if we can't parse it
+}
+
+// Enhance time display on page load
+function enhanceTimeDisplays() {
+    const timeElements = document.querySelectorAll('.job-meta-item .fas.fa-clock + span');
+    timeElements.forEach(element => {
+        const originalText = element.textContent.trim();
+        const enhancedText = formatTimeExactly(originalText);
+        if (enhancedText !== originalText) {
+            element.textContent = enhancedText;
+            element.style.fontWeight = '500';
+            element.style.color = '#1e40af';
+        }
+    });
+}
+
+// Excel Download and Creation Functions
+function downloadExcelFile() {
+    const downloadBtn = document.getElementById('downloadExcelBtn');
+    
+    // Update button state
+    downloadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Downloading...';
+    downloadBtn.disabled = true;
+    
+    // Attempt to download the Excel file
+    fetch('/api/download-upwork-excel')
+    .then(response => {
+        if (response.ok) {
+            return response.blob();
+        } else {
+            return response.json().then(error => {
+                throw new Error(error.error || 'Download failed');
+            });
+        }
+    })
+    .then(blob => {
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `upwork_jobs_${new Date().toISOString().slice(0,19).replace(/[:-]/g, '')}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+        // Reset button
+        downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Excel File';
+        downloadBtn.disabled = false;
+        
+        showNotification('✅ Excel file downloaded successfully!', 'success');
+    })
+    .catch(error => {
+        // Reset button
+        downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Excel File';
+        downloadBtn.disabled = false;
+        
+        console.error('Download error:', error);
+        showNotification(`❌ Download failed: ${error.message}`, 'error');
+    });
+}
+
+function createExcelFile() {
+    const createBtn = document.getElementById('createExcelBtn');
+    
+    // Update button state
+    createBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
+    createBtn.disabled = true;
+    
+    // Create new Excel file from current data
+    fetch('/api/create-upwork-excel', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Reset button
+        createBtn.innerHTML = '<i class="fas fa-file-plus"></i> Create New Excel';
+        createBtn.disabled = false;
+        
+        if (data.status === 'success') {
+            showNotification(`✅ Excel file created successfully! (${data.jobs_count} jobs)`, 'success');
+            
+            // Auto-enable download button if it was disabled
+            const downloadBtn = document.getElementById('downloadExcelBtn');
+            downloadBtn.disabled = false;
+            downloadBtn.style.opacity = '1';
+        } else {
+            showNotification(`❌ Failed to create Excel file: ${data.error}`, 'error');
+        }
+    })
+    .catch(error => {
+        // Reset button
+        createBtn.innerHTML = '<i class="fas fa-file-plus"></i> Create New Excel';
+        createBtn.disabled = false;
+        
+        console.error('Create Excel error:', error);
+        showNotification('❌ Failed to create Excel file. Please try again.', 'error');
+    });
+}
+
+// Add hover effects for Excel buttons
+const excelButtonStyle = document.createElement('style');
+excelButtonStyle.textContent = `
+    .excel-download-btn:hover {
+        background: #059669 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    .excel-create-btn:hover {
+        background: #2563eb !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    .excel-download-btn:disabled,
+    .excel-create-btn:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+`;
+document.head.appendChild(excelButtonStyle);
+
+// Add CSS animations for filters
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {
@@ -1064,6 +2657,14 @@ style.textContent = `
     @keyframes slideOut {
         from { transform: translateX(0); opacity: 1; }
         to { transform: translateX(100%); opacity: 0; }
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeOut {
+        from { opacity: 1; transform: translateY(0); }
+        to { opacity: 0; transform: translateY(-10px); }
     }
 `;
 document.head.appendChild(style);

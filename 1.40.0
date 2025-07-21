@@ -1,0 +1,5 @@
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: playwright in c:\users\hp\appdata\roaming\python\python313\site-packages (1.53.0)
+Requirement already satisfied: pyee<14,>=13 in c:\users\hp\appdata\roaming\python\python313\site-packages (from playwright) (13.0.0)
+Requirement already satisfied: greenlet<4.0.0,>=3.1.1 in c:\users\hp\appdata\roaming\python\python313\site-packages (from playwright) (3.2.3)
+Requirement already satisfied: typing-extensions in c:\users\hp\appdata\roaming\python\python313\site-packages (from pyee<14,>=13->playwright) (4.14.0)

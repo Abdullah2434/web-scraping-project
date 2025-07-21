@@ -8,7 +8,7 @@ Converts the Streamlit app to Flask with professional frontend.
 Author: Web Scraping Project
 """
 
-from flask import Flask, render_template, jsonify, request, redirect, url_for, Response
+from flask import Flask, render_template, jsonify, request, redirect, url_for, Response, send_file
 import json
 import logging
 from datetime import datetime, timedelta
@@ -80,6 +80,45 @@ def parse_youtube_duration(duration_str: str) -> int:
         seconds = int(seconds_part) if seconds_part.isdigit() else 0
     
     return hours * 3600 + minutes * 60 + seconds
+
+def create_simple_jobs_csv(upwork_data: Dict[str, Any]) -> Optional[str]:
+    """Create a simple CSV file with job data as fallback for Excel"""
+    try:
+        jobs = upwork_data.get('jobs', [])
+        if not jobs:
+            return None
+        
+        # Create filename
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"upwork_jobs_{timestamp}.csv"
+        filepath = os.path.join('data', filename)
+        
+        # Create CSV content
+        with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
+            import csv
+            writer = csv.writer(csvfile)
+            
+            # Header
+            writer.writerow(['Title', 'Budget', 'URL', 'Skills', 'Posted Date', 'Location', 'Keyword'])
+            
+            # Data rows
+            for job in jobs:
+                writer.writerow([
+                    job.get('title', 'N/A'),
+                    job.get('budget', 'N/A'),
+                    job.get('url', 'N/A'),
+                    ', '.join(job.get('skills', [])),
+                    job.get('posted_date', 'N/A'),
+                    job.get('location', 'N/A'),
+                    job.get('search_keyword', 'N/A')
+                ])
+        
+        logger.info(f"📄 Created CSV file: {filepath}")
+        return filepath
+        
+    except Exception as e:
+        logger.error(f"❌ Error creating CSV file: {e}")
+        return None
 
 def collect_youtube_data_with_timeout(keywords, timeout_seconds=60):
     """
@@ -423,10 +462,16 @@ def create_youtube_engagement_chart_data(data: dict) -> dict:
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Change this in production
 
-# Configure logging with UTF-8 encoding to handle emojis in Windows
+# Configure logging with UTF-8 encoding to handle Unicode properly on Windows
 import sys
+import io
+
 if sys.platform.startswith('win'):
     # For Windows, configure logging to handle unicode properly
+    # Force UTF-8 encoding for console output
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+    
     logging.basicConfig(
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -476,9 +521,29 @@ collection_status = {
     }
 }
 
+# Global cache for data to avoid reloading large files
+_data_cache = {}
+_cache_timestamp = 0
+
+def invalidate_data_cache():
+    """Invalidate the data cache to force fresh reload"""
+    global _data_cache, _cache_timestamp
+    _data_cache = {}
+    _cache_timestamp = 0
+    logger.info("🔄 Data cache invalidated - fresh data will be loaded")
+
 def load_data():
-    """Load data from JSON files - same logic as Streamlit app"""
+    """Load data from JSON files with caching for performance"""
+    global _data_cache, _cache_timestamp
+    
     try:
+        # Check if we need to refresh cache (cache for 30 seconds)
+        current_time = time.time()
+        if _data_cache and (current_time - _cache_timestamp) < 30:
+            logger.debug("📊 Using cached data for better performance")
+            return _data_cache
+        
+        logger.info("📊 Loading fresh data from files...")
         all_data = {}
         
         # Load Reddit data
@@ -563,6 +628,11 @@ def load_data():
         if all_data['google_trends_data'].get('interest_data'):
             all_data['data_sources'].append('google_trends')
         
+        # Update cache for performance
+        _data_cache = all_data
+        _cache_timestamp = current_time
+        
+        logger.info(f"📊 Data cached for {len(all_data.get('data_sources', []))} sources")
         return all_data if all_data['data_sources'] else None
         
     except Exception as e:
@@ -686,13 +756,27 @@ def upwork_jobs():
 
 @app.route('/api/collect-upwork', methods=['POST'])
 def api_collect_upwork():
-    """API endpoint to trigger Upwork data collection specifically"""
+    """API endpoint to trigger Upwork data collection with filters"""
     try:
         data = request.get_json()
         # Use dynamic keywords by default, fallback to provided keywords or DEFAULT_KEYWORDS
         dynamic_keywords = get_current_keywords()
         keywords = data.get('keywords', dynamic_keywords if dynamic_keywords else DEFAULT_KEYWORDS)
-        method = data.get('method', 'simulated')  # 'simulated', 'selenium', or 'manual'
+        method = data.get('method', 'selenium')  # 'selenium' (default)
+        
+        # Get enhanced filter options with new fields
+        filters = data.get('filters', {
+            'time_range': 'today',  # Changed default to 'today'
+            'hourly_filter': '',  # NEW: Hourly time filter
+            'budget_range': 'any',
+            'job_type': 'any',
+            'experience_level': 'any',
+            'payment_status': 'both',  # NEW: Payment verification filter
+            'sort_by': 'recency'
+        })
+        
+        # Use persistence by default
+        use_persistence = data.get('use_persistence', True)
         
         # Validate keywords
         if not keywords or not isinstance(keywords, list) or len(keywords) == 0:
@@ -705,6 +789,8 @@ def api_collect_upwork():
         
         logger.info(f"Received Upwork collection request with {len(keywords)} keywords: {keywords}")
         logger.info(f"Collection method: {method}")
+        logger.info(f"Filters: {filters}")
+        logger.info(f"Use persistence: {use_persistence}")
         
         # Reset status before starting new collection
         collection_status['upwork'] = {
@@ -713,7 +799,8 @@ def api_collect_upwork():
             'start_time': None,
             'end_time': None,
             'jobs_count': 0,
-            'error': None
+            'error': None,
+            'filters_applied': filters
         }
         
         # Run Upwork data collection in a separate thread
@@ -729,16 +816,49 @@ def api_collect_upwork():
                     'error': None
                 })
                 
-                logger.info(f"💼 Starting REAL Upwork data collection for: {keywords}")
+                logger.info(f"💼 Starting FILTERED Upwork data collection for: {keywords}")
+                logger.info(f"🔍 Using filters: {filters}")
                 
-                # ALWAYS use real browser automation - no simulated data
+                # Use comprehensive individual page collection
                 try:
-                    from fetch_upwork_data import collect_all_upwork_data
-                    logger.info("🎯 Using 100% real browser automation with file saving")
-                    upwork_data = collect_all_upwork_data(keywords, use_real_browser=True)
-                    jobs_data = upwork_data.get('jobs', [])
-                    
-                    logger.info(f"💾 Data automatically saved to file with {len(jobs_data)} jobs")
+                    # Try comprehensive individual page scraper first
+                    try:
+                        from fetch_upwork_data_enhanced import collect_comprehensive_upwork_data
+                        logger.info("🎯 Using COMPREHENSIVE individual page Upwork scraper")
+                        
+                        # Set max jobs per keyword based on user preference or default to 5
+                        max_jobs_per_keyword = data.get('max_jobs_per_keyword', 5)
+                        logger.info(f"🔢 Max jobs per keyword: {max_jobs_per_keyword}")
+                        
+                        # Get skip_private_jobs setting (default: True)
+                        skip_private_jobs = data.get('skip_private_jobs', True)
+                        logger.info(f"🔒 Skip private jobs: {skip_private_jobs}")
+                        
+                        upwork_data = collect_comprehensive_upwork_data(
+                            keywords=keywords, 
+                            filters=filters, 
+                            max_jobs_per_keyword=max_jobs_per_keyword,
+                            use_persistence=use_persistence,
+                            skip_private_jobs=skip_private_jobs
+                        )
+                        jobs_data = upwork_data.get('jobs', [])
+                        logger.info(f"💾 COMPREHENSIVE data collection completed with {len(jobs_data)} jobs (premium quality)")
+                        
+                    except ImportError:
+                        # Fallback to enhanced version
+                        try:
+                            from fetch_upwork_data_enhanced import collect_upwork_data_with_filters
+                            logger.info("🔄 Comprehensive version not available, using enhanced version")
+                            upwork_data = collect_upwork_data_with_filters(keywords, filters, use_persistence, max_jobs_per_keyword)
+                            jobs_data = upwork_data.get('jobs', [])
+                            logger.info(f"💾 Enhanced data collection completed with {len(jobs_data)} jobs")
+                        except ImportError:
+                            # Final fallback to original version
+                            from fetch_upwork_data import collect_all_upwork_data
+                            logger.info("🔄 Enhanced version not available, using standard version")
+                            upwork_data = collect_all_upwork_data(keywords, use_real_browser=True)
+                            jobs_data = upwork_data.get('jobs', [])
+                            logger.info(f"💾 Standard data collection completed with {len(jobs_data)} jobs")
                     
                     # Update status - collection completed successfully
                     collection_status['upwork'].update({
@@ -749,7 +869,10 @@ def api_collect_upwork():
                         'error': None
                     })
                     
-                    logger.info(f"✅ REAL Upwork collection completed: {len(jobs_data)} genuine jobs")
+                    # Invalidate cache so fresh data is shown immediately
+                    invalidate_data_cache()
+                    
+                    logger.info(f"✅ FILTERED Upwork collection completed: {len(jobs_data)} jobs with filters {filters}")
                     
                 except Exception as import_error:
                     logger.error(f"❌ Real scraper error: {import_error}")
@@ -810,6 +933,81 @@ def api_upwork_status():
     except Exception as e:
         logger.error(f"Status check error: {e}")
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/download-upwork-excel')
+def api_download_upwork_excel():
+    """API endpoint to download the latest Upwork jobs Excel file"""
+    try:
+        # Try to get the latest Excel file
+        try:
+            from fetch_upwork_data_enhanced import get_latest_jobs_excel_path
+            excel_path = get_latest_jobs_excel_path()
+        except ImportError:
+            return jsonify({'error': 'Enhanced Upwork module not available'}), 500
+        
+        if not excel_path or not os.path.exists(excel_path):
+            return jsonify({'error': 'No Excel file found. Please collect data first.'}), 404
+        
+        # Get filename for download
+        filename = os.path.basename(excel_path)
+        
+        logger.info(f"📊 Serving Excel file for download: {filename}")
+        
+        # Send file for download
+        return send_file(
+            excel_path,
+            as_attachment=True,
+            download_name=filename,
+            mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        
+    except Exception as e:
+        logger.error(f"Excel download error: {e}")
+        return jsonify({'error': f'Download failed: {str(e)}'}), 500
+
+@app.route('/api/create-upwork-excel', methods=['POST'])
+def api_create_upwork_excel():
+    """API endpoint to create Excel file from current Upwork data"""
+    try:
+        # Load current Upwork data
+        upwork_data = load_upwork_data()
+        
+        if not upwork_data or not upwork_data.get('jobs'):
+            return jsonify({'error': 'No Upwork jobs data available. Please collect data first.'}), 404
+        
+        # Create Excel file with fallback approach
+        excel_path = None
+        try:
+            from fetch_upwork_data_enhanced import create_jobs_excel_file
+            excel_path = create_jobs_excel_file(upwork_data)
+        except ImportError as e:
+            logger.error(f"❌ Enhanced Upwork module not available: {e}")
+            return jsonify({'error': 'Enhanced Upwork module not available'}), 500
+        except Exception as e:
+            logger.error(f"❌ Excel creation error: {e}")
+            # Try simple CSV approach as fallback
+            try:
+                excel_path = create_simple_jobs_csv(upwork_data)
+                logger.info("📊 Created CSV file as Excel fallback")
+            except Exception as csv_error:
+                logger.error(f"❌ CSV fallback also failed: {csv_error}")
+                return jsonify({'error': f'Excel creation failed: {str(e)}'}), 500
+        
+        if not excel_path:
+            return jsonify({'error': 'Failed to create Excel file'}), 500
+        
+        # Return success with download info
+        return jsonify({
+            'status': 'success',
+            'message': 'Excel file created successfully',
+            'filename': os.path.basename(excel_path),
+            'jobs_count': len(upwork_data.get('jobs', [])),
+            'download_url': '/api/download-upwork-excel'
+        })
+        
+    except Exception as e:
+        logger.error(f"Excel creation error: {e}")
+        return jsonify({'error': f'Excel creation failed: {str(e)}'}), 500
 
 @app.route('/api/trending')
 def api_trending():
@@ -1482,15 +1680,15 @@ if __name__ == '__main__':
     os.makedirs('static/img', exist_ok=True)
     
     # Use port 8080 to avoid Windows port 5000 restrictions
-    print("🚀 Starting Flask Dashboard (Local Development)...")
-    print("📊 Access your dashboard at: http://localhost:8080")
-    print("⚙️  All your existing data and business logic preserved!")
+    print("Starting Flask Dashboard (Local Development)...")
+    print("Access your dashboard at: http://localhost:8080")
+    print("All your existing data and business logic preserved!")
     
     # Start the automated scheduler for local development
     try:
         start_scheduler()
-        print("⏰ Automated data collection scheduler started")
+        print("Automated data collection scheduler started")
     except Exception as e:
-        print(f"⚠️ Warning: Could not start scheduler: {e}")
+        print(f"Warning: Could not start scheduler: {e}")
     
     app.run(debug=True, host='127.0.0.1', port=8080) 

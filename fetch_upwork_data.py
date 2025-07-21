@@ -505,7 +505,7 @@ def scrape_upwork_guaranteed(keywords: List[str]) -> List[Dict[str, Any]]:
                             logger.info(f"   Found {len(elements)} elements with this selector")
                             
                             for element_index, element in enumerate(elements):
-                                if jobs_found >= 10:  # Limit to 10 jobs per keyword
+                                if jobs_found >= 50:  # Increased limit to 50 jobs per keyword
                                     break
                                     
                                 try:
@@ -755,13 +755,26 @@ def collect_all_upwork_data(keywords: List[str], use_real_browser: bool = True) 
         }
     }
     
-    # Save to file
+    # Save to file with persistence (append mode)
     try:
-        with open(UPWORK_DATA_FILE, 'w', encoding='utf-8') as f:
-            json.dump(upwork_data, f, indent=2, ensure_ascii=False)
-        logger.info(f"💾 REAL Upwork data saved to {UPWORK_DATA_FILE}")
+        from data_persistence import append_upwork_data
+        success = append_upwork_data(upwork_data)
+        if success:
+            logger.info(f"💾 REAL Upwork data appended to {UPWORK_DATA_FILE}")
+        else:
+            # Fallback to overwrite if append fails
+            with open(UPWORK_DATA_FILE, 'w', encoding='utf-8') as f:
+                json.dump(upwork_data, f, indent=2, ensure_ascii=False)
+            logger.info(f"💾 REAL Upwork data saved (overwrite) to {UPWORK_DATA_FILE}")
     except Exception as e:
         logger.error(f"❌ Failed to save Upwork data: {e}")
+        # Fallback to standard save
+        try:
+            with open(UPWORK_DATA_FILE, 'w', encoding='utf-8') as f:
+                json.dump(upwork_data, f, indent=2, ensure_ascii=False)
+            logger.info(f"💾 Upwork data saved (fallback) to {UPWORK_DATA_FILE}")
+        except Exception as fallback_error:
+            logger.error(f"❌ Fallback save also failed: {fallback_error}")
     
     logger.info(f"✅ REAL Upwork collection completed: {len(all_jobs)} genuine jobs only")
     return upwork_data

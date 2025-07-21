@@ -96,7 +96,7 @@ class TwitterDataCollector:
         try:
             # Try to get own user information as a simple test
             me = self.client.get_me()
-            if me.data:
+            if me and getattr(me, 'data', None):
                 logger.info("Twitter API connection test successful")
                 return True
             else:
@@ -131,24 +131,26 @@ class TwitterDataCollector:
             # Search for tweets
             tweets = self.client.search_recent_tweets(
                 query=f"{keyword} -is:retweet lang:{TWITTER_SETTINGS['lang']}",  # Exclude retweets
-                max_results=min(max_results, 100),  # API limit per request
+                max_results=min(max_results or 10, 100),  # API limit per request, handle None
                 tweet_fields=TWITTER_SETTINGS['tweet_fields'],
                 user_fields=TWITTER_SETTINGS['user_fields'],
                 expansions=['author_id'],
                 start_time=start_time
             )
             
-            if not tweets.data:
+            tweets_data_list = getattr(tweets, 'data', None) if tweets else None
+            if not tweets_data_list:
                 logger.warning(f"No tweets found for keyword: {keyword}")
                 return []
             
             # Create a lookup dictionary for user information
             users_dict = {}
-            if tweets.includes and 'users' in tweets.includes:
-                users_dict = {user.id: user for user in tweets.includes['users']}
+            tweets_includes = getattr(tweets, 'includes', None) if tweets else None
+            if tweets_includes and 'users' in tweets_includes:
+                users_dict = {user.id: user for user in tweets_includes['users']}
             
             # Process each tweet
-            for tweet in tweets.data:
+            for tweet in tweets_data_list:
                 tweet_data = self._extract_tweet_data(tweet, users_dict, keyword)
                 tweets_data.append(tweet_data)
                 
@@ -420,13 +422,14 @@ def collect_all_twitter_data(keywords: Optional[List[str]] = None):
         return generate_mock_twitter_data(keywords, tweets_per_keyword=3)
 
 
-def save_twitter_data(data: Dict[str, Any], filepath: Optional[str] = None) -> bool:
+def save_twitter_data(data: Dict[str, Any], filepath: Optional[str] = None, use_persistence: bool = True) -> bool:
     """
-    Save Twitter data to JSON file
+    Save Twitter data to JSON file with persistence option
     
     Args:
         data (Dict[str, Any]): Twitter data to save
         filepath (str, optional): Custom file path. Uses default if None.
+        use_persistence (bool): Whether to append to existing data
         
     Returns:
         bool: True if successful, False otherwise
@@ -435,6 +438,17 @@ def save_twitter_data(data: Dict[str, Any], filepath: Optional[str] = None) -> b
         filepath = DATA_PATHS['raw_twitter_data']
     
     try:
+        if use_persistence:
+            # Use new persistence system to append data
+            from data_persistence import append_twitter_data
+            success = append_twitter_data(data)
+            if success:
+                logger.info(f"✅ Twitter data appended to: {filepath}")
+                return True
+            else:
+                logger.warning("⚠️ Failed to append, falling back to overwrite")
+        
+        # Fallback to overwrite or if persistence is disabled
         ensure_data_directory()
         
         with open(filepath, 'w', encoding='utf-8') as f:

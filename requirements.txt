@@ -8,6 +8,7 @@ gunicorn>=21.0.0
 # Data collection and processing
 requests>=2.31.0
 pandas>=2.0.0
+openpyxl>=3.0.0
 beautifulsoup4>=4.12.0
 python-dotenv>=1.0.0
 
@@ -34,4 +35,9 @@ APScheduler>=3.10.0
 python-dateutil>=2.8.2
 
 # Logging utilities (Windows compatibility)
-colorama>=0.4.6 
+colorama>=0.4.6
+
+# Web scraping for Upwork (fixes distutils error)
+selenium>=4.15.0
+undetected-chromedriver>=3.5.0
+setuptools>=68.0.0 
