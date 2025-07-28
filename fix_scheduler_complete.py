@@ -3,7 +3,7 @@ Complete Scheduler Fix
 =====================
 
 Fix all scheduler issues:
-1. Timing mismatch (60s sleep vs 2min interval)
+1. Timing mismatch (60s sleep vs 2hours interval)
 2. Thread not staying alive
 3. Integration with Flask app
 4. Proper error handling
@@ -31,7 +31,7 @@ def fix_scheduler_complete():
     print("⚙️ Updating scheduler settings...")
     scheduler.update_settings(
         enabled=True,
-        interval_minutes=2,
+        interval_minutes=120,
         sources=['upwork']
     )
     
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     if success:
         print("\n🎉 Scheduler fixed successfully!")
         print("📋 What to do next:")
-        print("   1. Wait 2 minutes for automatic collection")
+        print("   1. Wait 2 hours for automatic collection")
         print("   2. Check Google Sheets for new jobs")
         print("   3. Monitor at: http://localhost:8080/settings")
         print("   4. Or run: python test_scheduler_simple.py")

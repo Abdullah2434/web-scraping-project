@@ -33,7 +33,7 @@ class UpworkScheduler:
     Dedicated scheduler for Upwork job collection and Google Sheets integration
     
     Features:
-    - Runs every 2 hours (7200 seconds)
+    - Runs every 2 hours (120 minutes)
     - Collects jobs from Upwork using enhanced scraper
     - Automatically adds unique jobs to Google Sheets
     - Creates daily sheets with date/month titles
@@ -44,7 +44,7 @@ class UpworkScheduler:
     def __init__(self):
         """Initialize the Upwork scheduler"""
         self.is_running = False
-        self.collection_thread = None
+        self.collection_thread = None   
         self.next_collection_time = None
         self.collection_interval = 7200  # 2 hours in seconds
         self.enabled = True

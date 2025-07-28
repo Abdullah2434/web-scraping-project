@@ -39,7 +39,7 @@ class DataCollectionScheduler:
         self.is_running = False
         self.collection_thread = None
         self.next_collection_time = None
-        self.collection_interval = 120  # 2 hours in seconds (120 minutes) 7200
+        self.collection_interval = 7200  # 2 hours in seconds (120 minutes) 7200
         self.enabled = True
         self.sources = ['google', 'reddit', 'youtube', 'twitter']
         self.status_file = os.path.join('data', 'scheduler_status.json')
@@ -61,7 +61,7 @@ class DataCollectionScheduler:
                     'success_count': 0,
                     'error_count': 0,
                     'sources': self.sources,
-                    'interval_minutes': 2,  # 2 hours default 7200
+                    'interval_minutes': 120,  # 2 minutes default for testing
                     'created_at': datetime.now().isoformat()
                 }
                 

@@ -11,7 +11,7 @@
     <div class="settings-card">
         <div class="settings-header">
             <h3>🔍 Keywords Management</h3>
-            <p>Manage your keywords for trending analysis (Maximum 5 keywords)</p>
+            <p>Manage your keywords for job search and trending analysis (Maximum 10 keywords)</p>
         </div>
         
         <div class="settings-content">
@@ -46,11 +46,14 @@
             <div class="setting-section">
                 <h4>Add New Keyword</h4>
                 <div class="add-keyword-form">
-                    <input type="text" id="newKeywordInput" placeholder="Enter a keyword (e.g. artificial intelligence)" maxlength="50">
-                    <button id="addKeywordBtn" class="btn btn-primary">Add Keyword</button>
+                    <input type="text" id="newKeywordInput" placeholder="Enter a keyword (e.g. python, web development)" maxlength="50">
+                    <button id="addKeywordBtn" class="btn btn-primary">+ Add</button>
                 </div>
                 <div class="keyword-help">
-                    <small>💡 Keywords should be 2-50 characters. Examples: "artificial intelligence", "climate change", "cryptocurrency"</small>
+                    <small>💡 Keywords should be 2-50 characters. Examples: "python", "web development", "machine learning"</small>
+                    <div class="keyword-counter">
+                        <span id="keywordCountDisplay">0</span> / 10 keywords used
+                    </div>
                 </div>
             </div>
             
@@ -328,6 +331,20 @@
 .keyword-help {
     color: #64748b;
     font-size: 0.875rem;
+}
+
+.keyword-counter {
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: #f1f5f9;
+    border-radius: 6px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.keyword-counter span {
+    color: #3b82f6;
+    font-weight: 600;
 }
 
 .bulk-actions {

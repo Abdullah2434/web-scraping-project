@@ -55,7 +55,7 @@ def fix_scheduler_json():
                     'success_count': 0,
                     'error_count': 0,
                     'sources': ['upwork'],
-                    'interval_minutes': 2,
+                    'interval_minutes': 120,
                     'created_at': datetime.now().isoformat(),
                     'last_updated': datetime.now().isoformat()
                 }
@@ -81,7 +81,7 @@ def fix_scheduler_json():
                 'success_count': 0,
                 'error_count': 0,
                 'sources': ['upwork'],
-                'interval_minutes': 2,
+                'interval_minutes': 120,
                 'created_at': datetime.now().isoformat(),
                 'last_updated': datetime.now().isoformat()
             }
@@ -150,7 +150,7 @@ if __name__ == "__main__":
         if test_success:
             print("\n🎉 Scheduler is now working!")
             print("📋 What happens next:")
-            print("   1. Scheduler runs every 2 minutes")
+            print("   1. Scheduler runs every 2 hours")
             print("   2. Automatic Upwork job collection")
             print("   3. Jobs added to Google Sheets")
             print("   4. Monitor at: http://localhost:8080/settings")

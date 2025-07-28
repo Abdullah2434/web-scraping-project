@@ -2,7 +2,7 @@
 Fix Scheduler Settings
 =====================
 
-Fix the scheduler to run every 2 minutes instead of 2 hours
+Fix the scheduler to run every 2 hours
 and ensure it starts automatically.
 """
 
@@ -12,19 +12,19 @@ from datetime import datetime
 from scheduler import scheduler, start_scheduler, get_scheduler_status
 
 def fix_scheduler_settings():
-    """Fix scheduler settings to run every 2 minutes"""
+    """Fix scheduler settings to run every 2 hours"""
     
     print("🔧 Fixing scheduler settings...")
     
     # Update scheduler settings
     scheduler.update_settings(
         enabled=True,
-        interval_minutes=2,  # Change from 120 to 2 minutes
+        interval_minutes=120,  # Change from 2 to 120 minutes
         sources=['upwork']  # Focus on Upwork for now
     )
     
     print("✅ Scheduler settings updated:")
-    print("   - Interval: 2 minutes")
+    print("   - Interval: 2 hours")
     print("   - Enabled: True")
     print("   - Sources: ['upwork']")
     
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     
     print("\n🎉 Scheduler configuration complete!")
     print("📋 What happens now:")
-    print("   - Scheduler runs every 2 minutes")
+    print("   - Scheduler runs every 2 hours")
     print("   - Automatic Upwork job collection")
     print("   - Jobs added to Google Sheets")
     print("   - Check status at: http://localhost:8080/settings") 

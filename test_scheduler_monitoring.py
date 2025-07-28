@@ -100,7 +100,7 @@ if __name__ == "__main__":
     if success:
         print("\n🎉 Test PASSED! Scheduler is working!")
         print("📋 What this means:")
-        print("   - Scheduler runs every 2 minutes")
+        print("   - Scheduler runs every 2 hours")
         print("   - Automatic Upwork job collection")
         print("   - Jobs added to Google Sheets")
         print("   - System is fully automated")

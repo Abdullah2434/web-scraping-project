@@ -41,9 +41,96 @@ try:
     from fetch_reddit_data import collect_all_reddit_data
     from fetch_youtube_data import collect_all_youtube_data
     from fetch_twitter_data import collect_all_twitter_data
-    from fetch_upwork_data import collect_all_upwork_data, load_upwork_data, get_upwork_summary_stats
+    from fetch_upwork_data_enhanced import collect_comprehensive_upwork_data
     from trending_analysis import run_automatic_trending_analysis, load_trending_analysis
     from keyword_manager import keyword_manager, get_current_keywords, update_collection_timestamp
+    
+    # Simple function to load Upwork data from file
+    def load_upwork_data():
+        """Load Upwork data from the JSON file"""
+        try:
+            from config import DATA_PATHS
+            file_path = DATA_PATHS['raw_upwork_data']
+            if os.path.exists(file_path):
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            else:
+                return {'jobs': [], 'metadata': {}}
+        except Exception as e:
+            logger.error(f"Error loading Upwork data: {e}")
+            return {'jobs': [], 'metadata': {}}
+    
+    # Function to get Upwork summary statistics
+    def get_upwork_summary_stats():
+        """Get summary statistics for Upwork data"""
+        try:
+            upwork_data = load_upwork_data()
+            jobs = upwork_data.get('jobs', [])
+            
+            if not jobs:
+                return {
+                    'total_jobs': 0,
+                    'total_budget': 0,
+                    'avg_budget': 0,
+                    'hourly_jobs': 0,
+                    'fixed_jobs': 0,
+                    'keywords_analyzed': [],
+                    'last_updated': 'Never'
+                }
+            
+            # Calculate statistics
+            total_jobs = len(jobs)
+            total_budget = 0
+            hourly_jobs = 0
+            fixed_jobs = 0
+            keywords_analyzed = set()
+            
+            for job in jobs:
+                # Count job types
+                job_type = job.get('job_type', '').lower()
+                if 'hourly' in job_type:
+                    hourly_jobs += 1
+                elif 'fixed' in job_type:
+                    fixed_jobs += 1
+                
+                # Sum budgets
+                budget = job.get('budget', 0)
+                if isinstance(budget, (int, float)):
+                    total_budget += budget
+                elif isinstance(budget, str):
+                    # Try to extract number from budget string
+                    import re
+                    numbers = re.findall(r'\d+', budget)
+                    if numbers:
+                        total_budget += int(numbers[0])
+                
+                # Collect keywords
+                keyword = job.get('search_keyword', '')
+                if keyword:
+                    keywords_analyzed.add(keyword)
+            
+            avg_budget = total_budget / total_jobs if total_jobs > 0 else 0
+            
+            return {
+                'total_jobs': total_jobs,
+                'total_budget': total_budget,
+                'avg_budget': round(avg_budget, 2),
+                'hourly_jobs': hourly_jobs,
+                'fixed_jobs': fixed_jobs,
+                'keywords_analyzed': list(keywords_analyzed),
+                'last_updated': upwork_data.get('metadata', {}).get('collection_timestamp', 'Unknown')
+            }
+        except Exception as e:
+            logger.error(f"Error calculating Upwork summary stats: {e}")
+            return {
+                'total_jobs': 0,
+                'total_budget': 0,
+                'avg_budget': 0,
+                'hourly_jobs': 0,
+                'fixed_jobs': 0,
+                'keywords_analyzed': [],
+                'last_updated': 'Error'
+            }
     from scheduler import start_scheduler, stop_scheduler, get_scheduler_status, update_scheduler_settings, trigger_immediate_collection
     import pandas as pd
     IMPORT_SUCCESS = True
@@ -827,7 +914,7 @@ def api_collect_upwork():
                         logger.info("🎯 Using COMPREHENSIVE individual page Upwork scraper")
                         
                         # Set max jobs per keyword based on user preference or default to 5
-                        max_jobs_per_keyword = data.get('max_jobs_per_keyword', 5)
+                        max_jobs_per_keyword = data.get('max_jobs_per_keyword', 10)
                         logger.info(f"🔢 Max jobs per keyword: {max_jobs_per_keyword}")
                         
                         # Get skip_private_jobs setting (default: True)
@@ -854,9 +941,9 @@ def api_collect_upwork():
                             logger.info(f"💾 Enhanced data collection completed with {len(jobs_data)} jobs")
                         except ImportError:
                             # Final fallback to original version
-                            from fetch_upwork_data import collect_all_upwork_data
+                            from fetch_upwork_data_enhanced import collect_comprehensive_upwork_data
                             logger.info("🔄 Enhanced version not available, using standard version")
-                            upwork_data = collect_all_upwork_data(keywords, use_real_browser=True)
+                            upwork_data = collect_comprehensive_upwork_data(keywords, use_persistence=True, skip_private_jobs=True)
                             jobs_data = upwork_data.get('jobs', [])
                             logger.info(f"💾 Standard data collection completed with {len(jobs_data)} jobs")
                     
@@ -1238,7 +1325,7 @@ def run_data_collection_with_logging(keywords, sources):
                 # Use all keywords for Upwork
                 logger.info(f"💼 Using all keywords for Upwork: {keywords}")
                 
-                upwork_data = collect_all_upwork_data(keywords)
+                upwork_data = collect_comprehensive_upwork_data(keywords, use_persistence=True, skip_private_jobs=True)
                 if upwork_data and upwork_data.get('jobs'):
                     jobs_count = len(upwork_data.get('jobs', []))
                     logger.info(f"SUCCESS: Upwork data collection completed! Found {jobs_count} jobs")
@@ -1695,7 +1782,7 @@ def run_upwork_only_collection(keywords):
             upwork_data = collect_comprehensive_upwork_data(
                 keywords=keywords, 
                 filters=None,  # No filters for scheduler
-                max_jobs_per_keyword=5,  # Default 5 jobs per keyword
+                                        max_jobs_per_keyword=10,  # Default 10 jobs per keyword
                 use_persistence=True,
                 skip_private_jobs=True
             )
@@ -1735,9 +1822,9 @@ def run_upwork_only_collection(keywords):
                 
             except ImportError:
                 # Final fallback to original version
-                from fetch_upwork_data import collect_all_upwork_data
+                from fetch_upwork_data_enhanced import collect_comprehensive_upwork_data
                 logger.info("🔄 Using standard Upwork scraper")
-                upwork_data = collect_all_upwork_data(keywords, use_real_browser=True)
+                upwork_data = collect_comprehensive_upwork_data(keywords, use_persistence=True, skip_private_jobs=True)
                 jobs_data = upwork_data.get('jobs', [])
                 logger.info(f"✅ UPWORK collection completed: {len(jobs_data)} jobs")
                 
@@ -1779,14 +1866,14 @@ if __name__ == '__main__':
     # Start the automated scheduler for local development
     try:
         from scheduler import start_scheduler, update_scheduler_settings
-        # Configure scheduler for Upwork-only with 2-minute intervals
+        # Configure scheduler for Upwork-only with 2-hour intervals
         update_scheduler_settings(
             enabled=True,
             sources=['upwork'],
-            interval_minutes=2
+            interval_minutes=120
         )
         start_scheduler()
-        print("✅ Automated Upwork scheduler started (2-minute intervals)")
+        print("✅ Automated Upwork scheduler started (2-hour intervals)")
         print("📋 Will collect jobs from keywords.txt file")
     except Exception as e:
         print(f"❌ Warning: Could not start scheduler: {e}")

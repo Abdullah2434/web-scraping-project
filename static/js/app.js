@@ -1541,8 +1541,14 @@ async function loadKeywordsData() {
 function displayKeywords(keywords) {
     const container = document.getElementById('keywordsContainer');
     const statsDiv = document.getElementById('keywordsStats');
+    const counterDisplay = document.getElementById('keywordCountDisplay');
     
     if (!container) return;
+    
+    // Update the counter display
+    if (counterDisplay) {
+        counterDisplay.textContent = keywords ? keywords.length : 0;
+    }
     
     if (!keywords || keywords.length === 0) {
         container.innerHTML = `
@@ -1642,6 +1648,19 @@ async function handleAddKeyword() {
         return;
     }
     
+    // Check current keyword count first
+    try {
+        const keywordsResponse = await fetch('/api/keywords');
+        const keywordsData = await keywordsResponse.json();
+        
+        if (keywordsData.keywords && keywordsData.keywords.length >= 15) {
+            showNotification('Maximum 15 keywords reached. Please remove some keywords first.', 'warning');
+            return;
+        }
+    } catch (error) {
+        console.error('Error checking keyword count:', error);
+    }
+    
     // Disable button and show loading
     btn.disabled = true;
     btn.textContent = 'Adding...';
@@ -1669,7 +1688,7 @@ async function handleAddKeyword() {
         showNotification('Failed to add keyword', 'error');
     } finally {
         btn.disabled = false;
-        btn.textContent = 'Add Keyword';
+        btn.textContent = '+ Add';
     }
 }
 
@@ -1843,12 +1862,18 @@ function validateKeywordInput(value) {
     const trimmed = value.trim();
     const isValid = trimmed.length >= 2 && trimmed.length <= 50;
     
-    btn.disabled = !isValid;
+    // Check for duplicates
+    const existingKeywords = Array.from(document.querySelectorAll('.keyword-text')).map(el => el.textContent.toLowerCase());
+    const isDuplicate = existingKeywords.includes(trimmed.toLowerCase());
+    
+    btn.disabled = !isValid || isDuplicate;
     
     if (trimmed.length > 0 && trimmed.length < 2) {
         input.style.borderColor = '#ef4444';
     } else if (trimmed.length > 50) {
         input.style.borderColor = '#ef4444';
+    } else if (isDuplicate) {
+        input.style.borderColor = '#f59e0b';
     } else if (trimmed.length >= 2) {
         input.style.borderColor = '#10b981';
     } else {
