@@ -965,7 +965,7 @@ def api_download_upwork_excel():
         logger.error(f"Excel download error: {e}")
         return jsonify({'error': f'Download failed: {str(e)}'}), 500
 
-@app.route('/api/create-upwork-excel', methods=['POST'])
+@app.route('/api/create-upwork-excel')
 def api_create_upwork_excel():
     """API endpoint to create Excel file from current Upwork data"""
     try:
@@ -1669,6 +1669,98 @@ def manual_trigger():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+def run_upwork_only_collection(keywords):
+    """Run ONLY Upwork data collection - no other sources"""
+    global collection_active, log_queue
+    collection_active = True
+    
+    # Clear existing logs
+    while not log_queue.empty():
+        try:
+            log_queue.get_nowait()
+        except queue.Empty:
+            break
+    
+    try:
+        logger.info("🚀 STARTING UPWORK-ONLY data collection...")
+        logger.info(f"💼 KEYWORDS: {', '.join(keywords)}")
+        logger.info("🎯 SOURCE: Upwork only")
+        
+        # Import Upwork collection function
+        try:
+            from fetch_upwork_data_enhanced import collect_comprehensive_upwork_data
+            logger.info("🎯 Using COMPREHENSIVE Upwork scraper")
+            
+            # Use default settings for scheduler
+            upwork_data = collect_comprehensive_upwork_data(
+                keywords=keywords, 
+                filters=None,  # No filters for scheduler
+                max_jobs_per_keyword=5,  # Default 5 jobs per keyword
+                use_persistence=True,
+                skip_private_jobs=True
+            )
+            
+            jobs_data = upwork_data.get('jobs', [])
+            logger.info(f"✅ UPWORK collection completed: {len(jobs_data)} jobs")
+            
+            # Invalidate cache so fresh data is shown immediately
+            invalidate_data_cache()
+            
+            return {
+                'upwork': {
+                    'status': 'success',
+                    'jobs_count': len(jobs_data),
+                    'saved': True
+                }
+            }, ['upwork']
+            
+        except ImportError:
+            # Fallback to enhanced version
+            try:
+                from fetch_upwork_data_enhanced import collect_upwork_data_with_filters
+                logger.info("🔄 Using enhanced Upwork scraper")
+                upwork_data = collect_upwork_data_with_filters(keywords, None, True, 5)
+                jobs_data = upwork_data.get('jobs', [])
+                logger.info(f"✅ UPWORK collection completed: {len(jobs_data)} jobs")
+                
+                invalidate_data_cache()
+                
+                return {
+                    'upwork': {
+                        'status': 'success',
+                        'jobs_count': len(jobs_data),
+                        'saved': True
+                    }
+                }, ['upwork']
+                
+            except ImportError:
+                # Final fallback to original version
+                from fetch_upwork_data import collect_all_upwork_data
+                logger.info("🔄 Using standard Upwork scraper")
+                upwork_data = collect_all_upwork_data(keywords, use_real_browser=True)
+                jobs_data = upwork_data.get('jobs', [])
+                logger.info(f"✅ UPWORK collection completed: {len(jobs_data)} jobs")
+                
+                invalidate_data_cache()
+                
+                return {
+                    'upwork': {
+                        'status': 'success',
+                        'jobs_count': len(jobs_data),
+                        'saved': True
+                    }
+                }, ['upwork']
+                
+    except Exception as e:
+        logger.error(f"❌ UPWORK collection failed: {e}")
+        return {
+            'upwork': {
+                'status': 'error',
+                'error': str(e),
+                'jobs_count': 0
+            }
+        }, []
+
 if __name__ == '__main__':
     # This block only runs for local development
     # Production uses app.py as entry point
@@ -1686,9 +1778,18 @@ if __name__ == '__main__':
     
     # Start the automated scheduler for local development
     try:
+        from scheduler import start_scheduler, update_scheduler_settings
+        # Configure scheduler for Upwork-only with 2-minute intervals
+        update_scheduler_settings(
+            enabled=True,
+            sources=['upwork'],
+            interval_minutes=2
+        )
         start_scheduler()
-        print("Automated data collection scheduler started")
+        print("✅ Automated Upwork scheduler started (2-minute intervals)")
+        print("📋 Will collect jobs from keywords.txt file")
     except Exception as e:
-        print(f"Warning: Could not start scheduler: {e}")
+        print(f"❌ Warning: Could not start scheduler: {e}")
+        print("💡 You can start it manually with: python start_scheduler_auto.py")
     
     app.run(debug=True, host='127.0.0.1', port=8080) 

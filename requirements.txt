@@ -40,4 +40,8 @@ colorama>=0.4.6
 # Web scraping for Upwork (fixes distutils error)
 selenium>=4.15.0
 undetected-chromedriver>=3.5.0
-setuptools>=68.0.0 
+setuptools>=68.0.0
+
+# Google Sheets integration
+gspread>=5.10.0
+google-auth>=2.17.0 

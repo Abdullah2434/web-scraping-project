@@ -1,142 +1,51 @@
-#!/usr/bin/env python3
 """
-Test script for enhanced Upwork data extraction
+Test Upwork Scraper
+==================
+
+Test the Upwork scraper functionality with sample keywords.
 """
 
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from fetch_upwork_data_enhanced import collect_upwork_data_with_filters
+from fetch_upwork_data_enhanced import collect_comprehensive_upwork_data
 import json
-import logging
 
-# Enable detailed logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
-
-def test_upwork_extraction():
-    """Test the enhanced Upwork data extraction"""
-    print("🧪 Testing Enhanced Upwork Data Extraction")
-    print("=" * 50)
+def test_upwork_scraper():
+    """Test Upwork scraper with sample keywords"""
     
-    # Test with a simple keyword
-    test_keywords = ["python"]
+    print("💼 Testing Upwork scraper...")
     
-    # Simple filters
-    test_filters = {
-        'time_range': 'today',
-        'hourly_filter': '',
-        'budget_range': 'any',
-        'job_type': 'any',
-        'experience_level': 'any',
-        'payment_status': 'both',
-        'sort_by': 'recency'
-    }
+    # Test keywords
+    test_keywords = ["python", "web development"]
     
     print(f"🔍 Testing with keywords: {test_keywords}")
-    print(f"📋 Using filters: {test_filters}")
-    print()
     
     try:
-        # Collect data
-        result = collect_upwork_data_with_filters(
+        # Run scraper with more jobs for better testing
+        result = collect_comprehensive_upwork_data(
             keywords=test_keywords,
-            filters=test_filters,
-            use_persistence=False  # Don't save to file for testing
+            max_jobs_per_keyword=2,  # Increased to collect more jobs
+            use_persistence=True,
+            skip_private_jobs=True
         )
         
-        print("📊 Extraction Results:")
-        print("-" * 30)
+        print("✅ Upwork scraper completed successfully!")
+        print(f"📊 Total jobs collected: {len(result.get('jobs', []))}")
+        print(f"🔍 Keywords processed: {len(result.get('keywords_processed', []))}")
         
+        # Show sample job data
         jobs = result.get('jobs', [])
-        print(f"✅ Total jobs collected: {len(jobs)}")
-        
         if jobs:
-            # Analyze first few jobs for data quality
-            for i, job in enumerate(jobs[:3]):
-                print(f"\n🔍 Job {i+1} Analysis:")
-                print(f"  Title: {job.get('title', 'N/A')[:60]}...")
-                
-                # Check time data
-                time_info = job.get('job_details', {}).get('posted_time', {})
-                if isinstance(time_info, dict):
-                    time_display = time_info.get('display', 'Unknown')
-                    time_original = time_info.get('original', 'Unknown')
-                    print(f"  Time: {time_display} (original: {time_original})")
-                else:
-                    print(f"  Time: {time_info}")
-                
-                # Check location data
-                location = job.get('job_details', {}).get('client_location', 'Unknown')
-                country = job.get('job_details', {}).get('client_country', 'Unknown')
-                print(f"  Location: {location} / {country}")
-                
-                # Check proposals
-                proposals_info = job.get('job_details', {}).get('proposals_count', {})
-                if isinstance(proposals_info, dict):
-                    count = proposals_info.get('count', 0)
-                    display = proposals_info.get('display', 'Unknown')
-                    print(f"  Proposals: {count} ({display})")
-                else:
-                    print(f"  Proposals: {proposals_info}")
-                
-                # Check payment status
-                payment_info = job.get('job_details', {}).get('payment_verified', {})
-                if isinstance(payment_info, dict):
-                    status = payment_info.get('status', 'unknown')
-                    display = payment_info.get('display', 'Unknown')
-                    print(f"  Payment: {status} ({display})")
-                else:
-                    print(f"  Payment: {payment_info}")
-                
-                # Check budget
-                budget = job.get('budget', {})
-                if budget and budget.get('raw_text') != 'Budget not specified':
-                    print(f"  Budget: {budget.get('raw_text', 'N/A')} ({budget.get('type', 'unknown')})")
-                else:
-                    print(f"  Budget: Not specified")
+            print(f"\n📋 Sample job data:")
+            sample_job = jobs[0]
+            print(f"   Title: {sample_job.get('title', 'N/A')}")
+            print(f"   Budget: {sample_job.get('budget', 'N/A')}")
+            print(f"   Job Type: {sample_job.get('job_type', 'N/A')}")
+            print(f"   Posted: {sample_job.get('posted_time', 'N/A')}")
         
-        # Summary analysis
-        print(f"\n📈 Data Quality Analysis:")
-        print("-" * 30)
-        
-        real_times = sum(1 for job in jobs if 
-                        job.get('job_details', {}).get('posted_time', {}).get('original', 'Unknown') != 'Unknown')
-        real_locations = sum(1 for job in jobs if 
-                           job.get('job_details', {}).get('client_location', 'Unknown') not in ['Unknown', 'Not specified'])
-        real_proposals = sum(1 for job in jobs if 
-                           job.get('job_details', {}).get('proposals_count', {}).get('count', 0) > 0)
-        real_payment = sum(1 for job in jobs if 
-                         job.get('job_details', {}).get('payment_verified', {}).get('status', 'unknown') != 'unknown')
-        real_budgets = sum(1 for job in jobs if 
-                         job.get('budget', {}).get('raw_text', 'Budget not specified') != 'Budget not specified')
-        
-        total = len(jobs)
-        if total > 0:
-            print(f"⏰ Real posting times: {real_times}/{total} ({real_times/total*100:.1f}%)")
-            print(f"🌍 Real locations: {real_locations}/{total} ({real_locations/total*100:.1f}%)")
-            print(f"👥 Real proposal counts: {real_proposals}/{total} ({real_proposals/total*100:.1f}%)")
-            print(f"💳 Real payment status: {real_payment}/{total} ({real_payment/total*100:.1f}%)")
-            print(f"💰 Real budgets: {real_budgets}/{total} ({real_budgets/total*100:.1f}%)")
-            
-            # Overall data quality score
-            quality_score = (real_times + real_locations + real_proposals + real_payment + real_budgets) / (total * 5) * 100
-            print(f"\n🎯 Overall Data Quality Score: {quality_score:.1f}%")
-            
-            if quality_score > 80:
-                print("🟢 Excellent data quality!")
-            elif quality_score > 60:
-                print("🟡 Good data quality, some improvements possible")
-            elif quality_score > 40:
-                print("🟠 Moderate data quality, needs improvement")
-            else:
-                print("🔴 Poor data quality, scraper needs fixing")
+        return True
         
     except Exception as e:
-        print(f"❌ Test failed with error: {e}")
-        import traceback
-        traceback.print_exc()
+        print(f"❌ Upwork scraper error: {e}")
+        return False
 
 if __name__ == "__main__":
-    test_upwork_extraction() 
+    test_upwork_scraper() 

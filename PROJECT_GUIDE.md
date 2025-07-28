@@ -11,7 +11,7 @@ A comprehensive Flask-based web dashboard for analyzing keyword trends across mu
 
 ### 🌟 Key Features
 
-- **Real-time Data Collection** - Automated hourly data gathering
+- **Real-time Data Collection** - Automated data gathering every 2 hours
 - **Dynamic Keyword Management** - User-controlled keyword sets
 - **Interactive Dashboard** - Modern web interface with charts
 - **Trending Analysis** - AI-powered keyword trend detection
@@ -119,7 +119,7 @@ python flask_app.py
 
 ### Data Collection
 - **Manual Triggers** - Instant data collection on-demand
-- **Automated Scheduling** - Hourly background collection
+- **Automated Scheduling** - Background collection every 2 hours
 - **Keyword Management** - Dynamic keyword configuration
 - **Source Selection** - Enable/disable specific data sources
 
@@ -237,7 +237,7 @@ Content-Type: application/json
 
 {
   "enabled": true,
-  "interval_minutes": 60,
+      "interval_minutes": 120,  # 2 hours default
   "sources": ["google", "reddit", "youtube"]
 }
 ```
@@ -385,7 +385,7 @@ The production deployment uses Gunicorn for optimal performance:
 
 #### Built-in Scheduler
 The production deployment includes an automatic background scheduler that:
-- Runs hourly data collection automatically
+- Runs data collection every 2 hours automatically
 - Handles Render's ephemeral storage (files don't persist)
 - Logs results instead of file storage for monitoring
 - Provides health check endpoint at `/health`

@@ -1,0 +1,14 @@
+# Upwork Keywords File
+# Add your keywords here, one per line
+# Lines starting with # are comments and will be ignored
+# 
+# Example keywords:
+# web development
+# python developer
+# data analysis
+# graphic design
+# content writing
+
+# Add your keywords below:
+python developer
+web development

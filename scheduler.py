@@ -2,7 +2,7 @@
 Automated Data Collection Scheduler
 ==================================
 
-Handles automated hourly data collection using user-defined keywords.
+Handles automated data collection every 2 hours using user-defined keywords.
 Supports configurable scheduling, error handling, and logging.
 
 Author: Web Scraping Project
@@ -17,7 +17,7 @@ import json
 import os
 
 # Local imports
-from keyword_manager import get_current_keywords, update_collection_timestamp
+from keyword_file_manager import get_current_keywords
 from config import DATA_PATHS
 
 # Set up logging
@@ -28,7 +28,7 @@ class DataCollectionScheduler:
     Automated scheduler for data collection
     
     Features:
-    - Hourly data collection with user keywords
+    - Data collection every 2 hours with user keywords
     - Configurable sources and intervals
     - Error handling and retry logic
     - Status tracking and logging
@@ -39,7 +39,7 @@ class DataCollectionScheduler:
         self.is_running = False
         self.collection_thread = None
         self.next_collection_time = None
-        self.collection_interval = 3600  # 1 hour in seconds
+        self.collection_interval = 120  # 2 hours in seconds (120 minutes) 7200
         self.enabled = True
         self.sources = ['google', 'reddit', 'youtube', 'twitter']
         self.status_file = os.path.join('data', 'scheduler_status.json')
@@ -61,7 +61,7 @@ class DataCollectionScheduler:
                     'success_count': 0,
                     'error_count': 0,
                     'sources': self.sources,
-                    'interval_minutes': 60,
+                    'interval_minutes': 2,  # 2 hours default 7200
                     'created_at': datetime.now().isoformat()
                 }
                 
@@ -81,7 +81,7 @@ class DataCollectionScheduler:
                 
             self.enabled = settings.get('enabled', True)
             self.sources = settings.get('sources', self.sources)
-            interval_minutes = settings.get('interval_minutes', 60)
+            interval_minutes = settings.get('interval_minutes', 120)  # Default to 2 hours
             self.collection_interval = interval_minutes * 60
             
             logger.info(f"Loaded scheduler settings: enabled={self.enabled}, interval={interval_minutes}min")
@@ -194,11 +194,15 @@ class DataCollectionScheduler:
             logger.info(f"Using keywords: {keywords}")
             logger.info(f"Using sources: {self.sources}")
             
-            # Import and run collection function
-            from flask_app import run_data_collection_with_logging
-            
-            # Run collection with current keywords and sources
-            results, successful_sources = run_data_collection_with_logging(keywords, self.sources)
+            # Check if only Upwork is configured
+            if self.sources == ['upwork']:
+                logger.info("🎯 UPWORK-ONLY mode detected - using dedicated Upwork collection")
+                from flask_app import run_upwork_only_collection
+                results, successful_sources = run_upwork_only_collection(keywords)
+            else:
+                # Import and run collection function for multiple sources
+                from flask_app import run_data_collection_with_logging
+                results, successful_sources = run_data_collection_with_logging(keywords, self.sources)
             
             # Update statistics
             collection_count = self._increment_counter('collection_count')
@@ -209,7 +213,7 @@ class DataCollectionScheduler:
                 logger.info(f"   Successful sources: {', '.join(successful_sources)}")
                 
                 # Update collection timestamp
-                update_collection_timestamp()
+                # update_collection_timestamp()  # Not needed with file-based keywords
                 
                 self.save_settings(
                     last_run=datetime.now().isoformat(),

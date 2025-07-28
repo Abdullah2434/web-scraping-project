@@ -3063,6 +3063,24 @@ def collect_comprehensive_upwork_data(keywords: List[str], filters: Optional[Dic
         except Exception as e:
             logger.error(f"❌ Error creating Excel file: {e}")
     
+    # Add jobs to Google Sheets automatically
+    if all_jobs:
+        try:
+            logger.info("📊 Adding jobs to Google Sheets...")
+            from google_sheets_integration import add_upwork_jobs_to_sheets
+            
+            sheets_result = add_upwork_jobs_to_sheets(all_jobs)
+            if sheets_result.get('success'):
+                upwork_data['google_sheets_result'] = sheets_result
+                logger.info(f"✅ Successfully added {sheets_result.get('jobs_added', 0)} jobs to Google Sheets")
+                logger.info(f"📄 Sheet: {sheets_result.get('sheet_name', 'Unknown')}")
+            else:
+                logger.error(f"❌ Error adding to Google Sheets: {sheets_result.get('error', 'Unknown error')}")
+                upwork_data['google_sheets_error'] = sheets_result.get('error', 'Unknown error')
+        except Exception as e:
+            logger.error(f"❌ Error with Google Sheets integration: {e}")
+            upwork_data['google_sheets_error'] = str(e)
+    
     logger.info(f"🎉 COMPREHENSIVE DATA COLLECTION COMPLETED!")
     logger.info(f"📊 Final stats: {len(all_jobs)} jobs collected with premium detail level")
     
