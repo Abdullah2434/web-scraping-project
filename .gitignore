@@ -62,3 +62,8 @@ data/raw_*.json
 data/trending_*.json
 scraping.log 
 .vercel
+
+
+
+
+google_sheets_credentials.json
