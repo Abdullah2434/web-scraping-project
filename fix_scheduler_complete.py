@@ -31,7 +31,7 @@ def fix_scheduler_complete():
     print("⚙️ Updating scheduler settings...")
     scheduler.update_settings(
         enabled=True,
-        interval_minutes=2,
+        interval_minutes=10,
         sources=['upwork']
     )
     
@@ -135,7 +135,7 @@ if __name__ == "__main__":
         print("📋 What to do next:")
         print("   1. Wait 2 minutes for automatic collection")
         print("   2. Check Google Sheets for new jobs")
-        print("   3. Monitor at: http://localhost:8080/settings")
+        print("   3. Monitor at: http://localhost:5000/settings")
         print("   4. Or run: python test_scheduler_simple.py")
         
         # Create test script

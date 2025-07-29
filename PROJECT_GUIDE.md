@@ -104,7 +104,7 @@ TWITTER_ACCESS_TOKEN_SECRET=your_twitter_access_token_secret
 python flask_app.py
 
 # Access the dashboard
-# Open: http://localhost:8080
+# Open: http://localhost:5000
 ```
 
 ---

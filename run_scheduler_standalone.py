@@ -39,7 +39,7 @@ def run_scheduler_standalone():
     
     print("\n⏰ Scheduler is now running...")
     print("📋 Will collect data every 2 minutes")
-    print("🌐 Flask app available at: http://localhost:8080")
+    print("🌐 Flask app available at: http://localhost:5000")
     print("📊 Check Google Sheets for new jobs")
     print("\nPress Ctrl+C to stop...")
     

@@ -56,11 +56,19 @@ def create_default_keywords_file(file_path: str = "keywords.txt"):
 # content writing
 
 # Add your keywords below:
-python developer
-web development
-data analysis
-graphic design
-content writing
+Go-high level
+n8n
+zapier
+React.js
+Node.js
+Next.js
+Android Application
+IOS Application
+Flutter Application
+React Native Application
+LLM
+RAG
+Lang chain
 """
     
     try:

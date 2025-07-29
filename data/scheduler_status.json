@@ -1,22 +1,22 @@
 {
   "enabled": true,
-  "last_run": "2025-07-28T15:09:30.803738",
-  "next_run": "2025-07-28T15:11:00.349802",
-  "collection_count": 12,
-  "success_count": 5,
+  "last_run": "2025-07-29T17:14:03.793874",
+  "next_run": "2025-07-29T20:46:01.207885",
+  "collection_count": 34,
+  "success_count": 27,
   "error_count": 7,
   "sources": [
     "upwork"
   ],
-  "interval_minutes": 2,
+  "interval_minutes": 120,
   "created_at": "2025-07-28T14:10:00.578446",
-  "last_updated": "2025-07-28T15:09:30.827169",
+  "last_updated": "2025-07-29T18:46:01.208187",
   "last_error": "2025-07-28T14:31:59.337201",
-  "last_successful_run": "2025-07-28T15:09:30.803752",
+  "last_successful_run": "2025-07-29T17:14:03.793887",
   "last_results": {
     "upwork": {
       "status": "success",
-      "jobs_count": 0,
+      "jobs_count": 54,
       "saved": true
     }
   }

@@ -23,15 +23,24 @@ KEYWORDS_FILE = os.path.join('data', 'user_keywords.json')
 
 # Default keywords if none are set
 DEFAULT_USER_KEYWORDS = [
-    "artificial intelligence",
-    "climate change", 
-    "cryptocurrency",
-    "space exploration",
-    "renewable energy"
+    "Go-high level",
+    "n8n",
+    "zapier",
+    "React.js",
+    "Node.js",
+    "Next.js",
+    "Android Application",
+    "IOS Application",
+    "Flutter Application",
+    "React Native Application",
+    "LLM",
+    "RAG",
+    "Lang chain"
 ]
 
+
 # Limits
-MAX_KEYWORDS = 5
+MAX_KEYWORDS = 15
 MIN_KEYWORD_LENGTH = 2
 MAX_KEYWORD_LENGTH = 50
 

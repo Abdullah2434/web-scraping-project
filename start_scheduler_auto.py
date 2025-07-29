@@ -30,8 +30,8 @@ def auto_start_scheduler():
     print(f"   - Next run in: {status.get('time_until_next_minutes', 0)} minutes")
     
     print("\n⏰ Scheduler is now running automatically!")
-    print("📋 Will collect Upwork jobs every 2 minutes")
-    print("🌐 Flask app available at: http://localhost:8080")
+    print("📋 Will collect Upwork jobs every 2 hours")
+    print("🌐 Flask app available at: http://localhost:5000")
     print("📊 Check Google Sheets for new jobs")
     print("\nPress Ctrl+C to stop...")
     

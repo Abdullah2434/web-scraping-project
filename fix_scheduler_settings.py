@@ -19,7 +19,7 @@ def fix_scheduler_settings():
     # Update scheduler settings
     scheduler.update_settings(
         enabled=True,
-        interval_minutes=2,  # Change from 120 to 2 minutes
+        interval_minutes=120,  # Change from 120 to 2 minutes
         sources=['upwork']  # Focus on Upwork for now
     )
     
@@ -74,4 +74,4 @@ if __name__ == "__main__":
     print("   - Scheduler runs every 2 minutes")
     print("   - Automatic Upwork job collection")
     print("   - Jobs added to Google Sheets")
-    print("   - Check status at: http://localhost:8080/settings") 
+    print("   - Check status at: http://localhost:5000/settings") 

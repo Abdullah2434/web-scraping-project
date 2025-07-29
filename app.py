@@ -89,5 +89,5 @@ application = app
 if __name__ == '__main__':
     # This should only be used for local development
     logger.warning("Running with Flask development server. Use Gunicorn for production!")
-    port = int(os.getenv('PORT', 8080))
-    app.run(host='127.0.0.1', port=port, debug=True) 
+    port = int(os.getenv('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True) 

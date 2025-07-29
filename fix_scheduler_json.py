@@ -55,7 +55,7 @@ def fix_scheduler_json():
                     'success_count': 0,
                     'error_count': 0,
                     'sources': ['upwork'],
-                    'interval_minutes': 2,
+                    'interval_minutes': 120,
                     'created_at': datetime.now().isoformat(),
                     'last_updated': datetime.now().isoformat()
                 }
@@ -81,7 +81,7 @@ def fix_scheduler_json():
                 'success_count': 0,
                 'error_count': 0,
                 'sources': ['upwork'],
-                'interval_minutes': 2,
+                'interval_minutes': 120,
                 'created_at': datetime.now().isoformat(),
                 'last_updated': datetime.now().isoformat()
             }
@@ -153,7 +153,7 @@ if __name__ == "__main__":
             print("   1. Scheduler runs every 2 minutes")
             print("   2. Automatic Upwork job collection")
             print("   3. Jobs added to Google Sheets")
-            print("   4. Monitor at: http://localhost:8080/settings")
+            print("   4. Monitor at: http://localhost:5000/settings")
         else:
             print("\n⚠️ Scheduler test failed, try running Flask app:")
             print("   python flask_app.py")

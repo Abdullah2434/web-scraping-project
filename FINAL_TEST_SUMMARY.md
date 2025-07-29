@@ -23,7 +23,7 @@ Your web scraping dashboard is fully operational and ready to use. Here's what w
 ---
 
 ## 🌐 **Flask Web Application**
-- ✅ **Application**: Successfully running on http://localhost:8080
+- ✅ **Application**: Successfully running on http://localhost:5000
 - ✅ **Dashboard**: Accessible and responding
 - ✅ **Routes**: All endpoints working
 - ✅ **Data Loading**: Successfully loading cached data from 3 sources
@@ -74,7 +74,7 @@ Your web scraping dashboard is fully operational and ready to use. Here's what w
 
 ### **1. Web Dashboard**
 ```
-🌐 Open: http://localhost:8080
+🌐 Open: http://localhost:5000
 ```
 - Real-time data visualization
 - Interactive charts and metrics
@@ -109,7 +109,7 @@ Your web scraping dashboard is fully operational and ready to use. Here's what w
 ### **1. Start Using the Dashboard**
 ```bash
 # The Flask app is already running!
-# Open your browser to: http://localhost:8080
+# Open your browser to: http://localhost:5000
 ```
 
 ### **2. Test Upwork Collection**

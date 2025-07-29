@@ -51,6 +51,24 @@ except ImportError as e:
     print(f"Import error: {e}")
     IMPORT_SUCCESS = False
 
+# Add this after the imports and before any usage of load_upwork_data
+
+def load_upwork_data():
+    """Load Upwork jobs data from the raw_upwork_data.json file."""
+    try:
+        from config import DATA_PATHS
+        upwork_data_file = DATA_PATHS.get('raw_upwork_data', 'data/raw_upwork_data.json')
+        import os
+        if not os.path.exists(upwork_data_file):
+            return {}
+        import json
+        with open(upwork_data_file, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).error(f"Error loading Upwork data: {e}")
+        return {}
+
 # Parse YouTube duration function (from Streamlit app)
 def parse_youtube_duration(duration_str: str) -> int:
     """Parse YouTube PT duration format to seconds"""
@@ -748,8 +766,37 @@ def api_upwork():
 def upwork_jobs():
     """Upwork jobs page"""
     upwork_data = load_upwork_data()
-    upwork_stats = get_upwork_summary_stats()
-    
+
+    # Calculate Upwork-specific stats
+    jobs = upwork_data.get('jobs', []) if upwork_data else []
+    keywords = set()
+    total_budget = 0
+    budget_count = 0
+    for job in jobs:
+        kw = job.get('search_keyword') or job.get('keyword')
+        if kw:
+            keywords.add(kw)
+        # Try to get budget as a number
+        budget = None
+        if isinstance(job.get('budget'), dict):
+            # Try min_amount or amount
+            budget = job['budget'].get('min_amount') or job['budget'].get('amount')
+        elif isinstance(job.get('budget'), (int, float)):
+            budget = job['budget']
+        if budget:
+            try:
+                total_budget += float(budget)
+                budget_count += 1
+            except Exception:
+                pass
+    avg_budget = round(total_budget / budget_count, 2) if budget_count else 0
+    upwork_stats = {
+        'total_jobs': len(jobs),
+        'total_keywords': len(keywords),
+        'avg_budget': avg_budget,
+        'recent_jobs': len(jobs)
+    }
+
     return render_template('upwork.html', 
                          upwork_data=upwork_data, 
                          upwork_stats=upwork_stats)
@@ -1761,6 +1808,32 @@ def run_upwork_only_collection(keywords):
             }
         }, []
 
+# ===== DELETE ALL UPWORK JOBS ENDPOINT =====
+@app.route('/api/delete-upwork-jobs', methods=['POST'])
+def api_delete_upwork_jobs():
+    """Delete all Upwork jobs data (dangerous action)"""
+    try:
+        from config import DATA_PATHS
+        upwork_data_file = DATA_PATHS.get('raw_upwork_data', 'data/raw_upwork_data.json')
+        # Overwrite with empty jobs list and minimal metadata
+        empty_data = {
+            'jobs': [],
+            'metadata': {
+                'total_jobs': 0,
+                'keywords_analyzed': [],
+                'collection_timestamp': datetime.now().isoformat(),
+                'data_source': 'manual_delete',
+                'deleted': True
+            }
+        }
+        with open(upwork_data_file, 'w', encoding='utf-8') as f:
+            json.dump(empty_data, f, indent=2, ensure_ascii=False)
+        invalidate_data_cache()
+        return jsonify({'status': 'success', 'message': 'All Upwork jobs deleted.'})
+    except Exception as e:
+        logger.error(f"Failed to delete Upwork jobs: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 if __name__ == '__main__':
     # This block only runs for local development
     # Production uses app.py as entry point
@@ -1771,9 +1844,9 @@ if __name__ == '__main__':
     os.makedirs('static/js', exist_ok=True)
     os.makedirs('static/img', exist_ok=True)
     
-    # Use port 8080 to avoid Windows port 5000 restrictions
+    # Use port 5000 to avoid Windows port 5000 restrictions
     print("Starting Flask Dashboard (Local Development)...")
-    print("Access your dashboard at: http://localhost:8080")
+    print("Access your dashboard at: http://192.168.1.10:5000")
     print("All your existing data and business logic preserved!")
     
     # Start the automated scheduler for local development
@@ -1783,7 +1856,7 @@ if __name__ == '__main__':
         update_scheduler_settings(
             enabled=True,
             sources=['upwork'],
-            interval_minutes=2
+            interval_minutes=120
         )
         start_scheduler()
         print("✅ Automated Upwork scheduler started (2-minute intervals)")
@@ -1792,4 +1865,4 @@ if __name__ == '__main__':
         print(f"❌ Warning: Could not start scheduler: {e}")
         print("💡 You can start it manually with: python start_scheduler_auto.py")
     
-    app.run(debug=True, host='127.0.0.1', port=8080) 
+    app.run(debug=True, host='0.0.0.0', port=5000) 
