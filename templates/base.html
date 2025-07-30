@@ -21,109 +21,24 @@
 </head>
 <body>
     <!-- Sidebar -->
-    <nav class="sidebar">
+    <aside class="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-brand">
-                <i class="fas fa-chart-line"></i>
-                <span class="brand-text">Analytics</span>
-            </div>
+            <a href="/upwork" class="sidebar-brand">
+                <i class="fas fa-briefcase"></i>
+                <span class="brand-text">Upwork Jobs</span>
+            </a>
         </div>
-        
-        <div class="sidebar-menu">
-            <div class="menu-section">
-                <p class="menu-title">MAIN</p>
-                <ul class="menu-list">
-                    <li class="menu-item">
-                        <a href="{{ url_for('dashboard') }}" class="menu-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
-                            <i class="fas fa-tachometer-alt"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="#" class="menu-link" onclick="showDataCollection()">
-                            <i class="fas fa-download"></i>
-                            <span>Collect Data</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="menu-section">
-                <p class="menu-title">DATA SOURCES</p>
-                <ul class="menu-list">
-                    <li class="menu-item">
-                        <a href="#" class="menu-link" onclick="showRedditData()">
-                            <i class="fab fa-reddit"></i>
-                            <span>Reddit</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="menu-link" onclick="showYouTubeData()">
-                            <i class="fab fa-youtube"></i>
-                            <span>YouTube</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="menu-link" onclick="showTwitterData()">
-                            <i class="fab fa-twitter"></i>
-                            <span>Twitter</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="menu-link" onclick="showGoogleTrends()">
-                            <i class="fab fa-google"></i>
-                            <span>Google Trends</span>
-                        </a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="{{ url_for('upwork_jobs') }}" class="menu-link {% if request.endpoint == 'upwork_jobs' %}active{% endif %}">
-                            <i class="fas fa-briefcase"></i>
-                            <span>Upwork Jobs</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="menu-section">
-                <p class="menu-title">ANALYSIS</p>
-                <ul class="menu-list">
-                    <li class="menu-item">
-                        <a href="#" class="menu-link" onclick="showTrendingAnalysis()">
-                            <i class="fas fa-fire"></i>
-                            <span>Trending Analysis</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
-            <div class="menu-section">
-                <p class="menu-title">SETTINGS</p>
-                <ul class="menu-list">
-                    <li class="menu-item">
-                        <a href="{{ url_for('settings') }}" class="menu-link {% if request.endpoint == 'settings' %}active{% endif %}">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        
-        <!-- Upgrade Section -->
-        <div class="sidebar-footer">
-            <div class="upgrade-card">
-                <div class="upgrade-icon">
-                    <i class="fas fa-rocket"></i>
-                </div>
-                <h4>Upgrade to Pro</h4>
-                <p>Get advanced analytics and more data sources</p>
-                <button class="upgrade-btn" onclick="showUpgradeModal()">
-                    Upgrade now
-                </button>
-            </div>
-        </div>
-    </nav>
+        <nav class="sidebar-menu">
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="/upwork" class="menu-link">
+                        <i class="fas fa-briefcase"></i>
+                        <span>Upwork Jobs</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
     
     <!-- Main Content -->
     <main class="main-content">

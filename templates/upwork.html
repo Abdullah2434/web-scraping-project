@@ -679,6 +679,13 @@
     box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
 }
 
+.delete-wraper{
+        display: flex;
+        justify-content: end;
+        padding-bottom: 30px;
+        padding-top: 0px;
+    }
+
 .custom-select .select-arrow {
     position: absolute;
     right: 12px;
@@ -884,12 +891,24 @@
             <span class="stat-number">{{ upwork_data.jobs|length }}</span>
             <span class="stat-label">Recent Jobs</span>
         </div>
+        <div class="stat-card">
+            <span class="stat-number">
+                {% if upwork_stats.total_budget is defined %}
+                    ${{ upwork_stats.total_budget }}
+                {% elif upwork_stats.avg_budget is defined and upwork_stats.total_jobs > 0 %}
+                    ${{ (upwork_stats.avg_budget * upwork_stats.total_jobs) | round(2) }}
+                {% else %}
+                    $0.00
+                {% endif %}
+            </span>
+            <span class="stat-label">Total Budget</span>
+        </div>
     </div>
+    
     
     <!-- Excel Download Section -->
     <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
         <h4 style="margin: 0 0 15px 0; color: #1e3a8a; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <i class="fas fa-file-excel" style="color: #10b981;"></i>
             Excel Export
         </h4>
         <p style="margin: 0 0 15px 0; color: #64748b;">
@@ -905,19 +924,19 @@
                 Create New Excel
             </button>
         </div>
-        <div style="margin-top: 10px; font-size: 12px; color: #64748b;">
-            📊 Includes multiple sheets: All Jobs, Summary, URLs Only, and Keyword Breakdown
+        <div style="margin-top: 10px; font-size: 10px; color: #64748b;">
+            Includes multiple sheets: All Jobs, Summary, URLs Only, and Keyword Breakdown
         </div>
     </div>
     {% endif %}
 
     <!-- Collect Data Section -->
-    <!-- <div class="collect-section">
+     <div class="collect-section">
         <h3>Comprehensive Individual Job Collection</h3>
-        <p>Visit each job page individually for detailed data including exact budgets, precise posting times, proposal counts, payment verification status, and comprehensive location details</p>
+        <p style="font-size: 13px;">Visit each job page individually for detailed data including exact budgets, precise posting times, <br/> proposal counts, payment verification status, and comprehensive location details</p>
         
-        <div style="margin: 20px 0; display: flex; align-items: center; gap: 15px; justify-content: center; flex-wrap: wrap;">
-            <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="margin: 20px 0; display: flex; align-items: center; gap: 30px; justify-content: center; flex-wrap: wrap;">
+            <div style="display: flex; flex-direction: column; align-items: start; gap: 10px;">
                 <label for="maxJobsInput" style="color: white; font-weight: 500;">Max Jobs per Keyword:</label>
                 <select id="maxJobsInput" style="padding: 8px 12px; border-radius: 6px; border: none;">
                     <option value="3">3 jobs (Quick - ~2 min)</option>
@@ -932,7 +951,7 @@
                 </select>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="display: flex; align-items: start; flex-direction: column; gap: 10px;">
                 <label for="skipPrivateJobsInput" style="color: white; font-weight: 500;">Skip Private Jobs:</label>
                 <select id="skipPrivateJobsInput" style="padding: 8px 12px; border-radius: 6px; border: none;">
                     <option value="true" selected>Yes (Recommended)</option>
@@ -941,12 +960,12 @@
             </div>
         </div>
         
-        <button onclick="collectComprehensiveUpworkData()" class="collect-btn" id="collectBtn">
+        <button onclick="collectComprehensiveUpworkData()" class="collect-btn" id="collectBtn" style="margin-top: 15px;">
             <i class="fas fa-search-plus"></i> 
             Start Comprehensive Collection
         </button>
         
-        <div style="margin-top: 15px; font-size: 14px; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
+         <div style="margin-top: 15px; font-size: 14px; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
             <strong>🔍 What you'll get:</strong><br>
             ✅ Exact budget amounts from individual job pages<br>
             ✅ Precise posting times (e.g., "44 minutes ago")<br>
@@ -957,7 +976,7 @@
             ✅ Client ratings and membership details<br>
             🔒 Automatically skips private/confidential jobs (configurable)
         </div>
-    </div> -->
+    </div>
 
     <!-- Modern Filters Section -->
     {% if upwork_data and upwork_data.jobs %}
@@ -965,7 +984,7 @@
         <div class="filters-header">
             <div class="filters-title">
                 <i class="fas fa-sliders-h"></i>
-                <h3>Smart Filters</h3>
+           <h3>Smart Filters</h3>
                 <span class="jobs-count">{{ upwork_data.jobs|length }} jobs</span>
             </div>
             <button class="clear-filters-btn" onclick="clearAllFilters()">
@@ -982,7 +1001,7 @@
                 <div class="filter-content">
                     <label class="filter-label">Budget Type</label>
                     <div class="custom-select">
-                        <select id="budgetFilter" onchange="filterJobs()">
+                    <select id="budgetFilter" onchange="filterJobs()">
                             <option value="">All Budget Types</option>
                             <option value="hourly">Hourly Rate</option>
                             <option value="fixed">Fixed Price</option>
@@ -1183,6 +1202,13 @@
         </div>
     </div>
     {% endif %}
+    <div class="delete-wraper">
+        <!-- Delete All Jobs Button -->
+        <button onclick="showDeleteJobsConfirm()" class="delete-jobs-btn" id="deleteJobsBtn" style="background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-trash-alt"></i>
+            Delete All Jobs
+        </button>
+    </div>
 
     <!-- Jobs List -->
     <div id="jobsList">
@@ -1395,6 +1421,22 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteJobsModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.5); z-index:10001; align-items:center; justify-content:center;">
+  <div style="background:white; border-radius:12px; padding:32px 24px; max-width:400px; margin:auto; text-align:center; box-shadow:0 4px 24px rgba(0,0,0,0.2);">
+    <h3 style="color:#ef4444; margin-bottom:16px;"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
+    <p style="color:#374151; margin-bottom:16px;">
+      Are you sure you want to <b>delete all Upwork jobs</b>?<br>
+      <span style="color:#ef4444; font-weight:600; font-size:18px;">Total jobs: {{ upwork_stats.total_jobs }}</span>
+    </p>
+    <p style="color:#64748b; margin-bottom:24px; font-size:13px;">This action cannot be undone.</p>
+    <div style="display:flex; gap:16px; justify-content:center;">
+      <button onclick="confirmDeleteJobs()" id="confirmDeleteBtn" style="background:#ef4444; color:white; border:none; padding:10px 20px; border-radius:8px; font-weight:500; cursor:pointer;">Yes, Delete All</button>
+      <button onclick="hideDeleteJobsConfirm()" style="background:#e5e7eb; color:#374151; border:none; padding:10px 20px; border-radius:8px; font-weight:500; cursor:pointer;">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -2669,5 +2711,39 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
+// Delete All Jobs logic
+function showDeleteJobsConfirm() {
+  document.getElementById('deleteJobsModal').style.display = 'flex';
+}
+function hideDeleteJobsConfirm() {
+  document.getElementById('deleteJobsModal').style.display = 'none';
+}
+function confirmDeleteJobs() {
+  const btn = document.getElementById('confirmDeleteBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+  fetch('/api/delete-upwork-jobs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(res => res.json())
+  .then(data => {
+    btn.disabled = false;
+    btn.innerHTML = 'Yes, Delete All';
+    hideDeleteJobsConfirm();
+    if (data.status === 'success') {
+      showNotification('All Upwork jobs deleted!', 'success');
+      setTimeout(() => location.reload(), 1200);
+    } else {
+      showNotification('Failed to delete jobs: ' + (data.message || 'Unknown error'), 'error');
+    }
+  })
+  .catch(err => {
+    btn.disabled = false;
+    btn.innerHTML = 'Yes, Delete All';
+    hideDeleteJobsConfirm();
+    showNotification('Failed to delete jobs: ' + err, 'error');
+  });
+}
 </script>
 {% endblock %} 

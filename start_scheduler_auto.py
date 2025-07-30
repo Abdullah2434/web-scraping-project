@@ -31,7 +31,7 @@ def auto_start_scheduler():
     
     print("\n⏰ Scheduler is now running automatically!")
     print("📋 Will collect Upwork jobs every 2 hours")
-    print("🌐 Flask app available at: http://localhost:8080")
+    print("🌐 Flask app available at: http://localhost:5000")
     print("📊 Check Google Sheets for new jobs")
     print("\nPress Ctrl+C to stop...")
     

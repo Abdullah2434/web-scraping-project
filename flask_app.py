@@ -35,15 +35,11 @@ def add_no_cache_headers(response):
     response.headers['Expires'] = '0'
     return response
 
-# Import data collection modules and chart functions
+# Import data collection modules
 try:
-    from fetch_google_data import collect_all_google_data
-    from fetch_reddit_data import collect_all_reddit_data
-    from fetch_youtube_data import collect_all_youtube_data
-    from fetch_twitter_data import collect_all_twitter_data
     from fetch_upwork_data_enhanced import collect_comprehensive_upwork_data
-    from trending_analysis import run_automatic_trending_analysis, load_trending_analysis
     from keyword_manager import keyword_manager, get_current_keywords, update_collection_timestamp
+    from upwork_scheduler import start_upwork_scheduler, stop_upwork_scheduler, get_upwork_scheduler_status, update_upwork_scheduler_settings, trigger_immediate_upwork_collection
     
     # Simple function to load Upwork data from file
     def load_upwork_data():
@@ -131,42 +127,32 @@ try:
                 'keywords_analyzed': [],
                 'last_updated': 'Error'
             }
-    from scheduler import start_scheduler, stop_scheduler, get_scheduler_status, update_scheduler_settings, trigger_immediate_collection
+    from upwork_scheduler import start_upwork_scheduler, stop_upwork_scheduler, get_upwork_scheduler_status, update_upwork_scheduler_settings, trigger_immediate_upwork_collection
     import pandas as pd
     IMPORT_SUCCESS = True
 except ImportError as e:
     print(f"Import error: {e}")
     IMPORT_SUCCESS = False
 
-# Parse YouTube duration function (from Streamlit app)
-def parse_youtube_duration(duration_str: str) -> int:
-    """Parse YouTube PT duration format to seconds"""
-    if not duration_str or not duration_str.startswith('PT'):
-        return 0
-    
-    # Remove PT prefix
-    duration = duration_str[2:]
-    
-    # Parse hours, minutes, seconds
-    hours = 0
-    minutes = 0
-    seconds = 0
-    
-    if 'H' in duration:
-        hours_part = duration.split('H')[0]
-        hours = int(hours_part) if hours_part.isdigit() else 0
-        duration = duration.split('H')[1]
-    
-    if 'M' in duration:
-        minutes_part = duration.split('M')[0]
-        minutes = int(minutes_part) if minutes_part.isdigit() else 0
-        duration = duration.split('M')[1]
-    
-    if 'S' in duration:
-        seconds_part = duration.split('S')[0]
-        seconds = int(seconds_part) if seconds_part.isdigit() else 0
-    
-    return hours * 3600 + minutes * 60 + seconds
+# Add this after the imports and before any usage of load_upwork_data
+
+def load_upwork_data():
+    """Load Upwork jobs data from the raw_upwork_data.json file."""
+    try:
+        from config import DATA_PATHS
+        upwork_data_file = DATA_PATHS.get('raw_upwork_data', 'data/raw_upwork_data.json')
+        import os
+        if not os.path.exists(upwork_data_file):
+            return {}
+        import json
+        with open(upwork_data_file, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        import logging
+        logging.getLogger(__name__).error(f"Error loading Upwork data: {e}")
+        return {}
+
+
 
 def create_simple_jobs_csv(upwork_data: Dict[str, Any]) -> Optional[str]:
     """Create a simple CSV file with job data as fallback for Excel"""
@@ -207,97 +193,9 @@ def create_simple_jobs_csv(upwork_data: Dict[str, Any]) -> Optional[str]:
         logger.error(f"❌ Error creating CSV file: {e}")
         return None
 
-def collect_youtube_data_with_timeout(keywords, timeout_seconds=60):
-    """
-    Collect YouTube data with timeout protection for Flask context
-    
-    Args:
-        keywords: List of keywords to search
-        timeout_seconds: Maximum time to wait (default 1 minute)
-        
-    Returns:
-        Dict: YouTube data or empty dict if timeout/error
-    """
-    from queue import Queue, Empty
-    import threading
-    import signal
-    
-    logger.info(f"🔄 Starting YouTube collection with {timeout_seconds}s timeout for {len(keywords)} keywords")
-    
-    def target_function(result_queue, keywords_list):
-        """Target function to run in timeout context"""
-        try:
-            # Check dependencies first
-            try:
-                import googleapiclient.discovery
-                import googleapiclient.errors
-            except ImportError as e:
-                logger.error(f"❌ YouTube API dependencies missing: {e}")
-                result_queue.put(('error', 'YouTube API dependencies not installed'))
-                return
-            
-            logger.info(f"🎥 Thread starting YouTube collection for: {keywords_list}")
-            youtube_data = collect_all_youtube_data(keywords_list)
-            logger.info(f"🎥 Thread completed YouTube collection")
-            result_queue.put(('success', youtube_data))
-        except Exception as e:
-            logger.error(f"🎥 Thread error in YouTube collection: {e}")
-            result_queue.put(('error', str(e)))
-    
-    # Use threading with timeout for YouTube collection
-    result_queue = Queue()
-    collection_thread = threading.Thread(
-        target=target_function,
-        args=(result_queue, keywords),
-        daemon=True,
-        name="YouTubeCollectionThread"
-    )
-    
-    try:
-        logger.info(f"🚀 Starting YouTube collection thread...")
-        collection_thread.start()
-        
-        logger.info(f"⏳ Waiting for YouTube collection (max {timeout_seconds}s)...")
-        
-        # Wait with periodic checks
-        wait_time = 0
-        check_interval = 5  # Check every 5 seconds
-        
-        while wait_time < timeout_seconds:
-            collection_thread.join(timeout=check_interval)
-            wait_time += check_interval
-            
-            if not collection_thread.is_alive():
-                break
-                
-            logger.info(f"⏳ YouTube collection still running... ({wait_time}s/{timeout_seconds}s)")
-        
-        if collection_thread.is_alive():
-            logger.error(f"⏰ YouTube collection timed out after {timeout_seconds} seconds")
-            logger.error(f"🧵 Forcing thread termination, returning empty data")
-            return {}
-        
-        # Get result from queue
-        try:
-            logger.info(f"📥 Getting result from YouTube collection queue...")
-            status, result = result_queue.get_nowait()
-            if status == 'success':
-                videos_count = len(result.get('videos', [])) if result else 0
-                logger.info(f"✅ YouTube collection completed successfully ({videos_count} videos)")
-                return result
-            else:
-                logger.error(f"❌ YouTube collection failed: {result}")
-                return {}
-        except Empty:
-            logger.error("❌ No result available from YouTube collection queue")
-            return {}
-            
-    except Exception as e:
-        logger.error(f"❌ Error in YouTube timeout wrapper: {e}")
-        return {}
 
-# Chart creation functions (from Streamlit app)
-def create_keyword_frequency_chart_data(data: dict) -> dict:
+
+
     """Create keyword frequency chart data for frontend"""
     try:
         # Use user's current keywords instead of defaults
@@ -757,21 +655,40 @@ def get_summary_stats():
 # Routes
 @app.route('/')
 def dashboard():
-    """Main dashboard page with trending keywords"""
-    stats = get_summary_stats()
+    """Main dashboard page with Upwork data"""
+    upwork_data = load_upwork_data()
     
-    # Load trending analysis for main dashboard
-    try:
-        trending_data = load_trending_analysis()
-        top_trending = []
-        if trending_data and trending_data.get('trending_keywords'):
-            # Get top 10 trending keywords for dashboard
-            top_trending = trending_data['trending_keywords'][:10]
-    except Exception as e:
-        logger.error(f"Error loading trending data for dashboard: {e}")
-        top_trending = []
+    # Calculate Upwork-specific stats
+    jobs = upwork_data.get('jobs', []) if upwork_data else []
+    keywords = set()
+    total_budget = 0
+    budget_count = 0
+    for job in jobs:
+        kw = job.get('search_keyword') or job.get('keyword')
+        if kw:
+            keywords.add(kw)
+        # Try to get budget as a number
+        budget = None
+        if isinstance(job.get('budget'), dict):
+            # Try min_amount or amount
+            budget = job['budget'].get('min_amount') or job['budget'].get('amount')
+        elif isinstance(job.get('budget'), (int, float)):
+            budget = job['budget']
+        if budget:
+            try:
+                total_budget += float(budget)
+                budget_count += 1
+            except Exception:
+                pass
+    avg_budget = round(total_budget / budget_count, 2) if budget_count else 0
+    upwork_stats = {
+        'total_jobs': len(jobs),
+        'total_keywords': len(keywords),
+        'avg_budget': avg_budget,
+        'recent_jobs': len(jobs)
+    }
     
-    return render_template('dashboard.html', stats=stats, trending_keywords=top_trending)
+    return render_template('dashboard.html', upwork_stats=upwork_stats, upwork_data=upwork_data)
 
 @app.route('/api/data')
 def api_data():
@@ -790,37 +707,7 @@ def api_stats():
     response = jsonify(stats)
     return add_no_cache_headers(response)
 
-@app.route('/api/reddit')
-def api_reddit():
-    """API endpoint for Reddit data"""
-    data = load_data()
-    if data and 'reddit_data' in data:
-        return jsonify(data['reddit_data'])
-    return jsonify({'error': 'No Reddit data available'}), 404
 
-@app.route('/api/youtube')
-def api_youtube():
-    """API endpoint for YouTube data"""
-    data = load_data()
-    if data and 'youtube_data' in data:
-        return jsonify(data['youtube_data'])
-    return jsonify({'error': 'No YouTube data available'}), 404
-
-@app.route('/api/twitter')
-def api_twitter():
-    """API endpoint for Twitter data"""
-    data = load_data()
-    if data and 'twitter_data' in data:
-        return jsonify(data['twitter_data'])
-    return jsonify({'error': 'No Twitter data available'}), 404
-
-@app.route('/api/google-trends')
-def api_google_trends():
-    """API endpoint for Google Trends data"""
-    data = load_data()
-    if data and 'google_trends_data' in data:
-        return jsonify(data['google_trends_data'])
-    return jsonify({'error': 'No Google Trends data available'}), 404
 
 @app.route('/api/upwork')
 def api_upwork():
@@ -835,8 +722,37 @@ def api_upwork():
 def upwork_jobs():
     """Upwork jobs page"""
     upwork_data = load_upwork_data()
-    upwork_stats = get_upwork_summary_stats()
-    
+
+    # Calculate Upwork-specific stats
+    jobs = upwork_data.get('jobs', []) if upwork_data else []
+    keywords = set()
+    total_budget = 0
+    budget_count = 0
+    for job in jobs:
+        kw = job.get('search_keyword') or job.get('keyword')
+        if kw:
+            keywords.add(kw)
+        # Try to get budget as a number
+        budget = None
+        if isinstance(job.get('budget'), dict):
+            # Try min_amount or amount
+            budget = job['budget'].get('min_amount') or job['budget'].get('amount')
+        elif isinstance(job.get('budget'), (int, float)):
+            budget = job['budget']
+        if budget:
+            try:
+                total_budget += float(budget)
+                budget_count += 1
+            except Exception:
+                pass
+    avg_budget = round(total_budget / budget_count, 2) if budget_count else 0
+    upwork_stats = {
+        'total_jobs': len(jobs),
+        'total_keywords': len(keywords),
+        'avg_budget': avg_budget,
+        'recent_jobs': len(jobs)
+    }
+
     return render_template('upwork.html', 
                          upwork_data=upwork_data, 
                          upwork_stats=upwork_stats)
@@ -1437,87 +1353,7 @@ def api_collect():
         logger.error(f"Data collection error: {e}")
         return jsonify({'error': str(e)}), 500
 
-# Chart data endpoints
-@app.route('/api/charts/keyword-frequency')
-def api_keyword_frequency_chart():
-    """API endpoint for keyword frequency chart data"""
-    try:
-        data = load_data()
-        if not data:
-            return jsonify({'error': 'No data available'}), 404
-        
-        chart_data = create_keyword_frequency_chart_data(data)
-        return jsonify(chart_data)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
-@app.route('/api/charts/google-trends')
-def api_google_trends_chart():
-    """API endpoint for Google Trends chart data"""
-    try:
-        data = load_data()
-        if not data:
-            return jsonify({'error': 'No data available'}), 404
-        
-        chart_data = create_google_trends_chart_data(data)
-        return jsonify(chart_data)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/charts/reddit-engagement')
-def api_reddit_engagement_chart():
-    """API endpoint for Reddit engagement chart data"""
-    try:
-        data = load_data()
-        if not data:
-            return jsonify({'error': 'No data available'}), 404
-        
-        chart_data = create_reddit_engagement_chart_data(data)
-        return jsonify(chart_data)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/charts/youtube-engagement')
-def api_youtube_engagement_chart():
-    """API endpoint for YouTube engagement chart data"""
-    try:
-        data = load_data()
-        if not data:
-            return jsonify({'error': 'No data available'}), 404
-        
-        chart_data = create_youtube_engagement_chart_data(data)
-        return jsonify(chart_data)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/recent-activity')
-def api_recent_activity():
-    """API endpoint for recent activity data"""
-    try:
-        data = load_data()
-        if not data:
-            return jsonify({'error': 'No data available'}), 404
-        
-        # Get recent Reddit posts (top 5 by score)
-        reddit_posts = data.get('reddit_data', {}).get('posts', [])
-        recent_reddit = sorted(reddit_posts, key=lambda x: x.get('score', 0), reverse=True)[:5]
-        
-        # Get recent YouTube videos (top 5 by views)
-        youtube_videos = data.get('youtube_data', {}).get('videos', [])
-        recent_youtube = sorted(youtube_videos, key=lambda x: int(x.get('view_count', 0)), reverse=True)[:5]
-        
-        # Get recent Twitter posts (top 5 by likes)
-        twitter_tweets = data.get('twitter_data', [])
-        recent_twitter = sorted(twitter_tweets, key=lambda x: x.get('like_count', 0), reverse=True)[:5]
-        
-        response = jsonify({
-            'reddit': recent_reddit,
-            'youtube': recent_youtube,
-            'twitter': recent_twitter
-        })
-        return add_no_cache_headers(response)
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
 # ===== KEYWORD MANAGEMENT API ENDPOINTS =====
 
@@ -1682,30 +1518,7 @@ def api_scheduler_trigger():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@app.route('/reddit')
-def reddit_page():
-    """Reddit data page"""
-    return render_template('data_source.html', source='reddit', title='Reddit Posts Analysis')
 
-@app.route('/youtube')
-def youtube_page():
-    """YouTube data page"""
-    return render_template('data_source.html', source='youtube', title='YouTube Videos Analysis')
-
-@app.route('/twitter')
-def twitter_page():
-    """Twitter data page"""
-    return render_template('data_source.html', source='twitter', title='Twitter Posts Analysis')
-
-@app.route('/google-trends')
-def google_trends_page():
-    """Google Trends data page"""
-    return render_template('data_source.html', source='google', title='Google Trends Analysis')
-
-@app.route('/trending-analysis')
-def trending_analysis_page():
-    """Trending Analysis page"""
-    return render_template('trending_analysis.html')
 
 @app.route('/settings')
 def settings():
@@ -1848,6 +1661,32 @@ def run_upwork_only_collection(keywords):
             }
         }, []
 
+# ===== DELETE ALL UPWORK JOBS ENDPOINT =====
+@app.route('/api/delete-upwork-jobs', methods=['POST'])
+def api_delete_upwork_jobs():
+    """Delete all Upwork jobs data (dangerous action)"""
+    try:
+        from config import DATA_PATHS
+        upwork_data_file = DATA_PATHS.get('raw_upwork_data', 'data/raw_upwork_data.json')
+        # Overwrite with empty jobs list and minimal metadata
+        empty_data = {
+            'jobs': [],
+            'metadata': {
+                'total_jobs': 0,
+                'keywords_analyzed': [],
+                'collection_timestamp': datetime.now().isoformat(),
+                'data_source': 'manual_delete',
+                'deleted': True
+            }
+        }
+        with open(upwork_data_file, 'w', encoding='utf-8') as f:
+            json.dump(empty_data, f, indent=2, ensure_ascii=False)
+        invalidate_data_cache()
+        return jsonify({'status': 'success', 'message': 'All Upwork jobs deleted.'})
+    except Exception as e:
+        logger.error(f"Failed to delete Upwork jobs: {e}")
+        return jsonify({'status': 'error', 'message': str(e)}), 500
+
 if __name__ == '__main__':
     # This block only runs for local development
     # Production uses app.py as entry point
@@ -1858,9 +1697,9 @@ if __name__ == '__main__':
     os.makedirs('static/js', exist_ok=True)
     os.makedirs('static/img', exist_ok=True)
     
-    # Use port 8080 to avoid Windows port 5000 restrictions
+    # Use port 5000 to avoid Windows port 5000 restrictions
     print("Starting Flask Dashboard (Local Development)...")
-    print("Access your dashboard at: http://localhost:8080")
+    print("Access your dashboard at: http://192.168.1.10:5000")
     print("All your existing data and business logic preserved!")
     
     # Start the automated scheduler for local development
@@ -1879,4 +1718,4 @@ if __name__ == '__main__':
         print(f"❌ Warning: Could not start scheduler: {e}")
         print("💡 You can start it manually with: python start_scheduler_auto.py")
     
-    app.run(debug=True, host='127.0.0.1', port=8080) 
+    app.run(debug=True, host='0.0.0.0', port=5050) 

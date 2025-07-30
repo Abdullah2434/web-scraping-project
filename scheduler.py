@@ -15,6 +15,11 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
 import json
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.utils import formataddr
+from datetime import date
 
 # Local imports
 from keyword_file_manager import get_current_keywords
@@ -39,7 +44,7 @@ class DataCollectionScheduler:
         self.is_running = False
         self.collection_thread = None
         self.next_collection_time = None
-        self.collection_interval = 7200  # 2 hours in seconds (120 minutes) 7200
+        self.collection_interval = 120  # 2 hours in seconds (120 minutes) 7200
         self.enabled = True
         self.sources = ['google', 'reddit', 'youtube', 'twitter']
         self.status_file = os.path.join('data', 'scheduler_status.json')
@@ -61,7 +66,7 @@ class DataCollectionScheduler:
                     'success_count': 0,
                     'error_count': 0,
                     'sources': self.sources,
-                    'interval_minutes': 120,  # 2 minutes default for testing
+                    'interval_minutes': 120,  # 2 hours default 7200
                     'created_at': datetime.now().isoformat()
                 }
                 
@@ -222,6 +227,11 @@ class DataCollectionScheduler:
                     last_successful_run=datetime.now().isoformat(),
                     last_results=results
                 )
+                # Send email reports if this is the last run of the day (e.g., after 23:00)
+                now = datetime.now()
+                if now.hour >= 23:
+                    from email_reports import check_and_send_reports
+                    check_and_send_reports()
             else:
                 error_count = self._increment_counter('error_count')
                 logger.error("Scheduled collection failed - no sources successful")
@@ -326,6 +336,9 @@ class DataCollectionScheduler:
         collection_thread.start()
         
         return True
+
+
+
 
 
 # Global scheduler instance

@@ -26,6 +26,17 @@ MAX_TWITTER_TWEETS = 10  # Reduced to avoid rate limits
 GOOGLE_TRENDS_TIMEFRAME = 'today 12-m'  # Last 12 months (will give ~365+ data points)
 GOOGLE_TRENDS_REGION = 'US'  # Region for Google Trends (US, PK, UK, etc.)
 
+# ===== EMAIL REPORT SETTINGS =====
+EMAIL_REPORT_CONFIG = {
+    'smtp_server': 'smtp.gmail.com',
+    'smtp_port': 587,
+    'smtp_user': 'hrehman@techtiz.co',
+    'smtp_password': 'zekencppkkixquwx',  # App password with spaces removed
+    'from_email': 'hrehman@techtiz.co',
+    'to_email': ['anaeem@techtiz.co', 'mabdullah@techtiz.co', 'airfan@techtiz.co', 'adnan@techtiz.co']
+}
+# ['anaeem@techtiz.co', 'mabdullah@techtiz.co', 'airfan@techtiz.co', 'adnan@techtiz.co']
+
 # ===== REDDIT API SETTINGS =====
 # Reddit API credentials (get these from https://www.reddit.com/prefs/apps)
 REDDIT_CONFIG = {

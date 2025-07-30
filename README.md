@@ -40,7 +40,7 @@ pip install -r requirements.txt
    - **App type**: Select "script"
    - **Description**: Optional description
    - **About URL**: Leave blank or add your website
-   - **Redirect URI**: Use `http://localhost:8080`
+   - **Redirect URI**: Use `http://localhost:5000`
 4. Click "Create app"
 5. Note down the **Client ID** (under the app name) and **Client Secret**
 

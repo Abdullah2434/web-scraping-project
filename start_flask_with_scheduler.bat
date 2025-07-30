@@ -4,7 +4,7 @@ echo.
 echo This will start the Flask dashboard AND the automated Upwork scraper
 echo The scraper will run every 2 hours automatically
 echo.
-echo 🌐 Dashboard: http://localhost:8080
+echo 🌐 Dashboard: http://localhost:5000
 echo 📋 Keywords: keywords.txt file
 echo ⏰ Interval: 2 hours
 echo.

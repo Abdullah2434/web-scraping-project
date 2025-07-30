@@ -38,8 +38,9 @@ DEFAULT_USER_KEYWORDS = [
     "Lang chain"
 ]
 
+
 # Limits
-MAX_KEYWORDS = 15  # Increased from 10 to 15
+MAX_KEYWORDS = 15
 MIN_KEYWORD_LENGTH = 2
 MAX_KEYWORD_LENGTH = 50
 

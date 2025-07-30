@@ -1,0 +1,76 @@
+{
+  "created_at": "2025-07-30T16:28:34.491311",
+  "daily_data": {
+    "2025-07-30": {
+      "Go-high level": {
+        "jobs": 10,
+        "total_budget": 1191.0,
+        "budget_count": 9
+      },
+      "n8n": {
+        "jobs": 7,
+        "total_budget": 1105.0,
+        "budget_count": 4
+      },
+      "zapier": {
+        "jobs": 7,
+        "total_budget": 475.0,
+        "budget_count": 6
+      },
+      "React.js": {
+        "jobs": 9,
+        "total_budget": 5465.0,
+        "budget_count": 8
+      },
+      "Node.js": {
+        "jobs": 9,
+        "total_budget": 995.0,
+        "budget_count": 7
+      },
+      "Next.js": {
+        "jobs": 10,
+        "total_budget": 3259.99,
+        "budget_count": 9
+      },
+      "Android Application": {
+        "jobs": 9,
+        "total_budget": 1863.0,
+        "budget_count": 7
+      },
+      "IOS Application": {
+        "jobs": 9,
+        "total_budget": 2465.0,
+        "budget_count": 7
+      },
+      "Flutter Application": {
+        "jobs": 8,
+        "total_budget": 4310.0,
+        "budget_count": 7
+      },
+      "React Native Application": {
+        "jobs": 8,
+        "total_budget": 6869.99,
+        "budget_count": 6
+      },
+      "LLM": {
+        "jobs": 10,
+        "total_budget": 1761.0,
+        "budget_count": 8
+      },
+      "RAG": {
+        "jobs": 9,
+        "total_budget": 437.0,
+        "budget_count": 7
+      },
+      "Lang chain": {
+        "jobs": 9,
+        "total_budget": 437.0,
+        "budget_count": 7
+      },
+      "total_jobs": 114,
+      "total_budget": 30633.98,
+      "total_budget_count": 92
+    }
+  },
+  "last_updated": "2025-07-30T16:28:34.560275"
+}
