@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "last_run": "2025-07-30T16:00:00.631811",
-  "next_run": "2025-07-30T18:00:17.908158",
+  "next_run": "2025-07-31T16:49:19.637494",
   "collection_count": 19,
   "success_count": 19,
   "error_count": 0,
@@ -10,7 +10,7 @@
   ],
   "interval_minutes": 120,
   "created_at": "2025-07-30T14:51:06.134914",
-  "last_updated": "2025-07-30T16:00:17.908876",
+  "last_updated": "2025-07-31T14:49:19.639384",
   "last_successful_run": "2025-07-30T16:00:00.631822",
   "last_results": {
     "upwork": {

@@ -22,7 +22,7 @@ from email.utils import formataddr
 from datetime import date
 
 # Local imports
-from keyword_file_manager import get_current_keywords
+from keyword_manager import get_current_keywords
 from config import DATA_PATHS
 
 # Set up logging
@@ -46,7 +46,7 @@ class DataCollectionScheduler:
         self.next_collection_time = None
         self.collection_interval = 120  # 2 hours in seconds (120 minutes) 7200
         self.enabled = True
-        self.sources = ['google', 'reddit', 'youtube', 'twitter']
+        self.sources = ['upwork']
         self.status_file = os.path.join('data', 'scheduler_status.json')
         
         # Ensure status file exists

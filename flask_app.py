@@ -39,7 +39,7 @@ def add_no_cache_headers(response):
 try:
     from fetch_upwork_data_enhanced import collect_comprehensive_upwork_data
     from keyword_manager import keyword_manager, get_current_keywords, update_collection_timestamp
-    from upwork_scheduler import start_upwork_scheduler, stop_upwork_scheduler, get_upwork_scheduler_status, update_upwork_scheduler_settings, trigger_immediate_upwork_collection
+    from scheduler import start_scheduler, stop_scheduler, get_scheduler_status, update_scheduler_settings, trigger_immediate_collection
     
     # Simple function to load Upwork data from file
     def load_upwork_data():
@@ -127,7 +127,7 @@ try:
                 'keywords_analyzed': [],
                 'last_updated': 'Error'
             }
-    from upwork_scheduler import start_upwork_scheduler, stop_upwork_scheduler, get_upwork_scheduler_status, update_upwork_scheduler_settings, trigger_immediate_upwork_collection
+    from scheduler import start_scheduler, stop_scheduler, get_scheduler_status, update_scheduler_settings, trigger_immediate_collection
     import pandas as pd
     IMPORT_SUCCESS = True
 except ImportError as e:
@@ -516,6 +516,28 @@ def invalidate_data_cache():
     _data_cache = {}
     _cache_timestamp = 0
     logger.info("🔄 Data cache invalidated - fresh data will be loaded")
+
+def load_trending_analysis():
+    """Load trending analysis data"""
+    try:
+        from config import DATA_PATHS
+        trending_file = DATA_PATHS.get('trending_analysis', 'data/trending_analysis.json')
+        if os.path.exists(trending_file):
+            with open(trending_file, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        else:
+            return {
+                'trending_keywords': [],
+                'analysis_timestamp': datetime.now().isoformat(),
+                'total_count': 0
+            }
+    except Exception as e:
+        logger.error(f"Error loading trending analysis: {e}")
+        return {
+            'trending_keywords': [],
+            'analysis_timestamp': datetime.now().isoformat(),
+            'total_count': 0
+        }
 
 def load_data():
     """Load data from JSON files with caching for performance"""
@@ -1097,143 +1119,7 @@ def run_data_collection_with_logging(keywords, sources):
         logger.info(f"KEYWORDS: {', '.join(keywords)}")
         logger.info(f"SOURCES: {', '.join(sources)}")
         
-        if 'google' in sources:
-            current_step += 1
-            logger.info(f"STEP {current_step}/{total_steps}: Collecting Google Trends data...")
-            try:
-                # Use all keywords for Google Trends
-                logger.info(f"📊 Using all keywords for Google Trends: {keywords}")
-                
-                google_data = collect_all_google_data(keywords)
-                if google_data:
-                    # Save Google data to file
-                    from fetch_google_data import save_google_data
-                    save_success = save_google_data(google_data)
-                    logger.info(f"SUCCESS: Google Trends data collection completed! Saved: {save_success}")
-                    results['google'] = {
-                        'status': 'success',
-                        'data_points': len(google_data.get('interest_over_time', {})),
-                        'saved': save_success
-                    }
-                else:
-                    logger.warning("WARNING: Google Trends data collection returned no data")
-                    results['google'] = {'status': 'failed', 'error': 'No data returned'}
-            except Exception as e:
-                logger.error(f"ERROR: Google Trends collection failed: {e}")
-                results['google'] = {'status': 'error', 'error': str(e)}
-        
-        if 'reddit' in sources:
-            current_step += 1
-            logger.info(f"STEP {current_step}/{total_steps}: Collecting Reddit data...")
-            try:
-                # Use all keywords for Reddit
-                logger.info(f"🤖 Using all keywords for Reddit: {keywords}")
-                
-                reddit_data = collect_all_reddit_data(keywords)
-                if reddit_data and not reddit_data.get('error'):
-                    # Save Reddit data to file
-                    from fetch_reddit_data import save_reddit_data
-                    save_success = save_reddit_data(reddit_data)
-                    # Transform posts for counting
-                    posts_count = 0
-                    if 'keyword_posts' in reddit_data:
-                        posts_count = sum(len(posts) if isinstance(posts, list) else 0 
-                                        for posts in reddit_data['keyword_posts'].values())
-                    logger.info(f"SUCCESS: Reddit data collection completed! Found {posts_count} posts, Saved: {save_success}")
-                    results['reddit'] = {
-                        'status': 'success',
-                        'posts_count': posts_count,
-                        'saved': save_success
-                    }
-                else:
-                    error_msg = reddit_data.get('error', 'No data returned') if reddit_data else 'No data returned'
-                    logger.warning(f"WARNING: Reddit data collection failed: {error_msg}")
-                    results['reddit'] = {'status': 'failed', 'error': error_msg}
-            except Exception as e:
-                logger.error(f"ERROR: Reddit collection failed: {e}")
-                results['reddit'] = {'status': 'error', 'error': str(e)}
-        
-        if 'youtube' in sources:
-            current_step += 1
-            logger.info(f"STEP {current_step}/{total_steps}: Collecting YouTube data...")
-            try:
-                # Check if YouTube dependencies are available
-                try:
-                    import googleapiclient.discovery
-                    import googleapiclient.errors
-                    deps_available = True
-                except ImportError:
-                    deps_available = False
-                    logger.warning("WARNING: YouTube API dependencies not installed")
-                    logger.warning("RUN: python install_youtube_deps.py to install dependencies")
-                
-                if deps_available:
-                    logger.info("📺 Starting YouTube data collection...")
-                    logger.info(f"Using keywords for YouTube: {keywords}")
-                    logger.info("⚠️ If this hangs, YouTube API may be unresponsive. Will timeout in 60 seconds.")
-                    
-                    # Call YouTube collection with timeout protection
-                    youtube_data = collect_youtube_data_with_timeout(keywords, timeout_seconds=60)
-                    
-                    if youtube_data and youtube_data.get('videos'):
-                        videos_count = len(youtube_data.get('videos', []))
-                        logger.info(f"SUCCESS: YouTube data collection completed! Found {videos_count} videos")
-                        # Save YouTube data
-                        try:
-                            from fetch_youtube_data import save_youtube_data
-                            save_success = save_youtube_data(youtube_data)
-                            logger.info(f"YouTube data saved: {save_success}")
-                        except Exception as save_error:
-                            logger.warning(f"Failed to save YouTube data: {save_error}")
-                        
-                        results['youtube'] = {
-                            'status': 'success',
-                            'videos_count': videos_count
-                        }
-                    else:
-                        logger.warning("WARNING: YouTube data collection returned no data or timed out")
-                        results['youtube'] = {'status': 'failed', 'error': 'No data returned or timeout'}
-                else:
-                    logger.error("ERROR: YouTube API dependencies missing")
-                    results['youtube'] = {
-                        'status': 'error', 
-                        'error': 'YouTube API dependencies not installed. Run: python install_youtube_deps.py'
-                    }
-            except Exception as e:
-                logger.error(f"ERROR: YouTube collection failed: {e}")
-                results['youtube'] = {'status': 'error', 'error': str(e)}
-        
-        if 'twitter' in sources:
-            current_step += 1
-            logger.info(f"STEP {current_step}/{total_steps}: Collecting Twitter data...")
-            try:
-                # Use all keywords for Twitter
-                logger.info(f"🐦 Using all keywords for Twitter: {keywords}")
-                
-                twitter_data = collect_all_twitter_data(keywords)
-                if twitter_data and isinstance(twitter_data, list) and len(twitter_data) > 0:
-                    # Save Twitter data to file (wrap list in dict format expected by save function)
-                    from fetch_twitter_data import save_twitter_data
-                    twitter_data_dict = {
-                        'tweets': twitter_data,
-                        'collection_timestamp': datetime.now().isoformat(),
-                        'keywords': keywords
-                    }
-                    save_success = save_twitter_data(twitter_data_dict)
-                    tweets_count = len(twitter_data)
-                    logger.info(f"SUCCESS: Twitter data collection completed! Found {tweets_count} tweets, Saved: {save_success}")
-                    results['twitter'] = {
-                        'status': 'success',
-                        'tweets_count': tweets_count,
-                        'saved': save_success
-                    }
-                else:
-                    logger.warning("WARNING: Twitter data collection returned no data")
-                    results['twitter'] = {'status': 'failed', 'error': 'No valid tweets returned'}
-            except Exception as e:
-                logger.error(f"ERROR: Twitter collection failed: {e}")
-                results['twitter'] = {'status': 'error', 'error': str(e)}
-        
+        # Focus only on Upwork data collection for now
         if 'upwork' in sources:
             current_step += 1
             logger.info(f"STEP {current_step}/{total_steps}: Collecting Upwork jobs data...")
@@ -1256,34 +1142,26 @@ def run_data_collection_with_logging(keywords, sources):
                 logger.error(f"ERROR: Upwork collection failed: {e}")
                 results['upwork'] = {'status': 'error', 'error': str(e)}
         
-        # Run data cleaning and trending analysis
-        current_step += 1
-        logger.info(f"STEP {current_step}/{total_steps}: Running data cleaning and trending analysis...")
-        try:
-            # Run data cleaning first to update cleaned_data.json
-            try:
-                from clean_data import main as clean_data_main
-                logger.info("📊 Running data cleaning process...")
-                clean_data_main()
-                logger.info("✅ Data cleaning completed")
-            except Exception as clean_error:
-                logger.warning(f"⚠️ Data cleaning failed: {clean_error}")
-            
-            # Run trending analysis
-            logger.info("🔥 Running trending analysis...")
-            analysis_report = run_automatic_trending_analysis()
-            results['trending_analysis'] = {
-                'status': 'success' if analysis_report else 'failed',
-                'keywords_found': len(analysis_report.get('trending_keywords', [])) if analysis_report else 0
-            }
-            if analysis_report:
-                keywords_found = len(analysis_report.get('trending_keywords', []))
-                logger.info(f"SUCCESS: Trending analysis completed! Found {keywords_found} trending keywords")
-            else:
-                logger.warning("WARNING: Trending analysis returned no results")
-        except Exception as e:
-            logger.error(f"ERROR: Trending analysis failed: {e}")
-            results['trending_analysis'] = {'status': 'error', 'error': str(e)}
+        # Skip other sources for now - focus on Upwork only
+        if 'google' in sources:
+            logger.info("⚠️ Google Trends collection skipped - not implemented")
+            results['google'] = {'status': 'skipped', 'message': 'Not implemented'}
+        
+        if 'reddit' in sources:
+            logger.info("⚠️ Reddit collection skipped - not implemented")
+            results['reddit'] = {'status': 'skipped', 'message': 'Not implemented'}
+        
+        if 'youtube' in sources:
+            logger.info("⚠️ YouTube collection skipped - not implemented")
+            results['youtube'] = {'status': 'skipped', 'message': 'Not implemented'}
+        
+        if 'twitter' in sources:
+            logger.info("⚠️ Twitter collection skipped - not implemented")
+            results['twitter'] = {'status': 'skipped', 'message': 'Not implemented'}
+        
+        # Skip trending analysis for now
+        logger.info("⚠️ Trending analysis skipped - not implemented")
+        results['trending_analysis'] = {'status': 'skipped', 'message': 'Not implemented'}
         
         # Calculate overall success
         successful_sources = [k for k, v in results.items() if v.get('status') == 'success']
@@ -1310,7 +1188,7 @@ def api_collect():
         # Use dynamic keywords by default, fallback to provided keywords or DEFAULT_KEYWORDS
         dynamic_keywords = get_current_keywords()
         keywords = data.get('keywords', dynamic_keywords if dynamic_keywords else DEFAULT_KEYWORDS)
-        sources = data.get('sources', ['google', 'reddit', 'youtube', 'twitter', 'upwork'])
+        sources = data.get('sources', ['upwork'])
         
         # Validate keywords
         if not keywords or not isinstance(keywords, list) or len(keywords) == 0:
@@ -1697,9 +1575,9 @@ if __name__ == '__main__':
     os.makedirs('static/js', exist_ok=True)
     os.makedirs('static/img', exist_ok=True)
     
-    # Use port 5000 to avoid Windows port 5000 restrictions
+    # Use port 5000 as requested
     print("Starting Flask Dashboard (Local Development)...")
-    print("Access your dashboard at: http://192.168.1.10:5000")
+    print("Access your dashboard at: http://localhost:5000")
     print("All your existing data and business logic preserved!")
     
     # Start the automated scheduler for local development
@@ -1718,4 +1596,4 @@ if __name__ == '__main__':
         print(f"❌ Warning: Could not start scheduler: {e}")
         print("💡 You can start it manually with: python start_scheduler_auto.py")
     
-    app.run(debug=True, host='0.0.0.0', port=5050) 
+    app.run(debug=True, host='0.0.0.0', port=5000) 

@@ -17,7 +17,7 @@ from email.utils import formataddr
 
 from config import EMAIL_REPORT_CONFIG
 from flask_app import load_upwork_data
-from keyword_file_manager import get_current_keywords
+from keyword_manager import get_current_keywords
 
 logger = logging.getLogger(__name__)
 
