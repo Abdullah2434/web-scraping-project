@@ -830,7 +830,6 @@
     <!-- Custom Upwork Header -->
     <div class="upwork-header">
         <h1>
-            <i class="fas fa-briefcase"></i>
             Upwork Jobs Scraper
         </h1>
         <p>Collect freelance opportunities from Upwork using your custom keywords</p>
@@ -887,10 +886,10 @@
             <span class="stat-number">${{ upwork_stats.avg_budget }}</span>
             <span class="stat-label">Avg Budget</span>
         </div>
-        <div class="stat-card">
+        <!-- <div class="stat-card">
             <span class="stat-number">{{ upwork_data.jobs|length }}</span>
             <span class="stat-label">Recent Jobs</span>
-        </div>
+        </div> -->
         <div class="stat-card">
             <span class="stat-number">
                 {% if upwork_stats.total_budget is defined %}
@@ -907,7 +906,7 @@
     
     
     <!-- Excel Download Section -->
-    <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
+    <!-- <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: center;">
         <h4 style="margin: 0 0 15px 0; color: #1e3a8a; display: flex; align-items: center; justify-content: center; gap: 10px;">
             Excel Export
         </h4>
@@ -927,7 +926,7 @@
         <div style="margin-top: 10px; font-size: 10px; color: #64748b;">
             Includes multiple sheets: All Jobs, Summary, URLs Only, and Keyword Breakdown
         </div>
-    </div>
+    </div> -->
     {% endif %}
 
     <!-- Collect Data Section -->
@@ -961,21 +960,20 @@
         </div>
         
         <button onclick="collectComprehensiveUpworkData()" class="collect-btn" id="collectBtn" style="margin-top: 15px;">
-            <i class="fas fa-search-plus"></i> 
             Start Comprehensive Collection
         </button>
         
-         <div style="margin-top: 15px; font-size: 14px; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
+         <!-- <div style="margin-top: 15px; font-size: 14px; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto;">
             <strong>🔍 What you'll get:</strong><br>
-            ✅ Exact budget amounts from individual job pages<br>
-            ✅ Precise posting times (e.g., "44 minutes ago")<br>
-            ✅ Real proposal counts and competition data<br>
-            ✅ Payment verification status for each client<br>
-            ✅ Detailed location information<br>
-            ✅ Complete skills and requirements lists<br>
-            ✅ Client ratings and membership details<br>
-            🔒 Automatically skips private/confidential jobs (configurable)
-        </div>
+               Exact budget amounts from individual job pages<br>
+               Precise posting times (e.g., "44 minutes ago")<br>
+               Real proposal counts and competition data<br>
+               Payment verification status for each client<br>
+               Detailed location information<br>
+               Complete skills and requirements lists<br>
+               Client ratings and membership details<br>
+               Automatically skips private/confidential jobs (configurable)
+        </div> -->
     </div>
 
     <!-- Modern Filters Section -->

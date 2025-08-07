@@ -54,23 +54,6 @@
     </div>
 </div>
 
-<!-- Upwork Jobs Table or List (optional) -->
-<div class="jobs-section">
-    <h3>Recent Upwork Jobs</h3>
-    {% if upwork_data.jobs %}
-        <ul>
-        {% for job in upwork_data.jobs[:10] %}
-            <li>
-                <strong>{{ job.title }}</strong> - {{ job.budget }} USD
-                <br>
-                <small>{{ job.posted_time }} | {{ job.job_type }}</small>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No jobs found.</p>
-    {% endif %}
-</div>
 {% endblock %}
 
 {% block scripts %}
